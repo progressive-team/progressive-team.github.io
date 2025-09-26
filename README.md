@@ -1,0 +1,1 @@
+[![Deploy static content to Pages](https://github.com/progressive-team/progressive-team.github.io/actions/workflows/CD.yml/badge.svg)](https://github.com/progressive-team/progressive-team.github.io/actions/workflows/CD.yml)
