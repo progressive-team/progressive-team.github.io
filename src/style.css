@@ -1,0 +1,42 @@
+:root {
+  --main-theme-color: #ed6b6b;
+  --main-color: #fafaf8;
+}
+
+body {
+  font-family: BMJUA;
+  color: var(--main-color);
+  overflow-y: auto;
+}
+
+#create-timer {
+  display: flex;
+  width: 90px;
+  height: 90px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color: var(--main-theme-color);
+  border: none;
+  background: #fff;
+}
+
+label[for='create-timer'] {
+  display: block;
+  font-size: 30px;
+}
+main#app {
+  display: flex;
+  height: 576px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  background: var(--main-theme-color);
+  height: 100dvh;
+}
+
+#ipsum {
+  color: black;
+}
