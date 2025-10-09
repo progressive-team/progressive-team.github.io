@@ -10,29 +10,45 @@
   <body>
     <div class="overlay">
       <div id="setting-timer">
-        <div class="close-row">
-          <span class="setting-title">Setting</span>
-          <button class="close-button">ㅁ</button>
-        </div>
-        <div class="row-box">
-          <div class="time-row">
-            <span class="time-row-label">활동 시간</span>
-            <div class="time-row-value">00:25:00</div>
+        <header class="close-row">
+          <button aria-label="닫기">
+            <svg width="48" height="48" viewBox="0 0 48 48">
+              <path
+                d="M12.8 38L10 35.2L21.2 24L10 12.8L12.8 10L24 21.2L35.2 10L38 12.8L26.8 24L38 35.2L35.2 38L24 26.8L12.8 38Z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </header>
+        <fieldset class="row-box">
+          <div>
+            <label for="work-time">활동 시간</label>
+            <input id="work-time" inputmode="numeric" placeholder="00:25:00" />
           </div>
-          <div class="time-row">
-            <span class="time-row-label">휴식 시간</span>
-            <div class="time-row-value">00:05:00</div>
+          <div>
+            <label for="break-time">휴식 시간</label>
+            <input id="break-time" inputmode="numeric" placeholder="00:05:00" />
           </div>
-          <div class="time-row">
-            <span class="time-row-label">주기</span>
-            <div class="time-row-value">4</div>
+          <div>
+            <label for="cycle">주기</label>
+            <input
+              id="cycle"
+              name="cycle"
+              type="number"
+              placeholder="1"
+              min="1"
+            />
           </div>
-          <div class="time-row">
-            <span class="time-row-label">긴 휴식 시간</span>
-            <div class="time-row-value">00:15:00</div>
+          <div>
+            <label for="long-break-time">긴 휴식 시간</label>
+            <input
+              id="long-break-time"
+              inputmode="numeric"
+              placeholder="00:15:00"
+            />
           </div>
-        </div>
-        <button class="generate-row">만들기</button>
+        </fieldset>
+        <button type="submit" class="generate-row">만들기</button>
       </div>
     </div>
     <main class="app" hidden>
