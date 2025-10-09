@@ -42,32 +42,32 @@ main#app {
   color: black;
 }
 
-.overlay{
+.overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.25);
+  background: rgba(0, 0, 0, 0.25);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-#setting-timer{
-  position:relative;
+#setting-timer {
+  position: relative;
   display: flex;
   width: 620px;
   padding: 24px;
   flex-direction: column;
   align-items: center;
   gap: 18px;
-  background: #C46464;
+  background: #c46464;
   border-radius: 6px;
-  box-shadow: 0 8px 4px 0 rgba(0,0,0,0.25);
+  box-shadow: 0 8px 4px 0 rgba(0, 0, 0, 0.25);
 }
 
-.close-row{
+.close-row {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,7 +75,7 @@ main#app {
   height: 48px;
 }
 
-.setting-title{
+.setting-title {
   position: absolute;
   width: 100px;
   height: 48px;
@@ -87,7 +87,7 @@ main#app {
   font-style: normal;
 }
 
-.close-button{
+.close-button {
   display: flex;
   position: absolute;
   right: 48px;
@@ -101,21 +101,21 @@ main#app {
   color: #fdfdfd;
 }
 
-.row-box{
+.row-box {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 20px;
 }
 
-.time-row{
+.time-row {
   display: flex;
   width: 503px;
   justify-content: space-between;
   align-items: center;
 }
 
-.time-row-label{
+.time-row-label {
   width: 118px;
   height: 37px;
   flex-shrink: 0;
@@ -129,16 +129,16 @@ main#app {
   letter-spacing: -0.528px;
 }
 
-.time-row-value{
+.time-row-value {
   display: flex;
   width: 375px;
   padding: 8px 0;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
-  background: rgba(255,255,255,0.3);
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 8px;
-  box-shadow: 0 8px 12px 6px rgba(0,0,0,0.15), 0 4px 4px 0 rgba(0,0,0,0.3);
+  box-shadow: 0 8px 12px 6px rgba(0, 0, 0, 0.15), 0 4px 4px 0 rgba(0, 0, 0, 0.3);
   /* flex: 1 0 0; */
   color: #fdfdfd;
   text-align: center;
@@ -150,15 +150,15 @@ main#app {
   letter-spacing: -1.056px;
 }
 
-.generate-row{
+.generate-row {
   display: flex;
   padding: 2px 31px;
   justify-content: center;
   align-items: center;
-  background:rgba(255,255,255,0.4);
+  background: rgba(255, 255, 255, 0.4);
   border-radius: 8px;
-  box-shadow: 0 8px 12px 6px rgba(0,0,0,0.15), 0 4px 4px 0 rgba(0,0,0,0.3);
-  border:none;
+  box-shadow: 0 8px 12px 6px rgba(0, 0, 0, 0.15), 0 4px 4px 0 rgba(0, 0, 0, 0.3);
+  border: none;
   color: #fdfdfd;
   text-align: center;
   font-family: BMJUA;
@@ -168,4 +168,3 @@ main#app {
   line-height: 150%;
   letter-spacing: -0.616px;
 }
-
