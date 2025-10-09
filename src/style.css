@@ -123,6 +123,12 @@ fieldset.row-box {
         0 4px 4px 0 rgba(0, 0, 0, 0.3);
       /* flex: 1 0 0; */
       color: currentColor;
+
+      &::placeholder {
+        color: currentColor;
+        opacity: 0.4;
+      }
+
       text-align: center;
       font-family: BMJUA;
       font-size: 48px;
