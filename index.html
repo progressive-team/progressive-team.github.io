@@ -8,7 +8,18 @@
     <title>poc</title>
   </head>
   <body>
-    <main id="app">
+    <main class="app" hidden>
+      <button id="create-timer">
+        <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M33 39H15V33H33V15H39V33H57V39H39V57H33V39Z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+      <label for="create-timer">클릭해서 타이머를 추가하세요</label>
+    </main>
+    <main class="app">
       <div class="inner-box">
         <ul class="tab-list">
           <li><button class="tab-button">일할 시간</button></li>

@@ -10,7 +10,44 @@ body {
   margin: 0;
 }
 
-main#app {
+#create-timer {
+  display: flex;
+  width: 90px;
+  height: 90px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color: var(--main-theme-color);
+  border: none;
+  background: #fff;
+}
+
+label[for='create-timer'] {
+  display: block;
+  font-size: 30px;
+}
+
+main.app[hidden] {
+  display: none;
+}
+
+main.app {
+  display: flex;
+  height: 576px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  background: var(--main-theme-color);
+  height: 100dvh;
+}
+
+#ipsum {
+  color: black;
+}
+
+main.app {
   display: flex;
   height: 576px;
   padding: 56px;
@@ -78,7 +115,7 @@ main#app {
 }
 
 .timer-display {
-  color: #FFF;
+  color: #fff;
   text-align: center;
   font-size: 128px;
   font-style: normal;
@@ -103,8 +140,8 @@ main#app {
   width: 100%;
   max-width: 400px;
   border-radius: 8px;
-  background: #FDFDFD;
-  box-shadow: 0 8px 12px 6px rgba(0, 0, 0, 0.15), 0 4px 4px 0 rgba(0, 0, 0, 0.30);
+  background: #fdfdfd;
+  box-shadow: 0 8px 12px 6px rgba(0, 0, 0, 0.15), 0 4px 4px 0 rgba(0, 0, 0, 0.3);
   border: 2px solid var(--main-theme-color);
   color: var(--main-theme-color);
   font-size: 28px;
