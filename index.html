@@ -26,23 +26,47 @@
           </div>
           <div class="row-box">
             <div class="time-row">
-              <span class="time-row-label">활동 시간</span>
-              <div class="time-row-value">00:25:00</div>
+              <label for="work-time" class="time-row-label">활동 시간</label>
+              <input
+                id="work-time"
+                inputmode="numeric"
+                placeholder="00:25:00"
+                class="time-row-value"
+              />
             </div>
             <div class="time-row">
-              <span class="time-row-label">휴식 시간</span>
-              <div class="time-row-value">00:05:00</div>
+              <label for="break-time" class="time-row-label">휴식 시간</label>
+              <input
+                id="break-time"
+                inputmode="numeric"
+                placeholder="00:25:00"
+                class="time-row-value"
+              />
             </div>
             <div class="time-row">
-              <span class="time-row-label">주기</span>
-              <div class="time-row-value">4</div>
+              <label for="cycle" class="time-row-label">주기</label>
+              <input
+                id="cycle"
+                name="cycle"
+                type="number"
+                placeholder="1"
+                class="time-row-value"
+                min="1"
+              />
             </div>
             <div class="time-row">
-              <span class="time-row-label">긴 휴식 시간</span>
-              <div class="time-row-value">00:15:00</div>
+              <label for="long-break-time" class="time-row-label"
+                >긴 휴식 시간</label
+              >
+              <input
+                id="long-break-time"
+                inputmode="numeric"
+                class="time-row-value"
+                placeholder="00:15:00"
+              />
             </div>
           </div>
-          <button class="generate-row">만들기</button>
+          <button type="submit" class="generate-row">만들기</button>
         </div>
       </div>
     </main>
