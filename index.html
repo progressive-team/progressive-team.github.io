@@ -30,48 +30,42 @@
               </svg>
             </button>
           </header>
-          <div class="row-box">
-            <div class="time-row">
-              <label for="work-time" class="time-row-label">활동 시간</label>
+          <fieldset class="row-box">
+            <div>
+              <label for="work-time">활동 시간</label>
               <input
                 id="work-time"
                 inputmode="numeric"
                 placeholder="00:25:00"
-                class="time-row-value"
               />
             </div>
-            <div class="time-row">
-              <label for="break-time" class="time-row-label">휴식 시간</label>
+            <div>
+              <label for="break-time">휴식 시간</label>
               <input
                 id="break-time"
                 inputmode="numeric"
                 placeholder="00:25:00"
-                class="time-row-value"
               />
             </div>
-            <div class="time-row">
-              <label for="cycle" class="time-row-label">주기</label>
+            <div>
+              <label for="cycle">주기</label>
               <input
                 id="cycle"
                 name="cycle"
                 type="number"
                 placeholder="1"
-                class="time-row-value"
                 min="1"
               />
             </div>
-            <div class="time-row">
-              <label for="long-break-time" class="time-row-label"
-                >긴 휴식 시간</label
-              >
+            <div>
+              <label for="long-break-time">긴 휴식 시간</label>
               <input
                 id="long-break-time"
                 inputmode="numeric"
-                class="time-row-value"
                 placeholder="00:15:00"
               />
             </div>
-          </div>
+          </fieldset>
           <button type="submit" class="generate-row">만들기</button>
         </div>
       </div>
