@@ -10,6 +10,29 @@ body {
   margin: 0;
 }
 
+main.app {
+  display: flex;
+  position: relative;
+  height: 576px;
+  background: var(--main-theme-color);
+  height: 100dvh;
+  justify-content: center;
+  align-items: center;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* 타이머 생성 화면 */
+.timer-create-area {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+}
+
 #create-timer {
   display: flex;
   width: 90px;
@@ -28,151 +51,8 @@ label[for='create-timer'] {
   font-size: 30px;
 }
 
-main.app[hidden] {
-  display: none;
-}
-
-main.app {
-  display: flex;
-  position: relative;
-  height: 576px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 28px;
-  background: var(--main-theme-color);
-  height: 100dvh;
-}
-
-#ipsum {
-  color: black;
-}
-
-main.app {
-  display: flex;
-  height: 576px;
-  padding: 56px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-  align-self: stretch;
-  background: var(--main-theme-color);
-  height: 100dvh;
-}
-
-.inner-box {
-  display: flex;
-  padding: 48px 84px 18px 84px;
-  flex-direction: column;
-  align-items: center;
-  gap: 48px;
-  align-self: stretch;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.tab-list {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 24px;
-  align-self: stretch;
-  list-style: none; /* ul 기본 점 제거 */
-  padding: 0;
-  margin: 0;
-}
-
-.tab-button {
-  display: flex;
-  padding: 8px 40px;
-  justify-content: center;
-  align-items: center;
-  width: auto;
-  background: rgba(255, 255, 255, 0);
-  border: none;
-  border-radius: 8px;
-  transition: background-color 0.2s;
-  color: var(--main-text-color);
-  text-align: center;
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 100%; /* 15px */
-  letter-spacing: -0.33px;
-}
-
-.tab-button:hover {
-  background: rgba(0, 0, 0, 0.15);
-}
-
-.frame {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 18px;
-  width: 100%;
-}
-
-.timer-display {
-  color: #fff;
-  text-align: center;
-  font-size: 128px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 100%; /* 128px */
-  letter-spacing: -2.944px;
-}
-
-.button-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 18px;
-  width: 100%;
-}
-
-.start-button {
-  display: inline-flex;
-  padding: 14px 0;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 400px;
-  border-radius: 8px;
-  background: #fdfdfd;
-  box-shadow: 0 8px 12px 6px rgba(0, 0, 0, 0.15), 0 4px 4px 0 rgba(0, 0, 0, 0.3);
-  border: 2px solid var(--main-theme-color);
-  color: var(--main-theme-color);
-  font-size: 28px;
-  text-align: center;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%; /* 42px */
-  letter-spacing: -0.616px;
-}
-
-.start-button:hover {
-  filter: brightness(0.95);
-}
-
-.setting-guide {
-  color: #404040;
-  text-align: center;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 100%; /* 20px */
-  letter-spacing: -0.44px;
-  margin: 0; /* <p> 자체의 마진 제거 */
-}
-
-#ipsum {
-  color: black;
-}
-
 /* 이 아래는 2번째 페이지 입니다. */
+/* 타이머 설정창 */
 .overlay {
   position: absolute;
   top: 0;
@@ -213,18 +93,6 @@ main.app {
     background: none;
     color: var(--main-color);
   }
-}
-
-.setting-title {
-  position: absolute;
-  width: 100px;
-  height: 48px;
-  color: #fdfdfd;
-  text-align: center;
-  font-size: 28px;
-  font-family: BMJUA;
-  font-weight: 400;
-  font-style: normal;
 }
 
 .close-button {
@@ -357,4 +225,130 @@ fieldset.row-box {
   font-weight: 400;
   line-height: 150%;
   letter-spacing: -0.616px;
+}
+
+/* 타이머 작동 화면 */
+.timer-active-area {
+  display: flex;
+  padding: 56px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  align-self: stretch;
+}
+
+.inner-box {
+  display: flex;
+  padding: 48px 84px 18px 84px;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+  align-self: stretch;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.tab-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  align-self: stretch;
+  list-style: none; /* ul 기본 점 제거 */
+  padding: 0;
+  margin: 0;
+}
+
+.tab-button {
+  display: flex;
+  padding: 8px 40px;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  background: rgba(255, 255, 255, 0);
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  color: var(--main-text-color);
+  text-align: center;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%; /* 15px */
+  letter-spacing: -0.33px;
+}
+
+.tab-button:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.frame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+}
+
+.timer-display {
+  color: #fff;
+  text-align: center;
+  font-size: 128px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%; /* 128px */
+  letter-spacing: -2.944px;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+}
+
+.start-button {
+  display: inline-flex;
+  padding: 14px 0;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 8px;
+  background: #fdfdfd;
+  box-shadow: 0 8px 12px 6px rgba(0, 0, 0, 0.15), 0 4px 4px 0 rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--main-theme-color);
+  color: var(--main-theme-color);
+  font-size: 28px;
+  text-align: center;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 42px */
+  letter-spacing: -0.616px;
+}
+
+.start-button:hover {
+  filter: brightness(0.95);
+}
+
+.start-button:active {
+  filter: brightness(0.85);
+}
+
+.setting-guide {
+  color: #404040;
+  text-align: center;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%; /* 20px */
+  letter-spacing: -0.44px;
+  margin: 0; /* <p> 자체의 마진 제거 */
+}
+
+#ipsum {
+  color: black;
 }
