@@ -3,7 +3,5 @@
   "files.autoSave": "onWindowChange",
   "files.autoSaveDelay": 100,
   "editor.wordWrap": "on",
-  "[*]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
