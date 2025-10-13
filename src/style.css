@@ -1,5 +1,4 @@
 :root {
-  --main-theme-color: #ed6b6b;
   --main-color: #fafaf8;
 }
 
@@ -19,6 +18,18 @@ main.app {
   justify-content: center;
   align-items: center;
   transition: background-color 0.5s ease;
+}
+
+main.app[data-state='work'] {
+  --main-theme-color: #ed6b6b;
+}
+
+main.app[data-state='break'] {
+  --main-theme-color: #38858a;
+}
+
+main.app[data-state='long-break'] {
+  --main-theme-color: #397097;
 }
 
 [hidden] {

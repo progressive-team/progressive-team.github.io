@@ -39,13 +39,13 @@ tabButton.forEach((button) => {
 
     const buttonText = button.textContent;
     if (buttonText === '일할 시간') {
-      mainApp.style.setProperty('--main-theme-color', '#ed6b6b');
+      mainApp.dataset.state = 'work';
       timerDisplay.textContent = '25:00';
     } else if (buttonText === '짧은 휴식') {
-      mainApp.style.setProperty('--main-theme-color', '#38858A');
+      mainApp.dataset.state = 'break';
       timerDisplay.textContent = '05:00';
     } else if (buttonText === '긴 휴식') {
-      mainApp.style.setProperty('--main-theme-color', '#397097');
+      mainApp.dataset.state = 'long-break';
       timerDisplay.textContent = '40:00';
     }
   });
