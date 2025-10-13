@@ -1,15 +1,14 @@
-:root {
-  --main-color: #fafaf8;
-}
-
 body {
-  font-family: BMJUA;
-  color: var(--main-color);
   overflow-y: auto;
   margin: 0;
 }
 
 main.app {
+  --main-color: #fafaf8;
+  --main-theme-color: #ed6b6b;
+
+  font-family: BMJUA;
+  color: var(--main-color);
   display: flex;
   position: relative;
   height: 576px;
