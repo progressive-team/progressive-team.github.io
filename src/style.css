@@ -1,5 +1,4 @@
 :root {
-  --main-theme-color: #ed6b6b;
   --main-color: #fafaf8;
 }
 
@@ -18,6 +17,19 @@ main.app {
   height: 100dvh;
   justify-content: center;
   align-items: center;
+  transition: background-color 0.5s ease;
+}
+
+main.app[data-state='work'] {
+  --main-theme-color: #ed6b6b;
+}
+
+main.app[data-state='break'] {
+  --main-theme-color: #38858a;
+}
+
+main.app[data-state='long-break'] {
+  --main-theme-color: #397097;
 }
 
 [hidden] {
@@ -74,7 +86,7 @@ label[for='create-timer'] {
   flex-direction: column;
   align-items: center;
   gap: 18px;
-  background: #c46464;
+  background: var(--main-theme-color);
   border-radius: 6px;
   box-shadow: 0 8px 4px 0 rgba(0, 0, 0, 0.25);
 }
@@ -284,6 +296,10 @@ fieldset.row-box {
   background: rgba(0, 0, 0, 0.15);
 }
 
+.tab-button.active {
+  background: rgba(0, 0, 0, 0.15);
+}
+
 .frame {
   display: flex;
   flex-direction: column;
@@ -328,6 +344,7 @@ fieldset.row-box {
   font-weight: 400;
   line-height: 150%; /* 42px */
   letter-spacing: -0.616px;
+  transition: border 0.5s ease, color 0.5s ease;
 }
 
 .start-button:hover {
