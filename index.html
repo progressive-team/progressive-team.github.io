@@ -21,7 +21,7 @@
         <label for="create-timer">클릭해서 타이머를 추가하세요</label>
       </section>
 
-      <section class="timer-setting-modal overlay" hidden>
+      <section class="timer-setting-modal overlay" hidden data-mode="create">
         <div id="setting-timer">
           <header class="close-row">
             <button aria-label="닫기">
@@ -61,9 +61,7 @@
               />
             </div>
           </fieldset>
-          <button type="submit" id="generateBtn" class="generate-row">
-            만들기
-          </button>
+          <button type="submit" id="generateBtn" class="generate-row"></button>
         </div>
       </section>
 

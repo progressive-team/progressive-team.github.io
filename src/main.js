@@ -52,6 +52,7 @@ tabButton.forEach((button) => {
 });
 
 settingGuide.addEventListener('click', () => {
+  settingModal.dataset.mode = 'modify';
   settingModal.hidden = false;
 });
 

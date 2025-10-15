@@ -77,6 +77,14 @@ label[for='create-timer'] {
   z-index: 1;
 }
 
+.timer-setting-modal[data-mode='create'] #generateBtn:before {
+  content: '만들기';
+}
+
+.timer-setting-modal[data-mode='modify'] #generateBtn:before {
+  content: '수정하기';
+}
+
 #setting-timer {
   position: relative;
   display: flex;
