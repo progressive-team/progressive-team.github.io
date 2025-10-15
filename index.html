@@ -36,19 +36,11 @@
           <fieldset class="row-box">
             <div>
               <label for="work-time">활동 시간</label>
-              <input
-                id="work-time"
-                inputmode="numeric"
-                placeholder="00:25:00"
-              />
+              <input id="work-time" inputmode="numeric" placeholder="25:00" />
             </div>
             <div>
               <label for="break-time">휴식 시간</label>
-              <input
-                id="break-time"
-                inputmode="numeric"
-                placeholder="00:05:00"
-              />
+              <input id="break-time" inputmode="numeric" placeholder="05:00" />
             </div>
             <div>
               <label for="cycle">주기</label>
@@ -65,11 +57,13 @@
               <input
                 id="long-break-time"
                 inputmode="numeric"
-                placeholder="00:15:00"
+                placeholder="15:00"
               />
             </div>
           </fieldset>
-          <button type="submit" class="generate-row">만들기</button>
+          <button type="submit" id="generateBtn" class="generate-row">
+            만들기
+          </button>
         </div>
       </section>
 
