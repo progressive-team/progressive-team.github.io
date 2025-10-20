@@ -11,9 +11,19 @@ const createButton = document.querySelector('#create-timer');
 const confirmButton = document.querySelector('.generate-row');
 const closeButton = document.querySelector('button[aria-label="닫기"]');
 
+const workTimeInput = document.getElementById('work-time');
+const breakTimeInput = document.getElementById('break-time');
+const longBreakTimeInput = document.getElementById('long-break-time');
+const cycleInput = document.getElementById('cycle');
+workTimeInput.value = '25:00';
+breakTimeInput.value = '05:00';
+longBreakTimeInput.value = '15:00';
+cycleInput.value = '1';
+
 const tabButton = document.querySelectorAll('.tab-button');
 
 const timerDisplay = document.querySelector('.timer-display');
+const startButton = document.querySelector('.start-button');
 const settingGuide = document.querySelector('.setting-guide');
 
 createButton.addEventListener('click', () => {
@@ -56,6 +66,54 @@ settingGuide.addEventListener('click', () => {
   settingModal.hidden = false;
 });
 
+let isTimerRunning = false;
+
+const worker = new Worker(new URL('./worker.js', import.meta.url), {
+  type: 'module',
+});
+
+startButton.addEventListener('click', () => {
+  if (isTimerRunning) {
+    worker.postMessage({ command: 'stop' });
+
+    isTimerRunning = false;
+    startButton.textContent = '시작';
+    settingGuide.hidden = false;
+  } else {
+    const timerString = timerDisplay.textContent;
+    const parts = timerString.split(':');
+    const duration = (parseInt(parts[0]) * 60 + parseInt(parts[1])) * 1000;
+
+    worker.postMessage({ command: 'start', duration: duration });
+
+    isTimerRunning = true;
+    startButton.textContent = '중지';
+    settingGuide.hidden = true;
+  }
+});
+
+worker.onmessage = (event) => {
+  const { type, remaining } = event.data;
+
+  if (type === 'tick') {
+    updateTimerDisplay(remaining);
+  } else if (type === 'end') {
+    updateTimerDisplay(0);
+    isTimerRunning = false;
+    startButton.textContent = '시작';
+    settingGuide.hidden = false;
+  }
+};
+
+function updateTimerDisplay(ms) {
+  const totalSeconds = Math.max(0, Math.ceil(ms / 1000));
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+  timerDisplay.textContent = formattedTime;
+}
+
 function formatTimeInput(input) {
   let value = input.value.replace(/\D/g, ''); // 숫자만 남기기
   if (!value) {
@@ -76,21 +134,6 @@ function formatTimeInput(input) {
     '0'
   )}`;
 }
-
-//현재는 웹페이지를 불러올 때 작동. 후에 타이머 설정창을 보여주는 로직시 호출되게 바꿔야함.
-window.addEventListener('load', () => {
-  //원래 타이머가 가지고 있는 값을 불러오기
-  const workTimeInput = document.getElementById('work-time');
-  const breakTimeInput = document.getElementById('break-time');
-  const longBreakTimeInput = document.getElementById('long-break-time');
-  const cycleInput = document.getElementById('cycle');
-
-  // 값이 없으면 기본값으로 설정
-  if (!workTimeInput.value) workTimeInput.value = '25:00';
-  if (!breakTimeInput.value) breakTimeInput.value = '05:00';
-  if (!longBreakTimeInput.value) longBreakTimeInput.value = '15:00';
-  if (!cycleInput.value) cycleInput.value = '1';
-});
 
 const timeInputs = document.querySelectorAll(
   '#work-time, #break-time, #cycle, #long-break-time'
