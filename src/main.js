@@ -1,6 +1,12 @@
 import 'normalize.css';
 import '@noonnu/bmjua';
 
+const worker = new Worker(new URL('./worker.js', import.meta.url), {
+  type: 'module',
+});
+
+let isTimerRunning = false;
+
 let timerSettings = {
   workTime: '25:00',
   breakTime: '05:00',
@@ -41,6 +47,25 @@ closeButton.addEventListener('click', () => {
   settingModal.hidden = true;
 });
 
+function timerStop() {
+    worker.postMessage({ command: 'stop' });
+    isTimerRunning = false;
+    startButton.textContent = '시작';
+    settingGuide.classList.remove('is-hidden');
+}
+
+function startTimer() {
+  const timerString = timerDisplay.textContent;
+  const parts = timerString.split(':');
+  const duration = (parseInt(parts[0]) * 60 + parseInt(parts[1])) * 1000;
+
+  worker.postMessage({ command: 'start', duration: duration + 1000 });
+
+  isTimerRunning = true;
+  startButton.textContent = '중지';
+  settingGuide.classList.add('is-hidden');
+}
+
 tabButton.forEach((button) => {
   button.addEventListener('click', () => {
     tabButton.forEach((button) => {
@@ -59,6 +84,10 @@ tabButton.forEach((button) => {
       mainApp.dataset.state = 'long-break';
       timerDisplay.textContent = timerSettings.longBreakTime;
     }
+
+    if (isTimerRunning) {
+      timerStop();
+    }
   });
 });
 
@@ -67,29 +96,11 @@ settingGuide.addEventListener('click', () => {
   settingModal.hidden = false;
 });
 
-let isTimerRunning = false;
-
-const worker = new Worker(new URL('./worker.js', import.meta.url), {
-  type: 'module',
-});
-
 startButton.addEventListener('click', () => {
   if (isTimerRunning) {
-    worker.postMessage({ command: 'stop' });
-
-    isTimerRunning = false;
-    startButton.textContent = '시작';
-    settingGuide.hidden = false;
+    timerStop();
   } else {
-    const timerString = timerDisplay.textContent;
-    const parts = timerString.split(':');
-    const duration = (parseInt(parts[0]) * 60 + parseInt(parts[1])) * 1000;
-
-    worker.postMessage({ command: 'start', duration: duration });
-
-    isTimerRunning = true;
-    startButton.textContent = '중지';
-    settingGuide.hidden = true;
+    startTimer();
   }
 });
 
@@ -100,9 +111,7 @@ worker.onmessage = (event) => {
     updateTimerDisplay(remaining);
   } else if (type === 'end') {
     updateTimerDisplay(0);
-    isTimerRunning = false;
-    startButton.textContent = '시작';
-    settingGuide.hidden = false;
+    timerStop();
   }
 };
 
