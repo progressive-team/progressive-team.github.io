@@ -8,7 +8,6 @@ const settingModal = document.querySelector('.timer-setting-modal');
 const activeArea = document.querySelector('.timer-active-area');
 
 const createButton = document.querySelector('#create-timer');
-const confirmButton = document.querySelector('.generate-row');
 const closeButton = document.querySelector('button[aria-label="닫기"]');
 
 const workTimeInput = document.getElementById('work-time');
@@ -28,12 +27,6 @@ const settingGuide = document.querySelector('.setting-guide');
 
 createButton.addEventListener('click', () => {
   settingModal.hidden = false;
-});
-
-confirmButton.addEventListener('click', () => {
-  createArea.hidden = true;
-  settingModal.hidden = true;
-  activeArea.hidden = false;
 });
 
 closeButton.addEventListener('click', () => {
@@ -203,4 +196,7 @@ generateBtn.addEventListener('click', () => {
       cycle
     )}`
   );
+  createArea.hidden = true;
+  settingModal.hidden = true;
+  activeArea.hidden = false;
 });
