@@ -1,6 +1,13 @@
 import 'normalize.css';
 import '@noonnu/bmjua';
 
+let timerSettings = {
+  workTime: '25:00',
+  breakTime: '05:00',
+  longBreakTime: '15:00',
+  cycle: 1,
+};
+
 const mainApp = document.querySelector('main.app');
 
 const createArea = document.querySelector('.timer-create-area');
@@ -14,10 +21,10 @@ const workTimeInput = document.getElementById('work-time');
 const breakTimeInput = document.getElementById('break-time');
 const longBreakTimeInput = document.getElementById('long-break-time');
 const cycleInput = document.getElementById('cycle');
-workTimeInput.value = '25:00';
-breakTimeInput.value = '05:00';
-longBreakTimeInput.value = '15:00';
-cycleInput.value = '1';
+workTimeInput.value = timerSettings.workTime;
+breakTimeInput.value = timerSettings.breakTime;
+longBreakTimeInput.value = timerSettings.longBreakTime;
+cycleInput.value = timerSettings.cycle;
 
 const tabButton = document.querySelectorAll('.tab-button');
 
@@ -43,13 +50,13 @@ tabButton.forEach((button) => {
     const buttonText = button.textContent;
     if (buttonText === '일할 시간') {
       mainApp.dataset.state = 'work';
-      timerDisplay.textContent = '25:00';
+      timerDisplay.textContent = timerSettings.workTime;
     } else if (buttonText === '짧은 휴식') {
       mainApp.dataset.state = 'break';
-      timerDisplay.textContent = '05:00';
+      timerDisplay.textContent = timerSettings.breakTime;
     } else if (buttonText === '긴 휴식') {
       mainApp.dataset.state = 'long-break';
-      timerDisplay.textContent = '40:00';
+      timerDisplay.textContent = timerSettings.longBreakTime;
     }
   });
 });
@@ -199,4 +206,17 @@ generateBtn.addEventListener('click', () => {
   createArea.hidden = true;
   settingModal.hidden = true;
   activeArea.hidden = false;
+
+  timerSettings.workTime = workTime;
+  timerSettings.breakTime = breakTime;
+  timerSettings.longBreakTime = longBreakTime;
+  timerSettings.cycle = cycle;
+
+  if (mainApp.dataset.state === 'work') {
+    timerDisplay.textContent = timerSettings.workTime;
+  } else if (mainApp.dataset.state === 'break') {
+    timerDisplay.textContent = timerSettings.breakTime;
+  } else if (mainApp.dataset.state === 'long-break') {
+    timerDisplay.textContent = timerSettings.longBreakTime;
+  }
 });
