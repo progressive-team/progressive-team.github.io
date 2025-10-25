@@ -59,7 +59,7 @@ function startTimer() {
   const parts = timerString.split(':');
   const duration = (parseInt(parts[0]) * 60 + parseInt(parts[1])) * 1000;
 
-  worker.postMessage({ command: 'start', duration: duration + 1000 });
+  worker.postMessage({ command: 'start', duration: duration });
 
   isTimerRunning = true;
   startButton.textContent = '중지';
@@ -109,24 +109,68 @@ startButton.addEventListener('click', () => {
 });
 
 worker.onmessage = (event) => {
-  const { type, remaining } = event.data;
+  const remaining = event.data.remaining;
 
-  if (type === 'tick') {
-    updateTimerDisplay(remaining);
-  } else if (type === 'end') {
-    updateTimerDisplay(0);
-    timerStop();
-  }
-};
-
-function updateTimerDisplay(ms) {
-  const totalSeconds = Math.max(0, Math.ceil(ms / 1000));
+  const totalSeconds = Math.max(0, Math.ceil(remaining / 1000));
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
   const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
   timerDisplay.textContent = formattedTime;
-}
+
+  if (remaining > 0) {
+    return;
+  }
+
+  timerStop();
+  if (mainApp.dataset.state === 'work') {
+    mainApp.dataset.state = 'break';
+    timerDisplay.textContent = timerSettings.breakTime;
+    tabButton.forEach((button) => {
+      if (button.textContent === '짧은 휴식') {
+        button.classList.add('active');
+      } else {
+        button.classList.remove('active');
+      }
+    });
+    startTimer();
+  } else if (mainApp.dataset.state === 'break') {
+    if (timerSettings.currentCycle > 1) {
+      mainApp.dataset.state = 'work';
+      timerDisplay.textContent = timerSettings.workTime;
+      tabButton.forEach((button) => {
+        if (button.textContent === '일할 시간') {
+          button.classList.add('active');
+        } else {
+          button.classList.remove('active');
+        }
+      });
+    } else {
+      mainApp.dataset.state = 'long-break';
+      timerDisplay.textContent = timerSettings.longBreakTime;
+      tabButton.forEach((button) => {
+        if (button.textContent === '긴 휴식') {
+          button.classList.add('active');
+        } else {
+          button.classList.remove('active');
+        }
+      });
+    }
+    timerSettings.currentCycle--;
+    startTimer();
+  } else if (mainApp.dataset.state === 'long-break') {
+    mainApp.dataset.state = 'work';
+    timerDisplay.textContent = timerSettings.workTime;
+    timerSettings.currentCycle = timerSettings.totalCycle;
+    tabButton.forEach((button) => {
+      if (button.textContent === '일할 시간') {
+        button.classList.add('active');
+      } else {
+        button.classList.remove('active');
+      }
+    });
+  }
+};
 
 function formatTimeInput(input) {
   let value = input.value.replace(/\D/g, ''); // 숫자만 남기기

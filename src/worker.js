@@ -5,14 +5,12 @@ let startTime = 0;
 function tick() {
   const elapsed = Date.now() - startTime;
   const remaining = totalDuration - elapsed;
+  postMessage({ remaining: remaining });
 
   if (remaining <= 0) {
-    postMessage({ type: 'end' });
     clearTimeout(timerId);
     timerId = null;
   } else {
-    postMessage({ type: 'tick', remaining: remaining });
-
     timerId = setTimeout(tick, 100);
   }
 }
