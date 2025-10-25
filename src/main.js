@@ -198,29 +198,29 @@ const timeInputs = document.querySelectorAll(
 );
 
 timeInputs.forEach((input) => {
-  input.addEventListener('focus', () => {
-    input.value = ''; //입력 시 값 비우기
-  });
-
   input.addEventListener('blur', () => {
     if (input.id !== 'cycle') formatTimeInput(input); //주기를 제외하고 타이머 값 포맷팅
-    if (!input.value) {
-      // 값이 비어있으면 기본값을 다시 설정
-      if (input.id === 'work-time') input.value = '25:00';
-      else if (input.id === 'break-time') input.value = '05:00';
-      else if (input.id === 'cycle') input.value = '1';
-      else if (input.id === 'long-break-time') input.value = '15:00';
-    }
   });
 });
 
 //만들기 버튼 클릭 시 검증 로직
 const generateBtn = document.getElementById('generateBtn');
 generateBtn.addEventListener('click', () => {
-  const workTime = document.getElementById('work-time').value;
-  const breakTime = document.getElementById('break-time').value;
-  const longBreakTime = document.getElementById('long-break-time').value;
-  const cycle = document.getElementById('cycle').value;
+  const workTimeInput = document.getElementById('work-time');
+  const breakTimeInput = document.getElementById('break-time');
+  const longBreakTimeInput = document.getElementById('long-break-time');
+  const cycleInput = document.getElementById('cycle');
+
+  // 값이 없으면 기본값으로 설정
+  if (!workTimeInput.value) workTimeInput.value = '25:00';
+  if (!breakTimeInput.value) breakTimeInput.value = '05:00';
+  if (!longBreakTimeInput.value) longBreakTimeInput.value = '15:00';
+  if (!cycleInput.value) cycleInput.value = '1';
+
+  const workTime = workTimeInput.value;
+  const breakTime = breakTimeInput.value;
+  const longBreakTime = longBreakTimeInput.value;
+  const cycle = cycleInput.value;
 
   if (
     workTime === '00:00' ||
@@ -230,12 +230,6 @@ generateBtn.addEventListener('click', () => {
     alert('⚠️ 타이머 시간은 00:00일 수 없습니다!');
     return;
   }
-
-  /*
-        if (!workTime || !breakTime || !longBreakTime || !cycle) {
-          alert('⚠️ 모든 항목을 입력해주세요!');
-          return;
-        }*/
 
   if (
     isNaN(cycle) ||
@@ -255,6 +249,11 @@ generateBtn.addEventListener('click', () => {
     alert('⚠️ 시간 형식이 잘못되었습니다. (예: 25:00)');
     return;
   }
+
+  // 모든 검증을 통과하면 모달을 숨기고 활성화 페이지로 전환
+  createArea.hidden = true;
+  settingModal.hidden = true;
+  activeArea.hidden = false;
 
   alert(
     `✅ 타이머 생성 완료!\n활동: ${workTime}\n휴식: ${breakTime}\n긴 휴식: ${longBreakTime}\n주기: ${parseInt(
