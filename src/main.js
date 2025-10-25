@@ -5,8 +5,6 @@ const worker = new Worker(new URL('./worker.js', import.meta.url), {
   type: 'module',
 });
 
-let isTimerRunning = false;
-
 let timerSettings = {
   workTime: '25:00',
   breakTime: '05:00',
@@ -47,11 +45,14 @@ closeButton.addEventListener('click', () => {
   settingModal.hidden = true;
 });
 
-function timerStop() {
-    worker.postMessage({ command: 'stop' });
-    isTimerRunning = false;
-    startButton.textContent = '시작';
-    settingGuide.classList.remove('is-hidden');
+function isTimerRunning() {
+  return mainApp.dataset.timerState === 'running';
+}
+
+function stopTimer() {
+  worker.postMessage({ command: 'stop' });
+  mainApp.dataset.timerState = 'stopped';
+  settingGuide.classList.remove('is-hidden');
 }
 
 function startTimer() {
@@ -61,8 +62,7 @@ function startTimer() {
 
   worker.postMessage({ command: 'start', duration: duration });
 
-  isTimerRunning = true;
-  startButton.textContent = '중지';
+  mainApp.dataset.timerState = 'running';
   settingGuide.classList.add('is-hidden');
 }
 
@@ -89,8 +89,8 @@ tabButton.forEach((button) => {
       timerDisplay.textContent = timerSettings.longBreakTime;
     }
 
-    if (isTimerRunning) {
-      timerStop();
+    if (isTimerRunning()) {
+      stopTimer();
     }
   });
 });
@@ -101,8 +101,8 @@ settingGuide.addEventListener('click', () => {
 });
 
 startButton.addEventListener('click', () => {
-  if (isTimerRunning) {
-    timerStop();
+  if (isTimerRunning()) {
+    stopTimer();
   } else {
     startTimer();
   }
@@ -122,7 +122,7 @@ worker.onmessage = (event) => {
     return;
   }
 
-  timerStop();
+  stopTimer();
   if (mainApp.dataset.state === 'work') {
     mainApp.dataset.state = 'break';
     timerDisplay.textContent = timerSettings.breakTime;
