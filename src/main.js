@@ -5,7 +5,8 @@ let timerSettings = {
   workTime: '25:00',
   breakTime: '05:00',
   longBreakTime: '15:00',
-  cycle: 1,
+  totalCycle: 1,
+  currentCycle: 1,
 };
 
 const mainApp = document.querySelector('main.app');
@@ -24,7 +25,7 @@ const cycleInput = document.getElementById('cycle');
 workTimeInput.value = timerSettings.workTime;
 breakTimeInput.value = timerSettings.breakTime;
 longBreakTimeInput.value = timerSettings.longBreakTime;
-cycleInput.value = timerSettings.cycle;
+cycleInput.value = timerSettings.totalCycle;
 
 const tabButton = document.querySelectorAll('.tab-button');
 
@@ -210,7 +211,8 @@ generateBtn.addEventListener('click', () => {
   timerSettings.workTime = workTime;
   timerSettings.breakTime = breakTime;
   timerSettings.longBreakTime = longBreakTime;
-  timerSettings.cycle = cycle;
+  timerSettings.totalCycle = cycle;
+  timerSettings.currentCycle = cycle;
 
   if (mainApp.dataset.state === 'work') {
     timerDisplay.textContent = timerSettings.workTime;
