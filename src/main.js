@@ -68,6 +68,10 @@ function startTimer() {
 
 tabButton.forEach((button) => {
   button.addEventListener('click', () => {
+    if (button.classList.contains('active')) {
+      return;
+    }
+
     tabButton.forEach((button) => {
       button.classList.remove('active');
     });
