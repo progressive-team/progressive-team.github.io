@@ -391,9 +391,8 @@ main.app[data-timer-state='running'] .start-button::before {
   margin: 0; /* <p> 자체의 마진 제거 */
 }
 
-.setting-guide.is-hidden {
-  visibility: hidden;
-  opacity: 0;
+main.app[data-timer-state='running'] .setting-guide {
+  color: #fff;
 }
 
 #ipsum {

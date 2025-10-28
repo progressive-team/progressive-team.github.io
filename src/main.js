@@ -49,10 +49,16 @@ function isTimerRunning() {
   return mainApp.dataset.timerState === 'running';
 }
 
+function openSettingModal() {
+  settingModal.dataset.mode = 'modify';
+  settingModal.hidden = false;
+}
+
 function stopTimer() {
   worker.postMessage({ command: 'stop' });
   mainApp.dataset.timerState = 'stopped';
-  settingGuide.classList.remove('is-hidden');
+  settingGuide.textContent = '<클릭해서 시간 설정하기>';
+  settingGuide.addEventListener('click', openSettingModal);
 }
 
 function startTimer() {
@@ -63,7 +69,8 @@ function startTimer() {
   worker.postMessage({ command: 'start', duration: duration });
 
   mainApp.dataset.timerState = 'running';
-  settingGuide.classList.add('is-hidden');
+  settingGuide.textContent = `타이머 주기: ${timerSettings.currentCycle}/${timerSettings.totalCycle}`;
+  settingGuide.removeEventListener('click', openSettingModal);
 }
 
 tabButton.forEach((button) => {
@@ -93,11 +100,6 @@ tabButton.forEach((button) => {
       stopTimer();
     }
   });
-});
-
-settingGuide.addEventListener('click', () => {
-  settingModal.dataset.mode = 'modify';
-  settingModal.hidden = false;
 });
 
 startButton.addEventListener('click', () => {
@@ -263,6 +265,8 @@ generateBtn.addEventListener('click', () => {
   createArea.hidden = true;
   settingModal.hidden = true;
   activeArea.hidden = false;
+
+  settingGuide.addEventListener('click', openSettingModal);
 
   timerSettings.workTime = workTime;
   timerSettings.breakTime = breakTime;
