@@ -147,6 +147,7 @@ worker.onmessage = (event) => {
           button.classList.remove('active');
         }
       });
+      timerSettings.currentCycle--;
     } else {
       mainApp.dataset.state = 'long-break';
       timerDisplay.textContent = timerSettings.longBreakTime;
@@ -158,7 +159,6 @@ worker.onmessage = (event) => {
         }
       });
     }
-    timerSettings.currentCycle--;
     startTimer();
   } else if (mainApp.dataset.state === 'long-break') {
     mainApp.dataset.state = 'work';
