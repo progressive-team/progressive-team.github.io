@@ -49,7 +49,7 @@ function requestNotificationPermission() {
 
 function showNotification(message) {
   if ('Notification' in window && Notification.permission === 'granted') {
-    new Notification('타이머 종료', { body: message });
+    new Notification('알림', { body: message });
   }
 }
 
