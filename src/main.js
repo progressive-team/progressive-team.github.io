@@ -55,6 +55,23 @@ function stopTimer() {
   settingGuide.classList.remove('is-hidden');
 }
 
+function resetTimer() {
+  stopTimer();
+
+  timerSettings.currentCycle = timerSettings.totalCycle;
+  if (mainApp.dataset.state !== 'work') {
+    mainApp.dataset.state = 'work';
+    tabButton.forEach((button) => {
+      if (button.textContent === '일할 시간') {
+        button.classList.add('active');
+      } else {
+        button.classList.remove('active');
+      }
+    });
+  }
+  timerDisplay.textContent = timerSettings.workTime;
+}
+
 function startTimer() {
   const timerString = timerDisplay.textContent;
   const parts = timerString.split(':');
@@ -102,7 +119,7 @@ settingGuide.addEventListener('click', () => {
 
 startButton.addEventListener('click', () => {
   if (isTimerRunning()) {
-    stopTimer();
+    resetTimer();
   } else {
     startTimer();
   }
@@ -114,7 +131,9 @@ worker.onmessage = (event) => {
   const totalSeconds = Math.max(0, Math.ceil(remaining / 1000));
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
-  const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  const formattedTime = `${String(minutes).padStart(2, '0')}:${String(
+    seconds
+  ).padStart(2, '0')}`;
 
   timerDisplay.textContent = formattedTime;
 
