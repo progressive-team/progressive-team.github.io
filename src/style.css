@@ -325,7 +325,7 @@ fieldset.row-box {
   flex-direction: column;
   align-items: center;
   gap: 18px;
-  width: 100%;
+  width: min(36vw, 400px);
 }
 
 .timer-display {
@@ -396,6 +396,7 @@ main.app[data-timer-state='running'] .start-button::before {
   line-height: 100%; /* 20px */
   letter-spacing: -0.44px;
   margin: 0; /* <p> 자체의 마진 제거 */
+  word-break: keep-all;
 }
 
 .setting-guide.is-hidden {
