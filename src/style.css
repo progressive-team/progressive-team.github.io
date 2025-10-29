@@ -30,6 +30,9 @@ main.app[data-state='break'] {
 main.app[data-state='long-break'] {
   --main-theme-color: #397097;
 }
+main.app[data-state='very-long-break'] {
+  --main-theme-color: #b228d8;
+}
 
 [hidden] {
   display: none !important;

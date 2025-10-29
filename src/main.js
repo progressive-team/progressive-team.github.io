@@ -9,6 +9,7 @@ let timerSettings = {
   workTime: '25:00',
   breakTime: '05:00',
   longBreakTime: '15:00',
+  veryLongBreakTime: '15:00',
   totalCycle: 1,
   currentCycle: 1,
 };
@@ -32,7 +33,6 @@ longBreakTimeInput.value = timerSettings.longBreakTime;
 cycleInput.value = timerSettings.totalCycle;
 
 const tabButton = document.querySelectorAll('.tab-button');
-
 const timerDisplay = document.querySelector('.timer-display');
 const startButton = document.querySelector('.start-button');
 const settingGuide = document.querySelector('.setting-guide');
@@ -87,6 +87,9 @@ tabButton.forEach((button) => {
     } else if (buttonText === '긴 휴식') {
       mainApp.dataset.state = 'long-break';
       timerDisplay.textContent = timerSettings.longBreakTime;
+    } else if (buttonText === '매우 긴 휴식') {
+      mainApp.dataset.state = 'very-long-break';
+      timerDisplay.textContent = timerSettings.veryLongBreakTime;
     }
 
     if (isTimerRunning()) {
@@ -114,7 +117,9 @@ worker.onmessage = (event) => {
   const totalSeconds = Math.max(0, Math.ceil(remaining / 1000));
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
-  const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  const formattedTime = `${String(minutes).padStart(2, '0')}:${String(
+    seconds
+  ).padStart(2, '0')}`;
 
   timerDisplay.textContent = formattedTime;
 
