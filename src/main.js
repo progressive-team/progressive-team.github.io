@@ -57,7 +57,6 @@ function openSettingModal() {
 function stopTimer() {
   worker.postMessage({ command: 'stop' });
   mainApp.dataset.timerState = 'stopped';
-  settingGuide.addEventListener('click', openSettingModal);
 }
 
 function startTimer() {
@@ -69,7 +68,6 @@ function startTimer() {
 
   mainApp.dataset.timerState = 'running';
   settingGuide.dataset.cycleContext = `${timerSettings.currentCycle}/${timerSettings.totalCycle}`;
-  settingGuide.removeEventListener('click', openSettingModal);
 }
 
 tabButton.forEach((button) => {
@@ -106,6 +104,12 @@ startButton.addEventListener('click', () => {
     stopTimer();
   } else {
     startTimer();
+  }
+});
+
+settingGuide.addEventListener('click', () => {
+  if (!isTimerRunning()) {
+    openSettingModal();
   }
 });
 
@@ -264,8 +268,6 @@ generateBtn.addEventListener('click', () => {
   createArea.hidden = true;
   settingModal.hidden = true;
   activeArea.hidden = false;
-
-  settingGuide.addEventListener('click', openSettingModal);
 
   timerSettings.workTime = workTime;
   timerSettings.breakTime = breakTime;
