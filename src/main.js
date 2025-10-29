@@ -49,10 +49,14 @@ function isTimerRunning() {
   return mainApp.dataset.timerState === 'running';
 }
 
+function openSettingModal() {
+  settingModal.dataset.mode = 'modify';
+  settingModal.hidden = false;
+}
+
 function stopTimer() {
   worker.postMessage({ command: 'stop' });
   mainApp.dataset.timerState = 'stopped';
-  settingGuide.classList.remove('is-hidden');
 }
 
 function startTimer() {
@@ -63,7 +67,7 @@ function startTimer() {
   worker.postMessage({ command: 'start', duration: duration });
 
   mainApp.dataset.timerState = 'running';
-  settingGuide.classList.add('is-hidden');
+  settingGuide.dataset.cycleContext = `${timerSettings.currentCycle}/${timerSettings.totalCycle}`;
 }
 
 tabButton.forEach((button) => {
@@ -95,16 +99,17 @@ tabButton.forEach((button) => {
   });
 });
 
-settingGuide.addEventListener('click', () => {
-  settingModal.dataset.mode = 'modify';
-  settingModal.hidden = false;
-});
-
 startButton.addEventListener('click', () => {
   if (isTimerRunning()) {
     stopTimer();
   } else {
     startTimer();
+  }
+});
+
+settingGuide.addEventListener('click', () => {
+  if (!isTimerRunning()) {
+    openSettingModal();
   }
 });
 
@@ -145,6 +150,7 @@ worker.onmessage = (event) => {
           button.classList.remove('active');
         }
       });
+      timerSettings.currentCycle--;
     } else {
       mainApp.dataset.state = 'long-break';
       timerDisplay.textContent = timerSettings.longBreakTime;
@@ -156,7 +162,6 @@ worker.onmessage = (event) => {
         }
       });
     }
-    timerSettings.currentCycle--;
     startTimer();
   } else if (mainApp.dataset.state === 'long-break') {
     mainApp.dataset.state = 'work';
