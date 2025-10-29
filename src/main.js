@@ -57,7 +57,6 @@ function openSettingModal() {
 function stopTimer() {
   worker.postMessage({ command: 'stop' });
   mainApp.dataset.timerState = 'stopped';
-  settingGuide.textContent = '<클릭해서 시간 설정하기>';
   settingGuide.addEventListener('click', openSettingModal);
 }
 
@@ -69,7 +68,7 @@ function startTimer() {
   worker.postMessage({ command: 'start', duration: duration });
 
   mainApp.dataset.timerState = 'running';
-  settingGuide.textContent = `타이머 주기: ${timerSettings.currentCycle}/${timerSettings.totalCycle}`;
+  settingGuide.dataset.cycleContext = `${timerSettings.currentCycle}/${timerSettings.totalCycle}`;
   settingGuide.removeEventListener('click', openSettingModal);
 }
 

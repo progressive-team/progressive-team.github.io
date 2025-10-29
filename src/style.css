@@ -391,8 +391,14 @@ main.app[data-timer-state='running'] .start-button::before {
   margin: 0; /* <p> 자체의 마진 제거 */
 }
 
-main.app[data-timer-state='running'] .setting-guide {
+main.app[data-timer-state='stopped'] .setting-guide::before {
+  color: #404040;
+  content: '<클릭해서 시간 설정하기>';
+}
+
+main.app[data-timer-state='running'] .setting-guide::before {
   color: #fff;
+  content: '타이머 주기: ' attr(data-cycle-context);
 }
 
 #ipsum {
