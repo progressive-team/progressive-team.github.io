@@ -1,186 +1,72 @@
 import 'normalize.css';
 import '@noonnu/bmjua';
 
+import { requestNotificationPermission, showNotification } from './notify.js';
+
 const worker = new Worker(new URL('./worker.js', import.meta.url), {
   type: 'module',
 });
 
-let timerSettings = {
-  workTime: '25:00',
-  breakTime: '05:00',
-  longBreakTime: '15:00',
-  totalCycle: 1,
-  currentCycle: 1,
-};
-
-const mainApp = document.querySelector('main.app');
-
-const createArea = document.querySelector('.timer-create-area');
-const settingModal = document.querySelector('.timer-setting-modal');
-const activeArea = document.querySelector('.timer-active-area');
-
-const createButton = document.querySelector('#create-timer');
-const closeButton = document.querySelector('button[aria-label="닫기"]');
-
-const workTimeInput = document.getElementById('work-time');
-const breakTimeInput = document.getElementById('break-time');
-const longBreakTimeInput = document.getElementById('long-break-time');
-const cycleInput = document.getElementById('cycle');
-workTimeInput.value = timerSettings.workTime;
-breakTimeInput.value = timerSettings.breakTime;
-longBreakTimeInput.value = timerSettings.longBreakTime;
-cycleInput.value = timerSettings.totalCycle;
-
-const tabButton = document.querySelectorAll('.tab-button');
-
-const timerDisplay = document.querySelector('.timer-display');
-const startButton = document.querySelector('.start-button');
-const settingGuide = document.querySelector('.setting-guide');
-
-function requestNotificationPermission() {
-  if (!('Notification' in window)) {
-    return;
-  }
-
-  if (Notification.permission === 'default') {
-    Notification.requestPermission();
+class TimerInfo {
+  constructor(name, keyword) {
+    this.name = name;
+    this.keyword = keyword;
   }
 }
 
-function showNotification(message) {
-  if ('Notification' in window && Notification.permission === 'granted') {
-    new Notification('알림', { body: message });
-  }
-}
-
-createButton.addEventListener('click', () => {
-  settingModal.hidden = false;
+const State = Object.freeze({
+  WORK: new TimerInfo('일할 시간', 'work'),
+  BREAK: new TimerInfo('짧은 휴식', 'break'),
+  LONG_BREAK: new TimerInfo('긴 휴식', 'long-break'),
 });
 
-closeButton.addEventListener('click', () => {
-  settingModal.hidden = true;
-});
+class Timer {
+  constructor() {
+    this.workTime = '25:00';
+    this.breakTime = '05:00';
+    this.longBreakTime = '15:00';
+    this.totalCycle = 1;
+    this.currentCycle = 1;
+  }
 
-function isTimerRunning() {
-  return mainApp.dataset.timerState === 'running';
-}
-
-function openSettingModal() {
-  settingModal.dataset.mode = 'modify';
-  settingModal.hidden = false;
-}
-
-function stopTimer() {
-  worker.postMessage({ command: 'stop' });
-  mainApp.dataset.timerState = 'stopped';
-}
-
-function resetTimer() {
-  stopTimer();
-
-  timerSettings.currentCycle = timerSettings.totalCycle;
-  if (mainApp.dataset.state !== 'work') {
-    mainApp.dataset.state = 'work';
+  changeState(state) {
+    mainApp.dataset.state = state.keyword;
+    timerDisplay.textContent = this.getTime(state);
     tabButton.forEach((button) => {
-      if (button.textContent === '일할 시간') {
+      if (button.textContent === state.name) {
         button.classList.add('active');
       } else {
         button.classList.remove('active');
       }
     });
   }
-  timerDisplay.textContent = timerSettings.workTime;
-}
 
-function startTimer() {
-  requestNotificationPermission();
-
-  const timerString = timerDisplay.textContent;
-  const parts = timerString.split(':');
-  const duration = (parseInt(parts[0]) * 60 + parseInt(parts[1])) * 1000;
-
-  worker.postMessage({ command: 'start', duration: duration });
-
-  mainApp.dataset.timerState = 'running';
-  settingGuide.dataset.cycleContext = `${timerSettings.currentCycle}/${timerSettings.totalCycle}`;
-}
-
-tabButton.forEach((button) => {
-  button.addEventListener('click', () => {
-    if (button.classList.contains('active')) {
-      return;
+  getTime(state) {
+    if (state === State.WORK) {
+      return this.workTime;
+    } else if (state === State.BREAK) {
+      return this.breakTime;
+    } else if (state === State.LONG_BREAK) {
+      return this.longBreakTime;
     }
+  }
 
-    tabButton.forEach((button) => {
-      button.classList.remove('active');
-    });
-    button.classList.add('active');
+  isTimerRunning() {
+    return mainApp.dataset.timerState === 'running';
+  }
 
-    const buttonText = button.textContent;
-    if (buttonText === '일할 시간') {
+  stopTimer() {
+    worker.postMessage({ command: 'stop' });
+    mainApp.dataset.timerState = 'stopped';
+  }
+
+  resetTimer() {
+    this.stopTimer();
+
+    timer.currentCycle = timer.totalCycle;
+    // work가 아닐 때 work 상태로 변경
+    if (mainApp.dataset.state !== 'work') {
       mainApp.dataset.state = 'work';
-      timerDisplay.textContent = timerSettings.workTime;
-    } else if (buttonText === '짧은 휴식') {
-      mainApp.dataset.state = 'break';
-      timerDisplay.textContent = timerSettings.breakTime;
-    } else if (buttonText === '긴 휴식') {
-      mainApp.dataset.state = 'long-break';
-      timerDisplay.textContent = timerSettings.longBreakTime;
-    }
-
-    if (isTimerRunning()) {
-      stopTimer();
-    }
-  });
-});
-
-startButton.addEventListener('click', () => {
-  if (isTimerRunning()) {
-    resetTimer();
-  } else {
-    startTimer();
-  }
-});
-
-settingGuide.addEventListener('click', () => {
-  if (!isTimerRunning()) {
-    openSettingModal();
-  }
-});
-
-worker.onmessage = (event) => {
-  const remaining = event.data.remaining;
-
-  const totalSeconds = Math.max(0, Math.ceil(remaining / 1000));
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-  const formattedTime = `${String(minutes).padStart(2, '0')}:${String(
-    seconds
-  ).padStart(2, '0')}`;
-
-  timerDisplay.textContent = formattedTime;
-
-  if (remaining > 0) {
-    return;
-  }
-
-  stopTimer();
-  if (mainApp.dataset.state === 'work') {
-    mainApp.dataset.state = 'break';
-    timerDisplay.textContent = timerSettings.breakTime;
-    tabButton.forEach((button) => {
-      if (button.textContent === '짧은 휴식') {
-        button.classList.add('active');
-      } else {
-        button.classList.remove('active');
-      }
-    });
-    showNotification('짧은 휴식 시작!');
-    startTimer();
-  } else if (mainApp.dataset.state === 'break') {
-    if (timerSettings.currentCycle > 1) {
-      mainApp.dataset.state = 'work';
-      timerDisplay.textContent = timerSettings.workTime;
       tabButton.forEach((button) => {
         if (button.textContent === '일할 시간') {
           button.classList.add('active');
@@ -188,31 +74,146 @@ worker.onmessage = (event) => {
           button.classList.remove('active');
         }
       });
-      timerSettings.currentCycle--;
+    }
+    timerDisplay.textContent = timer.workTime;
+  }
+
+  startTimer() {
+    requestNotificationPermission();
+
+    const timerString = timerDisplay.textContent;
+    const parts = timerString.split(':');
+    const duration = (parseInt(parts[0]) * 60 + parseInt(parts[1])) * 1000;
+
+    worker.postMessage({ command: 'start', duration: duration });
+
+    mainApp.dataset.timerState = 'running';
+    settingGuide.dataset.cycleContext = `${timer.currentCycle}/${timer.totalCycle}`;
+  }
+}
+
+const timer = new Timer();
+
+const mainApp = document.querySelector('main.app');
+
+const settingModal = document.querySelector('.timer-setting-modal');
+
+const createButton = document.querySelector('#create-timer');
+createButton.addEventListener('click', () => {
+  settingModal.hidden = false;
+});
+
+const closeButton = document.querySelector('button[aria-label="닫기"]');
+closeButton.addEventListener('click', () => {
+  settingModal.hidden = true;
+});
+
+const workTimeInput = document.getElementById('work-time');
+const breakTimeInput = document.getElementById('break-time');
+const longBreakTimeInput = document.getElementById('long-break-time');
+const cycleInput = document.getElementById('cycle');
+workTimeInput.value = timer.workTime;
+breakTimeInput.value = timer.breakTime;
+longBreakTimeInput.value = timer.longBreakTime;
+cycleInput.value = timer.totalCycle;
+
+const timeInputs = document.querySelectorAll(
+  '#work-time, #break-time, #cycle, #long-break-time'
+);
+
+timeInputs.forEach((input) => {
+  input.addEventListener('blur', () => {
+    if (input.id !== 'cycle') formatTimeInput(input); //주기를 제외하고 타이머 값 포맷팅
+  });
+});
+
+const tabButton = document.querySelectorAll('.tab-button');
+tabButton.forEach((button) => {
+  button.addEventListener('click', () => {
+    // 이미 선택되어 있는 상태에서는 다시 선택 로직이 동작하지 않게끔 하기
+    if (button.classList.contains('active')) return;
+
+    detachActiveClass(); // todo 로직 제거
+    button.classList.add('active');
+
+    const buttonText = button.textContent;
+    if (buttonText === '일할 시간') {
+      timer.changeState(State.WORK);
+    } else if (buttonText === '짧은 휴식') {
+      timer.changeState(State.BREAK);
+    } else if (buttonText === '긴 휴식') {
+      timer.changeState(State.LONG_BREAK);
+    }
+
+    if (timer.isTimerRunning()) {
+      timer.stopTimer();
+    }
+  });
+});
+
+const timerDisplay = document.querySelector('.timer-display');
+
+//만들기 버튼 클릭 시 검증 로직
+const generateBtn = document.getElementById('generateBtn');
+generateBtn.addEventListener('click', verify);
+
+const startButton = document.querySelector('.start-button');
+startButton.addEventListener('click', () => {
+  if (timer.isTimerRunning()) {
+    timer.resetTimer();
+  } else {
+    timer.currentCycle = timer.totalCycle;
+    timer.startTimer();
+  }
+});
+
+const settingGuide = document.querySelector('.setting-guide');
+settingGuide.addEventListener('click', () => {
+  if (!timer.isTimerRunning()) {
+    openSettingModal();
+  }
+});
+
+function detachActiveClass() {
+  tabButton.forEach((button) => {
+    button.classList.remove('active');
+  });
+}
+
+function openSettingModal() {
+  settingModal.dataset.mode = 'modify';
+  settingModal.hidden = false;
+}
+
+worker.onmessage = (event) => {
+  const remaining = event.data.remaining;
+
+  const totalSeconds = Math.max(0, Math.ceil(remaining / 1000));
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  const formattedTime = getDisplayFormat(minutes, seconds);
+
+  timerDisplay.textContent = formattedTime;
+
+  // 남은 시간이 0보다 크면 타이머 종료 동작하지 않기
+  if (remaining > 0) return;
+
+  timer.stopTimer();
+  if (mainApp.dataset.state === 'work') {
+    timer.changeState(State.BREAK);
+    showNotification('짧은 휴식 시작!');
+    timer.startTimer();
+  } else if (mainApp.dataset.state === 'break') {
+    if (timer.currentCycle > 1) {
+      timer.changeState(State.WORK);
+      timer.currentCycle--;
     } else {
-      mainApp.dataset.state = 'long-break';
-      timerDisplay.textContent = timerSettings.longBreakTime;
-      tabButton.forEach((button) => {
-        if (button.textContent === '긴 휴식') {
-          button.classList.add('active');
-        } else {
-          button.classList.remove('active');
-        }
-      });
+      timer.changeState(State.LONG_BREAK);
       showNotification('모든 주기 종료\n긴 휴식 시작!');
     }
-    startTimer();
+    timer.startTimer();
   } else if (mainApp.dataset.state === 'long-break') {
-    mainApp.dataset.state = 'work';
-    timerDisplay.textContent = timerSettings.workTime;
-    timerSettings.currentCycle = timerSettings.totalCycle;
-    tabButton.forEach((button) => {
-      if (button.textContent === '일할 시간') {
-        button.classList.add('active');
-      } else {
-        button.classList.remove('active');
-      }
-    });
+    timer.changeState(State.WORK);
     showNotification('뽀모도로 종료');
   }
 };
@@ -232,30 +233,14 @@ function formatTimeInput(input) {
     sec = sec % 60;
   }
 
-  input.value = `${String(min).padStart(2, '0')}:${String(sec).padStart(
-    2,
-    '0'
-  )}`;
+  input.value = getDisplayFormat(min, sec);
 }
 
-const timeInputs = document.querySelectorAll(
-  '#work-time, #break-time, #cycle, #long-break-time'
-);
+function getDisplayFormat(min, sec) {
+  return `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+}
 
-timeInputs.forEach((input) => {
-  input.addEventListener('blur', () => {
-    if (input.id !== 'cycle') formatTimeInput(input); //주기를 제외하고 타이머 값 포맷팅
-  });
-});
-
-//만들기 버튼 클릭 시 검증 로직
-const generateBtn = document.getElementById('generateBtn');
-generateBtn.addEventListener('click', () => {
-  const workTimeInput = document.getElementById('work-time');
-  const breakTimeInput = document.getElementById('break-time');
-  const longBreakTimeInput = document.getElementById('long-break-time');
-  const cycleInput = document.getElementById('cycle');
-
+function verify() {
   // 값이 없으면 기본값으로 설정
   if (!workTimeInput.value) workTimeInput.value = '25:00';
   if (!breakTimeInput.value) breakTimeInput.value = '05:00';
@@ -296,30 +281,21 @@ generateBtn.addEventListener('click', () => {
   }
 
   // 모든 검증을 통과하면 모달을 숨기고 활성화 페이지로 전환
-  createArea.hidden = true;
+  document.querySelector('.timer-create-area').hidden = true;
   settingModal.hidden = true;
-  activeArea.hidden = false;
+  document.querySelector('.timer-active-area').hidden = false;
 
   alert(
-    `✅ 타이머 생성 완료!\n활동: ${workTime}\n휴식: ${breakTime}\n긴 휴식: ${longBreakTime}\n주기: ${parseInt(
-      cycle
-    )}`
+    `✅ 타이머 생성 완료!\n활동: ${workTime}\n휴식: ${breakTime}\n
+    긴 휴식: ${longBreakTime}\n주기: ${parseInt(cycle)}`
   );
-  createArea.hidden = true;
-  settingModal.hidden = true;
-  activeArea.hidden = false;
 
-  timerSettings.workTime = workTime;
-  timerSettings.breakTime = breakTime;
-  timerSettings.longBreakTime = longBreakTime;
-  timerSettings.totalCycle = cycle;
-  timerSettings.currentCycle = cycle;
+  timer.workTime = workTime;
+  timer.breakTime = breakTime;
+  timer.longBreakTime = longBreakTime;
+  timer.totalCycle = cycle;
+  timer.currentCycle = cycle;
 
-  if (mainApp.dataset.state === 'work') {
-    timerDisplay.textContent = timerSettings.workTime;
-  } else if (mainApp.dataset.state === 'break') {
-    timerDisplay.textContent = timerSettings.breakTime;
-  } else if (mainApp.dataset.state === 'long-break') {
-    timerDisplay.textContent = timerSettings.longBreakTime;
-  }
-});
+  // 다른 탭에서 수정하더라도 일할 시간 탭으로 돌아오게 하기
+  timer.changeState(State.WORK);
+}
