@@ -37,6 +37,22 @@ const timerDisplay = document.querySelector('.timer-display');
 const startButton = document.querySelector('.start-button');
 const settingGuide = document.querySelector('.setting-guide');
 
+function requestNotificationPermission() {
+  if (!('Notification' in window)) {
+    return;
+  }
+
+  if (Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+function showNotification(message) {
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification('알림', { body: message });
+  }
+}
+
 createButton.addEventListener('click', () => {
   settingModal.hidden = false;
 });
@@ -77,6 +93,8 @@ function resetTimer() {
 }
 
 function startTimer() {
+  requestNotificationPermission();
+
   const timerString = timerDisplay.textContent;
   const parts = timerString.split(':');
   const duration = (parseInt(parts[0]) * 60 + parseInt(parts[1])) * 1000;
@@ -157,6 +175,7 @@ worker.onmessage = (event) => {
         button.classList.remove('active');
       }
     });
+    showNotification('짧은 휴식 시작!');
     startTimer();
   } else if (mainApp.dataset.state === 'break') {
     if (timerSettings.currentCycle > 1) {
@@ -180,6 +199,7 @@ worker.onmessage = (event) => {
           button.classList.remove('active');
         }
       });
+      showNotification('모든 주기 종료\n긴 휴식 시작!');
     }
     startTimer();
   } else if (mainApp.dataset.state === 'long-break') {
@@ -193,6 +213,7 @@ worker.onmessage = (event) => {
         button.classList.remove('active');
       }
     });
+    showNotification('뽀모도로 종료');
   }
 };
 
