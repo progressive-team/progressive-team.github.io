@@ -37,6 +37,22 @@ const timerDisplay = document.querySelector('.timer-display');
 const startButton = document.querySelector('.start-button');
 const settingGuide = document.querySelector('.setting-guide');
 
+function requestNotificationPermission() {
+  if (!('Notification' in window)) {
+    return;
+  }
+
+  if (Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+function showNotification(message) {
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification('알림', { body: message });
+  }
+}
+
 createButton.addEventListener('click', () => {
   settingModal.hidden = false;
 });
@@ -49,13 +65,36 @@ function isTimerRunning() {
   return mainApp.dataset.timerState === 'running';
 }
 
+function openSettingModal() {
+  settingModal.dataset.mode = 'modify';
+  settingModal.hidden = false;
+}
+
 function stopTimer() {
   worker.postMessage({ command: 'stop' });
   mainApp.dataset.timerState = 'stopped';
-  settingGuide.classList.remove('is-hidden');
+}
+
+function resetTimer() {
+  stopTimer();
+
+  timerSettings.currentCycle = timerSettings.totalCycle;
+  if (mainApp.dataset.state !== 'work') {
+    mainApp.dataset.state = 'work';
+    tabButton.forEach((button) => {
+      if (button.textContent === '일할 시간') {
+        button.classList.add('active');
+      } else {
+        button.classList.remove('active');
+      }
+    });
+  }
+  timerDisplay.textContent = timerSettings.workTime;
 }
 
 function startTimer() {
+  requestNotificationPermission();
+
   const timerString = timerDisplay.textContent;
   const parts = timerString.split(':');
   const duration = (parseInt(parts[0]) * 60 + parseInt(parts[1])) * 1000;
@@ -63,7 +102,7 @@ function startTimer() {
   worker.postMessage({ command: 'start', duration: duration });
 
   mainApp.dataset.timerState = 'running';
-  settingGuide.classList.add('is-hidden');
+  settingGuide.dataset.cycleContext = `${timerSettings.currentCycle}/${timerSettings.totalCycle}`;
 }
 
 tabButton.forEach((button) => {
@@ -98,16 +137,17 @@ tabButton.forEach((button) => {
   });
 });
 
-settingGuide.addEventListener('click', () => {
-  settingModal.dataset.mode = 'modify';
-  settingModal.hidden = false;
-});
-
 startButton.addEventListener('click', () => {
   if (isTimerRunning()) {
-    stopTimer();
+    resetTimer();
   } else {
     startTimer();
+  }
+});
+
+settingGuide.addEventListener('click', () => {
+  if (!isTimerRunning()) {
+    openSettingModal();
   }
 });
 
@@ -138,6 +178,7 @@ worker.onmessage = (event) => {
         button.classList.remove('active');
       }
     });
+    showNotification('짧은 휴식 시작!');
     startTimer();
   } else if (mainApp.dataset.state === 'break') {
     if (timerSettings.currentCycle > 1) {
@@ -150,6 +191,7 @@ worker.onmessage = (event) => {
           button.classList.remove('active');
         }
       });
+      timerSettings.currentCycle--;
     } else {
       mainApp.dataset.state = 'long-break';
       timerDisplay.textContent = timerSettings.longBreakTime;
@@ -160,8 +202,8 @@ worker.onmessage = (event) => {
           button.classList.remove('active');
         }
       });
+      showNotification('모든 주기 종료\n긴 휴식 시작!');
     }
-    timerSettings.currentCycle--;
     startTimer();
   } else if (mainApp.dataset.state === 'long-break') {
     mainApp.dataset.state = 'work';
@@ -174,6 +216,7 @@ worker.onmessage = (event) => {
         button.classList.remove('active');
       }
     });
+    showNotification('뽀모도로 종료');
   }
 };
 

@@ -103,11 +103,21 @@ label[for='create-timer'] {
 
 .close-row {
   width: 100%;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: flex-end;
+  column-gap: 1rem;
+
+  h2 {
+    grid-column: 2;
+    margin: 0;
+    font-size: 36px;
+    font-weight: 400;
+  }
 
   button[aria-label='닫기'] {
+    grid-column: 3;
+    justify-self: end;
     width: 48px;
     height: 48px;
     padding: 0;
@@ -263,7 +273,11 @@ fieldset.row-box {
 
 .inner-box {
   display: flex;
-  padding: 48px 84px 18px 84px;
+
+  padding-inline: clamp(16px, 8vw, 84px); /* 좌/우: 16px ~ 84px */
+  padding-block-start: clamp(24px, 5vmin, 48px); /* 위: 24px ~ 48px */
+  padding-block-end: clamp(12px, 3vmin, 18px); /* 아래: 12px ~ 18px */
+
   flex-direction: column;
   align-items: center;
   gap: 48px;
@@ -274,10 +288,6 @@ fieldset.row-box {
 
 .tab-list {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 24px;
-  align-self: stretch;
   list-style: none; /* ul 기본 점 제거 */
   padding: 0;
   margin: 0;
@@ -285,10 +295,13 @@ fieldset.row-box {
 
 .tab-button {
   display: flex;
-  padding: 8px 40px;
+
+  /* 가변 패딩으로 작은 가로 뷰포트에서 축소하기 */
+  padding-block: clamp(6px, 1.5vmin, 8px);
+  padding-inline: clamp(8px, 3.5vw, 16px);
+
   justify-content: center;
   align-items: center;
-  width: auto;
   background: rgba(255, 255, 255, 0);
   border: none;
   border-radius: 8px;
@@ -315,13 +328,14 @@ fieldset.row-box {
   flex-direction: column;
   align-items: center;
   gap: 18px;
-  width: 100%;
+  width: min(36vw, 400px);
 }
 
 .timer-display {
   color: #fff;
   text-align: center;
-  font-size: 128px;
+  /* 뷰포트 기준: 최소 48px ~ 최대 128px */
+  font-size: clamp(48px, 14vw, 128px);
   font-style: normal;
   font-weight: 400;
   line-height: 100%; /* 128px */
@@ -338,7 +352,10 @@ fieldset.row-box {
 
 .start-button {
   display: inline-flex;
-  padding: 14px 0;
+
+  padding-inline: 0;
+  padding-block: clamp(8px, 2vw, 14px);
+
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -382,11 +399,17 @@ main.app[data-timer-state='running'] .start-button::before {
   line-height: 100%; /* 20px */
   letter-spacing: -0.44px;
   margin: 0; /* <p> 자체의 마진 제거 */
+  word-break: keep-all;
 }
 
-.setting-guide.is-hidden {
-  visibility: hidden;
-  opacity: 0;
+main.app[data-timer-state='stopped'] .setting-guide::before {
+  color: #404040;
+  content: '<클릭해서 시간 설정하기>';
+}
+
+main.app[data-timer-state='running'] .setting-guide::before {
+  color: #fff;
+  content: '타이머 주기: ' attr(data-cycle-context);
 }
 
 #ipsum {
