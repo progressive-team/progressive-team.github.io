@@ -92,8 +92,9 @@ label[for='create-timer'] {
 #setting-timer {
   position: relative;
   display: flex;
-  width: 620px;
-  padding: 24px;
+  max-width: 620px;
+  padding: clamp(16px, 4vw, 24px);
+  margin: clamp(16px, 4vw, 24px);
   flex-direction: column;
   align-items: center;
   gap: 18px;
@@ -143,59 +144,43 @@ label[for='create-timer'] {
 }
 
 fieldset.row-box {
+  margin: 0;
+  padding: 0 34px;
   border: none;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 20px;
 
-  > div {
-    display: flex;
-    width: 503px;
-    justify-content: space-between;
-    align-items: center;
+  display: grid;
+  gap: 20px 10px;
+  font-size: clamp(1.25rem, 4vw, 24px);
 
-    > label {
-      width: 118px;
-      height: 37px;
-      flex-shrink: 0;
-      text-align: right;
-      font-family: BMJUA;
-      font-size: 24px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 150%;
-      letter-spacing: -0.528px;
-    }
+  grid-template-columns: minmax(max-content, 1fr) minmax(0, 3fr);
 
-    > input {
-      display: flex;
-      width: 375px;
-      padding: 8px 0;
-      justify-content: center;
-      align-items: center;
-      flex-shrink: 0;
-      border: none;
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 8px;
-      box-shadow: 0 8px 12px 6px rgba(0, 0, 0, 0.15),
-        0 4px 4px 0 rgba(0, 0, 0, 0.3);
-      /* flex: 1 0 0; */
+  > label {
+    text-align: right;
+    align-self: center;
+    font-weight: 400;
+    letter-spacing: -0.528px;
+  }
+
+  > input {
+    padding-block: clamp(6px, 2.5vmin, 8px);
+    border: none;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    box-shadow: 0 8px 12px 6px rgba(0, 0, 0, 0.15),
+      0 4px 4px 0 rgba(0, 0, 0, 0.3);
+    color: currentColor;
+
+    &::placeholder {
       color: currentColor;
-
-      &::placeholder {
-        color: currentColor;
-        opacity: 0.4;
-      }
-
-      text-align: center;
-      font-family: BMJUA;
-      font-size: 48px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 100%;
-      letter-spacing: -1.056px;
+      opacity: 0.4;
     }
+
+    text-align: center;
+    font-size: 2em;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 100%;
+    letter-spacing: -1.056px;
   }
 }
 
