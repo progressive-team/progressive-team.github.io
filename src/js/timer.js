@@ -11,7 +11,7 @@ class TimerInfo {
   }
 }
 
-const State = Object.freeze({
+export const State = Object.freeze({
   WORK: new TimerInfo('일할 시간', 'work'),
   BREAK: new TimerInfo('짧은 휴식', 'break'),
   LONG_BREAK: new TimerInfo('긴 휴식', 'long-break'),

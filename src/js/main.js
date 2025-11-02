@@ -1,8 +1,8 @@
 import 'normalize.css';
 import '@noonnu/bmjua';
 
-import Timer from './timer.js';
 import { formatTimeInput } from './util.js';
+import Timer, { State } from './timer.js';
 
 const settingModal = document.querySelector('.timer-setting-modal');
 
