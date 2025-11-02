@@ -91,7 +91,7 @@ export default class Timer {
   skipNextPhase() {
     this.stopTimer();
 
-    const state = this.mainApp.dataset;
+    const { state } = this.mainApp.dataset;
     let autoStart = false;
 
     switch (state) {
