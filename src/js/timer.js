@@ -82,7 +82,7 @@ export default class Timer {
     // 주기 초기화
     this.currentCycle = this.totalCycle;
 
-    const timerString = timerDisplay.textContent;
+    const timerString = this.timerDisplay.textContent;
     const parts = timerString.split(':');
     const duration = (parseInt(parts[0]) * 60 + parseInt(parts[1])) * 1000;
 
@@ -152,6 +152,6 @@ export default class Timer {
   }
 
   setTimerDisplay(value) {
-      this.timerDisplay.textContent = value;
+    this.timerDisplay.textContent = value;
   }
 }
