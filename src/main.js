@@ -90,6 +90,13 @@ class Timer {
     mainApp.dataset.timerState = 'running';
     settingGuide.dataset.cycleContext = `${timer.currentCycle}/${timer.totalCycle}`;
   }
+  setTime(workTime, breakTime, longBreakTime, cycle) {
+    this.workTime = workTime;
+    this.breakTime = breakTime;
+    this.longBreakTime = longBreakTime;
+    this.totalCycle = cycle;
+    this.currentCycle = cycle;
+  }
 }
 
 const timer = new Timer();
@@ -291,11 +298,7 @@ function verify() {
     긴 휴식: ${longBreakTime}\n주기: ${parseInt(cycle)}`
   );
 
-  timer.workTime = workTime;
-  timer.breakTime = breakTime;
-  timer.longBreakTime = longBreakTime;
-  timer.totalCycle = cycle;
-  timer.currentCycle = cycle;
+  timer.setTime(workTime, breakTime, longBreakTime, cycle);
 
   // 다른 탭에서 수정하더라도 일할 시간 탭으로 돌아오게 하기
   timer.changeState(State.WORK);
