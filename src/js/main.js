@@ -4,6 +4,10 @@ import '@noonnu/bmjua';
 import Timer, { State } from './timer.js';
 import { formatTimeInput, getDisplayFormat } from './util.js';
 
+const worker = new Worker(new URL('./worker.js', import.meta.url), {
+  type: 'module',
+});
+
 const settingModal = document.querySelector('.timer-setting-modal');
 
 const workTimeInput = document.getElementById('work-time');
@@ -27,7 +31,8 @@ const timer = new Timer(
   document.querySelector('main.app'),
   document.querySelector('.timer-display'),
   tabButtons,
-  settingGuide
+  settingGuide,
+  worker
 );
 
 document.querySelector('#create-timer').addEventListener('click', () => {
