@@ -74,12 +74,6 @@ startButton.addEventListener('click', () => {
   }
 });
 
-function detachActiveClass() {
-  tabButtons.forEach((button) => {
-    button.classList.remove('active');
-  });
-}
-
 function openSettingModal() {
   if (timer.isTimerRunning()) return;
 
