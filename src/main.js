@@ -214,14 +214,17 @@ function openSettingModal() {
   settingModal.hidden = false;
 }
 
-worker.onmessage = (event) => {
-  const remaining = event.data.remaining;
-
+function getFormattedTimeByRemaining(remaining) {
   const totalSeconds = Math.max(0, Math.ceil(remaining / 1000));
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
   const formattedTime = getDisplayFormat(minutes, seconds);
+  return;
+}
 
+worker.onmessage = (event) => {
+  const remaining = event.data.remaining;
+  const formattedTime = getFormattedTimeByRemaining(remaining);
   timerDisplay.textContent = formattedTime;
 
   // 남은 시간이 0보다 크면 타이머 종료 동작하지 않기
