@@ -24,13 +24,15 @@ timeInputs.forEach((input) => {
   });
 });
 
-const tabButtons = document.querySelectorAll('.tab-button');
+const tabs = document.querySelectorAll(
+  '.tab-list[role="tablist"] > [role="tab"]'
+);
 const settingGuide = document.querySelector('.setting-guide');
 
 const timer = new Timer(
   document.querySelector('main.app'),
   document.querySelector('.timer-display'),
-  tabButtons,
+  tabs,
   settingGuide,
   worker
 );
@@ -49,13 +51,13 @@ breakTimeInput.value = timer.breakTime;
 longBreakTimeInput.value = timer.longBreakTime;
 cycleInput.value = timer.totalCycle;
 
-tabButtons.forEach((button) => {
-  button.addEventListener('click', () => {
+tabs.forEach((tab) => {
+  tab.addEventListener('click', () => {
     // 이미 선택되어 있는 상태에서는 다시 선택 로직이 동작하지 않게끔 하기
-    if (button.classList.contains('active')) return;
+    if (tab.ariaSelected === 'true') return;
 
     // 버튼마다 기능 동작시키기
-    timer.runByButton(button.textContent);
+    timer.runByButton(tab.dataset.keyword);
 
     // 다른 버튼 눌러서 넘어갈 때 타이머가 동작할 경우 타이머를 멈추게 하기
     if (timer.isTimerRunning()) {

@@ -14,10 +14,10 @@ export const State = Object.freeze({
 });
 
 export default class Timer {
-  constructor(mainApp, timerDisplay, tabButtons, settingGuide, worker) {
+  constructor(mainApp, timerDisplay, tabs, settingGuide, worker) {
     this.mainApp = mainApp;
     this.timerDisplay = timerDisplay;
-    this.tabButtons = tabButtons;
+    this.tabs = tabs;
     this.settingGuide = settingGuide;
     this.worker = worker;
 
@@ -31,12 +31,9 @@ export default class Timer {
   changeState(state) {
     this.mainApp.dataset.state = state.keyword;
     this.timerDisplay.textContent = this.getTime(state);
-    for (const button of this.tabButtons) {
-      if (button.textContent === state.name) {
-        button.classList.add('active');
-        continue;
-      }
-      button.classList.remove('active');
+    for (const tab of this.tabs) {
+      tab.ariaSelected =
+        tab.dataset.keyword === state.keyword ? 'true' : 'false';
     }
   }
 
@@ -131,15 +128,15 @@ export default class Timer {
     this.currentCycle = cycle;
   }
 
-  runByButton(buttonText) {
-    switch (buttonText) {
-      case '일할 시간':
+  runByButton(keyword) {
+    switch (keyword) {
+      case 'work':
         this.changeState(State.WORK);
         break;
-      case '짧은 휴식':
+      case 'break':
         this.changeState(State.BREAK);
         break;
-      case '긴 휴식':
+      case 'long-break':
         this.changeState(State.LONG_BREAK);
         break;
       default:

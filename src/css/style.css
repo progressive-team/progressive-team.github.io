@@ -272,41 +272,43 @@ fieldset.row-box {
   background: rgba(255, 255, 255, 0.15);
 }
 
-.tab-list {
+.tab-list[role='tablist'] {
   display: flex;
-  list-style: none; /* ul 기본 점 제거 */
+  list-style-type: '';
   padding: 0;
   margin: 0;
-}
 
-.tab-button {
-  display: flex;
+  [role='tab'] {
+    & > button {
+      display: flex;
 
-  /* 가변 패딩으로 작은 가로 뷰포트에서 축소하기 */
-  padding-block: clamp(6px, 1.5vmin, 8px);
-  padding-inline: clamp(8px, 3.5vw, 16px);
+      /* 가변 패딩으로 작은 가로 뷰포트에서 축소하기 */
+      padding-block: clamp(6px, 1.5vmin, 8px);
+      padding-inline: clamp(8px, 3.5vw, 16px);
 
-  justify-content: center;
-  align-items: center;
-  background: rgba(255, 255, 255, 0);
-  border: none;
-  border-radius: 8px;
-  transition: background-color 0.2s;
-  color: var(--main-text-color);
-  text-align: center;
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 100%; /* 15px */
-  letter-spacing: -0.33px;
-}
+      justify-content: center;
+      align-items: center;
+      background: rgba(255, 255, 255, 0);
+      border: none;
+      border-radius: 8px;
+      transition: background-color 0.2s;
+      color: var(--main-text-color);
+      text-align: center;
+      font-size: 15px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 100%; /* 15px */
+      letter-spacing: -0.33px;
 
-.tab-button:hover {
-  background: rgba(0, 0, 0, 0.15);
-}
+      &:hover {
+        background: rgba(0, 0, 0, 0.15);
+      }
+    }
 
-.tab-button.active {
-  background: rgba(0, 0, 0, 0.15);
+    &[aria-selected='true'] > button {
+      background: rgba(0, 0, 0, 0.15);
+    }
+  }
 }
 
 .frame {
