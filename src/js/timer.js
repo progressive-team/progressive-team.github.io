@@ -32,7 +32,8 @@ export default class Timer {
     this.mainApp.dataset.state = state.keyword;
     this.timerDisplay.textContent = this.getTime(state);
     for (const tab of this.tabs) {
-      tab.ariaSelected = tab.textContent === state.name ? 'true' : 'false';
+      tab.ariaSelected =
+        tab.dataset.keyword === state.keyword ? 'true' : 'false';
     }
   }
 
@@ -127,15 +128,15 @@ export default class Timer {
     this.currentCycle = cycle;
   }
 
-  runByButton(buttonText) {
-    switch (buttonText) {
-      case '일할 시간':
+  runByButton(keyword) {
+    switch (keyword) {
+      case 'work':
         this.changeState(State.WORK);
         break;
-      case '짧은 휴식':
+      case 'break':
         this.changeState(State.BREAK);
         break;
-      case '긴 휴식':
+      case 'long-break':
         this.changeState(State.LONG_BREAK);
         break;
       default:

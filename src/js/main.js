@@ -57,7 +57,7 @@ tabs.forEach((tab) => {
     if (tab.ariaSelected === 'true') return;
 
     // 버튼마다 기능 동작시키기
-    timer.runByButton(button.textContent);
+    timer.runByButton(tab.dataset.keyword);
 
     // 다른 버튼 눌러서 넘어갈 때 타이머가 동작할 경우 타이머를 멈추게 하기
     if (timer.isTimerRunning()) {
