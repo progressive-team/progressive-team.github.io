@@ -257,6 +257,7 @@ function verify() {
     breakTime === '00:00' ||
     longBreakTime === '00:00'
   ) {
+    // todo 근본적으로 alert 방식에서 벗어나는 건 어떨까
     alert('⚠️ 타이머 시간은 00:00일 수 없습니다!');
     return;
   }
