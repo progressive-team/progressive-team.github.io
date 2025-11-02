@@ -33,9 +33,11 @@ const timer = new Timer(
 document.querySelector('#create-timer').addEventListener('click', () => {
   settingModal.hidden = false;
 });
-document.querySelector('button[aria-label="닫기"]').addEventListener('click', () => {
-  settingModal.hidden = true;
-});
+document
+  .querySelector('button[aria-label="닫기"]')
+  .addEventListener('click', () => {
+    settingModal.hidden = true;
+  });
 
 workTimeInput.value = timer.workTime;
 breakTimeInput.value = timer.breakTime;
@@ -143,7 +145,6 @@ function verify() {
 }
 
 worker.onmessage = (event) => {
-  
   const remaining = event.data.remaining;
 
   const totalSeconds = Math.max(0, Math.ceil(remaining / 1000));
