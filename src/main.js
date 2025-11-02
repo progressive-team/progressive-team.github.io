@@ -90,6 +90,28 @@ class Timer {
     mainApp.dataset.timerState = 'running';
     settingGuide.dataset.cycleContext = `${timer.currentCycle}/${timer.totalCycle}`;
   }
+
+  skipNextPhase() {
+    this.stopTimer();
+    if (mainApp.dataset.state === 'work') {
+      this.changeState(State.BREAK);
+      showNotification('짧은 휴식 시작!');
+      this.startTimer();
+    } else if (mainApp.dataset.state === 'break') {
+      if (this.currentCycle > 1) {
+        this.changeState(State.WORK);
+        this.currentCycle--;
+      } else {
+        this.changeState(State.LONG_BREAK);
+        showNotification('모든 주기 종료\n긴 휴식 시작!');
+      }
+      this.startTimer();
+    } else if (mainApp.dataset.state === 'long-break') {
+      this.changeState(State.WORK);
+      showNotification('뽀모도로 종료');
+    }
+  }
+
   setTime(workTime, breakTime, longBreakTime, cycle) {
     this.workTime = workTime;
     this.breakTime = breakTime;
@@ -205,24 +227,7 @@ worker.onmessage = (event) => {
   // 남은 시간이 0보다 크면 타이머 종료 동작하지 않기
   if (remaining > 0) return;
 
-  timer.stopTimer();
-  if (mainApp.dataset.state === 'work') {
-    timer.changeState(State.BREAK);
-    showNotification('짧은 휴식 시작!');
-    timer.startTimer();
-  } else if (mainApp.dataset.state === 'break') {
-    if (timer.currentCycle > 1) {
-      timer.changeState(State.WORK);
-      timer.currentCycle--;
-    } else {
-      timer.changeState(State.LONG_BREAK);
-      showNotification('모든 주기 종료\n긴 휴식 시작!');
-    }
-    timer.startTimer();
-  } else if (mainApp.dataset.state === 'long-break') {
-    timer.changeState(State.WORK);
-    showNotification('뽀모도로 종료');
-  }
+  timer.skipNextPhase();
 };
 
 function formatTimeInput(input) {
