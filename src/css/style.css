@@ -400,6 +400,11 @@ main.app[data-timer-state='running'] .setting-guide::before {
   content: '타이머 주기: ' attr(data-cycle-context);
 }
 
+main.app[data-timer-state='long-break'] .setting-guide::before {
+  color: #fff;
+  content: '긴 휴식 시간입니다. 재정비하세요.';
+}
+
 #ipsum {
   color: black;
 }
