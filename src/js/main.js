@@ -135,8 +135,9 @@ function verify() {
   document.querySelector('.timer-active-area').hidden = false;
 
   alert(
-    `✅ 타이머 생성 완료!\n활동: ${workTime}\n휴식: ${breakTime}\n
-    긴 휴식: ${longBreakTime}\n주기: ${parseInt(cycle)}`
+    `✅ 타이머 생성 완료!\n활동: ${workTime}\n휴식: ${breakTime}\n긴 휴식: ${longBreakTime}\n주기: ${parseInt(
+      cycle
+    )}`
   );
 
   timer.setTime(workTime, breakTime, longBreakTime, cycle);
