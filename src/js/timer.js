@@ -61,12 +61,8 @@ export default class Timer {
 
   resetTimer() {
     this.stopTimer();
-
     this.currentCycle = this.totalCycle;
-    // work가 아닐 때 work 상태로 변경
-    if (this.mainApp.dataset.state !== 'work') {
-      this.changeState(State.WORK);
-    }
+    this.changeState(State.WORK);
   }
 
   initTimer() {
