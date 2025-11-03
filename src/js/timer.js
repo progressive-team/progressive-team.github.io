@@ -51,7 +51,10 @@ export default class Timer {
   }
 
   isTimerRunning() {
-    return this.mainApp.dataset.timerState === 'running';
+    return (
+      this.mainApp.dataset.timerState === 'running' ||
+      this.mainApp.dataset.timerState === 'long-break'
+    );
   }
 
   stopTimer() {
@@ -105,6 +108,7 @@ export default class Timer {
           this.changeState(State.WORK);
           this.currentCycle--;
         } else {
+          this.mainApp.dataset.timerState = 'long-break';
           this.changeState(State.LONG_BREAK);
           showNotification('모든 주기 종료\n긴 휴식 시작!');
         }
