@@ -51,10 +51,7 @@ export default class Timer {
   }
 
   isTimerRunning() {
-    return (
-      this.mainApp.dataset.timerState === 'running' ||
-      this.mainApp.dataset.timerState === 'long-break'
-    );
+    return this.mainApp.dataset.timerState === 'running';
   }
 
   stopTimer() {
