@@ -77,6 +77,7 @@ startButton.addEventListener('click', () => {
   if (timer.isTimerRunning()) {
     timer.resetTimer();
   } else {
+    timer.initTimer();
     timer.startTimer();
   }
 });

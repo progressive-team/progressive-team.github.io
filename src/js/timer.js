@@ -69,12 +69,14 @@ export default class Timer {
     }
   }
 
-  startTimer() {
+  initTimer() {
     requestNotificationPermission();
 
     // 주기 초기화
     this.currentCycle = this.totalCycle;
+  }
 
+  startTimer() {
     const timerString = this.timerDisplay.textContent;
     const parts = timerString.split(':');
     const duration = (parseInt(parts[0]) * 60 + parseInt(parts[1])) * 1000;
