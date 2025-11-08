@@ -4,7 +4,10 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://vite.dev/config/
 export default defineConfig(() => {
+  const base = process.env.PREVIEW_BASE;
+
   return {
+    base,
     plugins: [svelte(), tailwindcss()],
   };
 });

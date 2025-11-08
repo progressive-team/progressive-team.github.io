@@ -1,4 +1,4 @@
-name: Deploy static content to Pages
+name: Production Deployment
 
 on:
   push:
@@ -7,43 +7,67 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
-  id-token: write
-
-# Allow one concurrent deployment
-concurrency:
-  group: 'pages'
-  cancel-in-progress: true
+  deployments: write
 
 jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4.1.0
         with:
           version: 10
+
       - name: Set up Node
         uses: actions/setup-node@v5
         with:
           node-version: lts/*
           cache: 'pnpm'
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
       - name: Build
         run: pnpm build
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+
+      - name: Deploy to gh-pages branch (production)
+        id: deploy_pages
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          path: './dist'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          branch: gh-pages
+          clean: false
+          folder: ./dist
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish deployment record (mark production ready)
+        uses: actions/github-script@v6
+        env:
+          PAGE_URL: ${{ steps.deploy_pages.outputs.page_url }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const ref = context.sha;
+            const deployment = await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref,
+              environment: 'production',
+              transient_environment: false,
+              auto_merge: false,
+              required_contexts: []
+            });
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment.data.id,
+              state: 'success',
+              environment_url: process.env.PAGE_URL,
+              description: 'Production deployed'
+            });
