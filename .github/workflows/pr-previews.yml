@@ -20,6 +20,8 @@ env:
 
 jobs:
   preview:
+    # only run the "build & deploy preview" job when the PR is opened / updated / reopened
+    if: github.event.action != 'closed'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout PR head (fetch PR repo and exact SHA)
