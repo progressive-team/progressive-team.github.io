@@ -93,7 +93,7 @@ export default class Timer {
       case 'work':
         this.changeState(State.BREAK);
         showNotification(
-          `짧은 휴식 시작. 현재 주기: ${this.settingGuide.dataset.cycleContext}`
+          `짧은 휴식 시작. 현재 주기: ${this.settingGuide.dataset.cycleContext}`,
         );
         autoStart = true;
         break;
