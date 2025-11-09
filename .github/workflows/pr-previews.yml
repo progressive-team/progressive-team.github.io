@@ -1,0 +1,149 @@
+name: PR Preview Deployment
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+
+permissions:
+  contents: write
+  pages: write
+  deployments: write
+
+concurrency:
+  group: pr-previews
+  cancel-in-progress: true
+
+env:
+  PREVIEW_DIR: pr-${{ github.event.pull_request.number }}
+  PREVIEW_URL: https://${{ github.repository_owner }}.github.io/pr-${{ github.event.pull_request.number }}/
+  ENVIRONMENT: pr-previews
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR head (fetch PR repo and exact SHA)
+        uses: actions/checkout@v5
+        with:
+          # needed to build PRs from forks as the head may be in a different repo
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          # use exact commit to avoid building the merge commit
+          ref: ${{ github.event.pull_request.head.sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4.1.0
+        with:
+          version: 10
+
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: lts/*
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build (Vite) for PR preview
+        env:
+          PREVIEW_BASE: /${{ env.PREVIEW_DIR }}/
+        run: pnpm build
+        # Result: build files written to ./dist/pr-<N>/ and HTML/assets use base "/pr-<N>/".
+
+      - name: Deploy preview to gh-pages/pr-<PR_NUMBER>
+        # Push built preview into gh-pages branch under pr-<N> folder so the site (served from gh-pages)
+        # will expose https://<org-or-user>.github.io/pr-<N>/
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: ./dist
+          # place this preview under a folder so we don't overwrite production root
+          target-folder: ${{ env.PREVIEW_DIR }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish deployment record (mark preview ready)
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const ref = context.payload.pull_request?.head?.sha || context.sha;
+            // create deployment
+            const deployment = await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref,
+              environment: process.env.ENVIRONMENT,
+              transient_environment: true,
+              auto_merge: false,
+              required_contexts: []
+            });
+            // mark deployment successful and attach URL shown in UI
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment.data.id,
+              state: 'success',
+              environment_url: process.env.PREVIEW_URL,
+              description: 'PR preview deployed'
+            });
+
+  cleanup:
+    # only run when the PR is closed -> remove preview folder to keep gh-pages tidy
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v5
+        with:
+          ref: gh-pages
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Remove preview folder for closed PR
+        run: |
+          if [ -d "$PREVIEW_DIR" ]; then
+            git rm -rf "$PREVIEW_DIR"
+            git commit -m "Remove preview for PR #${{ github.event.pull_request.number }}" || echo "no changes to commit"
+            git push origin gh-pages
+          else
+            echo "$PREVIEW_DIR not present on gh-pages branch — nothing to remove"
+          fi
+
+      - name: Remove preview deployment record(s) for closed PR
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const ENVIRONMENT = process.env.ENVIRONMENT;
+            const PREVIEW_URL = process.env.PREVIEW_URL;
+
+            // list deployments for the preview environment (page through if needed)
+            const deployments = await github.rest.repos.listDeployments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              environment: ENVIRONMENT,
+              per_page: 100
+            }).data ?? [];
+
+            for (const deployment of deployments) {
+              // check statuses for this deployment to find matching environment_url
+              const statuses = await github.rest.repos.listDeploymentStatuses({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                deployment_id: deployment.id,
+                per_page: 100
+              }).data ?? [];
+
+              const matched = statuses.some(({ environment_url }) => environment_url === PREVIEW_URL);
+              
+              if (matched) {
+                await github.rest.repos.deleteDeployment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  deployment_id: d.id
+                });
+                console.log(`Deleted deployment ${d.id} (matched environment_url ${PREVIEW_URL})`);
+              }
+            }
