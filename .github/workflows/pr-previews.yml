@@ -16,6 +16,7 @@ concurrency:
 env:
   PREVIEW_DIR: pr-${{ github.event.pull_request.number }}
   PREVIEW_URL: https://${{ github.repository_owner }}.github.io/pr-${{ github.event.pull_request.number }}/
+  ENVIRONMENT: pr-previews
 
 jobs:
   preview:
@@ -73,7 +74,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref,
-              environment: 'pr-previews',
+              environment: process.env.ENVIRONMENT,
               transient_environment: true,
               auto_merge: false,
               required_contexts: []
@@ -109,3 +110,40 @@ jobs:
           else
             echo "$PREVIEW_DIR not present on gh-pages branch — nothing to remove"
           fi
+
+      - name: Remove preview deployment record(s) for closed PR
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const ENVIRONMENT = process.env.ENVIRONMENT;
+            const PREVIEW_URL = process.env.PREVIEW_URL;
+
+            // list deployments for the preview environment (page through if needed)
+            const deployments = await github.rest.repos.listDeployments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              environment: ENVIRONMENT,
+              per_page: 100
+            }).data ?? [];
+
+            for (const deployment of deployments) {
+              // check statuses for this deployment to find matching environment_url
+              const statuses = await github.rest.repos.listDeploymentStatuses({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                deployment_id: deployment.id,
+                per_page: 100
+              }).data ?? [];
+
+              const matched = statuses.some(({ environment_url }) => environment_url === PREVIEW_URL);
+              
+              if (matched) {
+                await github.rest.repos.deleteDeployment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  deployment_id: d.id
+                });
+                console.log(`Deleted deployment ${d.id} (matched environment_url ${PREVIEW_URL})`);
+              }
+            }
