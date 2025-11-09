@@ -45,29 +45,3 @@ jobs:
           clean: false
           folder: ./dist
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publish deployment record (mark production ready)
-        uses: actions/github-script@v6
-        env:
-          PAGE_URL: ${{ steps.deploy_pages.outputs.page_url }}
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const ref = context.sha;
-            const deployment = await github.rest.repos.createDeployment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref,
-              environment: 'production',
-              transient_environment: false,
-              auto_merge: false,
-              required_contexts: []
-            });
-            await github.rest.repos.createDeploymentStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              deployment_id: deployment.data.id,
-              state: 'success',
-              environment_url: process.env.PAGE_URL,
-              description: 'Production deployed'
-            });
