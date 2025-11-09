@@ -2,82 +2,415 @@
 @import 'normalize.css';
 @import '@noonnu/bmjua';
 
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+* {
+  box-sizing: border-box;
 }
 
 body {
+  overflow-y: auto;
   margin: 0;
+}
+
+main.app {
+  --main-color: #fafaf8;
+  --main-theme-color: #ed6b6b;
+
+  font-family: BMJUA;
+  color: var(--main-color);
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  position: relative;
+  height: 576px;
+  background: var(--main-theme-color);
+  height: 100dvh;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.5s ease;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+main.app[data-state='work'] {
+  --main-theme-color: #ed6b6b;
 }
 
-.card {
-  padding: 2em;
+main.app[data-state='break'] {
+  --main-theme-color: #38858a;
 }
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+main.app[data-state='long-break'] {
+  --main-theme-color: #397097;
 }
 
-button {
+[hidden] {
+  display: none !important;
+}
+
+/* 타이머 생성 화면 */
+.timer-create-area {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+}
+
+#create-timer {
+  display: flex;
+  width: 90px;
+  height: 90px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color: var(--main-theme-color);
+  border: none;
+  background: #fff;
+}
+
+label[for='create-timer'] {
+  display: block;
+  font-size: 30px;
+}
+
+/* 이 아래는 2번째 페이지 입니다. */
+/* 타이머 설정창 */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.timer-setting-modal[data-mode='create'] #generateBtn:before {
+  content: '만들기';
+}
+
+.timer-setting-modal[data-mode='modify'] #generateBtn:before {
+  content: '수정하기';
+}
+
+#setting-timer {
+  position: relative;
+  display: flex;
+  max-width: 620px;
+  padding: clamp(16px, 4vw, 24px);
+  margin: clamp(16px, 4vw, 24px);
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  background: var(--main-theme-color);
+  border-radius: 6px;
+  box-shadow: 0 8px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.close-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  column-gap: 1rem;
+
+  h2 {
+    grid-column: 2;
+    margin: 0;
+    font-size: 36px;
+    font-weight: 400;
+  }
+
+  button[aria-label='닫기'] {
+    grid-column: 3;
+    justify-self: end;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--main-color);
+  }
+}
+
+.close-button {
+  display: flex;
+  position: absolute;
+  right: 48px;
+  width: 48px;
+  height: 48px;
+  aspect-ratio: 1/1;
+  border: none;
+  background: none;
+  align-items: center;
+  justify-content: center;
+  color: #fdfdfd;
+}
+
+fieldset.row-box {
+  margin: 0;
+  padding: 0 34px;
+  border: none;
+
+  display: grid;
+  gap: 20px 10px;
+  font-size: clamp(1.25rem, 4vw, 24px);
+
+  grid-template-columns: minmax(max-content, 1fr) minmax(0, 3fr);
+
+  > label {
+    text-align: right;
+    align-self: center;
+    font-weight: 400;
+    letter-spacing: -0.528px;
+  }
+
+  > input {
+    padding-block: clamp(6px, 2.5vmin, 8px);
+    border: none;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    box-shadow: 0 8px 12px 6px rgba(0, 0, 0, 0.15),
+      0 4px 4px 0 rgba(0, 0, 0, 0.3);
+    color: currentColor;
+
+    &::placeholder {
+      color: currentColor;
+      opacity: 0.4;
+    }
+
+    text-align: center;
+    font-size: 2em;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 100%;
+    letter-spacing: -1.056px;
+  }
+}
+
+.time-row {
+  display: flex;
+  width: 503px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.time-row-label {
+  width: 118px;
+  height: 37px;
+  flex-shrink: 0;
+  color: #fdfdfd;
+  text-align: right;
+  font-family: BMJUA;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  letter-spacing: -0.528px;
+}
+
+.time-row-value {
+  display: flex;
+  width: 375px;
+  padding: 8px 0;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  box-shadow: 0 8px 12px 6px rgba(0, 0, 0, 0.15), 0 4px 4px 0 rgba(0, 0, 0, 0.3);
+  /* flex: 1 0 0; */
+  color: #fdfdfd;
+  text-align: center;
+  font-family: BMJUA;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%;
+  letter-spacing: -1.056px;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+.generate-row {
+  display: flex;
+  padding: 2px 31px;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  box-shadow: 0 8px 12px 6px rgba(0, 0, 0, 0.15), 0 4px 4px 0 rgba(0, 0, 0, 0.3);
+  border: none;
+  color: currentColor;
+  text-align: center;
+  font-family: BMJUA;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  letter-spacing: -0.616px;
+}
+
+/* 타이머 작동 화면 */
+.timer-active-area {
+  display: flex;
+  padding: 56px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  align-self: stretch;
+}
+
+.inner-box {
+  display: flex;
+
+  padding-inline: clamp(16px, 8vw, 84px); /* 좌/우: 16px ~ 84px */
+  padding-block-start: clamp(24px, 5vmin, 48px); /* 위: 24px ~ 48px */
+  padding-block-end: clamp(12px, 3vmin, 18px); /* 아래: 12px ~ 18px */
+
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+  align-self: stretch;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.tab-list[role='tablist'] {
+  display: flex;
+  list-style-type: '';
+  padding: 0;
+  margin: 0;
+
+  [role='tab'] {
+    & > button {
+      display: flex;
+
+      /* 가변 패딩으로 작은 가로 뷰포트에서 축소하기 */
+      padding-block: clamp(6px, 1.5vmin, 8px);
+      padding-inline: clamp(8px, 3.5vw, 16px);
+
+      justify-content: center;
+      align-items: center;
+      background: rgba(255, 255, 255, 0);
+      border: none;
+      border-radius: 8px;
+      transition: background-color 0.2s;
+      color: var(--main-text-color);
+      text-align: center;
+      font-size: 15px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 100%; /* 15px */
+      letter-spacing: -0.33px;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.15);
+      }
+    }
+
+    &[aria-selected='true'] > button {
+      background: rgba(0, 0, 0, 0.15);
+    }
   }
 }
+
+.frame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  width: min(36vw, 400px);
+}
+
+.timer-display {
+  color: #fff;
+  text-align: center;
+  /* 뷰포트 기준: 최소 48px ~ 최대 128px */
+  font-size: clamp(48px, 14vw, 128px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%; /* 128px */
+  letter-spacing: -2.944px;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+}
+
+.start-button {
+  display: inline-flex;
+
+  padding-inline: 0;
+  padding-block: clamp(8px, 2vw, 14px);
+
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 8px;
+  background: #fdfdfd;
+  box-shadow: 0 8px 12px 6px rgba(0, 0, 0, 0.15), 0 4px 4px 0 rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--main-theme-color);
+  color: var(--main-theme-color);
+  font-size: 28px;
+  text-align: center;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 42px */
+  letter-spacing: -0.616px;
+  transition: border 0.5s ease, color 0.5s ease;
+}
+
+main.app[data-timer-state='stopped'] .start-button::before {
+  content: '시작';
+}
+
+main.app[data-timer-state='running'] .start-button::before {
+  content: '중지';
+}
+
+.start-button:hover {
+  filter: brightness(0.95);
+}
+
+.start-button:active {
+  filter: brightness(0.85);
+}
+
+.setting-guide {
+  color: #404040;
+  text-align: center;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%; /* 20px */
+  letter-spacing: -0.44px;
+  margin: 0; /* <p> 자체의 마진 제거 */
+  word-break: keep-all;
+}
+
+main.app[data-timer-state='stopped'] .setting-guide::before {
+  color: #404040;
+  content: '<클릭해서 시간 설정하기>';
+}
+
+main.app[data-timer-state='running'] .setting-guide::before {
+  color: #fff;
+  content: '타이머 주기: ' attr(data-cycle-context);
+}
+
+main.app[data-timer-state='running'][data-state='long-break']
+  .setting-guide::before {
+  color: #fff;
+  content: '긴 휴식 시간입니다. 재정비하세요.';
+}
+
+#ipsum {
+  color: black;
+}
+
