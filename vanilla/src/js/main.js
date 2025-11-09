@@ -15,7 +15,7 @@ const breakTimeInput = document.getElementById('break-time');
 const longBreakTimeInput = document.getElementById('long-break-time');
 const cycleInput = document.getElementById('cycle');
 const timeInputs = document.querySelectorAll(
-  '#work-time, #break-time, #cycle, #long-break-time'
+  '#work-time, #break-time, #cycle, #long-break-time',
 );
 
 timeInputs.forEach((input) => {
@@ -25,7 +25,7 @@ timeInputs.forEach((input) => {
 });
 
 const tabs = document.querySelectorAll(
-  '.tab-list[role="tablist"] > [role="tab"]'
+  '.tab-list[role="tablist"] > [role="tab"]',
 );
 const settingGuide = document.querySelector('.setting-guide');
 
@@ -34,7 +34,7 @@ const timer = new Timer(
   document.querySelector('.timer-display'),
   tabs,
   settingGuide,
-  worker
+  worker,
 );
 
 document.querySelector('#create-timer').addEventListener('click', () => {
@@ -137,8 +137,8 @@ function verify() {
 
   alert(
     `✅ 타이머 설정 완료!\n활동: ${workTime}\n휴식: ${breakTime}\n긴 휴식: ${longBreakTime}\n주기: ${parseInt(
-      cycle
-    )}`
+      cycle,
+    )}`,
   );
 
   timer.setTime(workTime, breakTime, longBreakTime, cycle);

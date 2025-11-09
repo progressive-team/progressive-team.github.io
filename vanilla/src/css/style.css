@@ -166,7 +166,8 @@ fieldset.row-box {
     border: none;
     background: rgba(255, 255, 255, 0.3);
     border-radius: 8px;
-    box-shadow: 0 8px 12px 6px rgba(0, 0, 0, 0.15),
+    box-shadow:
+      0 8px 12px 6px rgba(0, 0, 0, 0.15),
       0 4px 4px 0 rgba(0, 0, 0, 0.3);
     color: currentColor;
 
@@ -214,7 +215,9 @@ fieldset.row-box {
   flex-shrink: 0;
   background: rgba(255, 255, 255, 0.3);
   border-radius: 8px;
-  box-shadow: 0 8px 12px 6px rgba(0, 0, 0, 0.15), 0 4px 4px 0 rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 8px 12px 6px rgba(0, 0, 0, 0.15),
+    0 4px 4px 0 rgba(0, 0, 0, 0.3);
   /* flex: 1 0 0; */
   color: #fdfdfd;
   text-align: center;
@@ -233,7 +236,9 @@ fieldset.row-box {
   align-items: center;
   background: rgba(255, 255, 255, 0.4);
   border-radius: 8px;
-  box-shadow: 0 8px 12px 6px rgba(0, 0, 0, 0.15), 0 4px 4px 0 rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 8px 12px 6px rgba(0, 0, 0, 0.15),
+    0 4px 4px 0 rgba(0, 0, 0, 0.3);
   border: none;
   color: currentColor;
   text-align: center;
@@ -350,7 +355,9 @@ fieldset.row-box {
   max-width: 400px;
   border-radius: 8px;
   background: #fdfdfd;
-  box-shadow: 0 8px 12px 6px rgba(0, 0, 0, 0.15), 0 4px 4px 0 rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 8px 12px 6px rgba(0, 0, 0, 0.15),
+    0 4px 4px 0 rgba(0, 0, 0, 0.3);
   border: 2px solid var(--main-theme-color);
   color: var(--main-theme-color);
   font-size: 28px;
@@ -359,7 +366,9 @@ fieldset.row-box {
   font-weight: 400;
   line-height: 150%; /* 42px */
   letter-spacing: -0.616px;
-  transition: border 0.5s ease, color 0.5s ease;
+  transition:
+    border 0.5s ease,
+    color 0.5s ease;
 }
 
 main.app[data-timer-state='stopped'] .start-button::before {
