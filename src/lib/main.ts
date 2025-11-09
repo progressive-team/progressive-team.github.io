@@ -1,7 +1,7 @@
 import 'normalize.css';
 import '@noonnu/bmjua';
 
-import Timer, { State } from './timer.js';
+import Timer, { State } from './timer.ts';
 import { formatTimeInput, getDisplayFormat } from './util.js';
 
 const worker = new Worker(new URL('./worker.js', import.meta.url), {
