@@ -10,11 +10,11 @@ class TimerInfo {
   }
 }
 
-export const State = Object.freeze({
+export const State = {
   WORK: new TimerInfo('일할 시간', 'work'),
   BREAK: new TimerInfo('짧은 휴식', 'break'),
   LONG_BREAK: new TimerInfo('긴 휴식', 'long-break'),
-});
+} as const
 
 export default class Timer {
   mainApp: HTMLElement;
@@ -49,7 +49,7 @@ export default class Timer {
     this.currentCycle = 1;
   }
 
-  changeState(state) {
+  changeState(state: TimerInfo) {
     this.mainApp.dataset.state = state.keyword;
     this.timerDisplay.textContent = this.getTime(state);
     for (const tab of this.tabs) {
