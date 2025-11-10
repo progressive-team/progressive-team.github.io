@@ -99,7 +99,7 @@ function verify() {
   const workTime = workTimeInput.value;
   const breakTime = breakTimeInput.value;
   const longBreakTime = longBreakTimeInput.value;
-  const cycle = cycleInput.value;
+  const cycle = Number(cycleInput.value);
 
   if (
     workTime === '00:00' ||
@@ -113,8 +113,8 @@ function verify() {
 
   if (
     isNaN(cycle) ||
-    !Number.isInteger(parseFloat(cycle)) ||
-    parseInt(cycle) <= 0
+    !Number.isInteger(cycle) ||
+    cycle <= 0
   ) {
     alert('⚠️ 주기는 0보다 큰 정수만 가능합니다!');
     return;
@@ -136,9 +136,7 @@ function verify() {
   document.querySelector<HTMLElement>('.timer-active-area').hidden = false;
 
   alert(
-    `✅ 타이머 설정 완료!\n활동: ${workTime}\n휴식: ${breakTime}\n긴 휴식: ${longBreakTime}\n주기: ${parseInt(
-      cycle,
-    )}`,
+    `✅ 타이머 설정 완료!\n활동: ${workTime}\n휴식: ${breakTime}\n긴 휴식: ${longBreakTime}\n주기: ${cycle}`,
   );
 
   timer.setTime(workTime, breakTime, longBreakTime, cycle);
