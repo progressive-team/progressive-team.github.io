@@ -1,13 +1,23 @@
 <script lang="ts">
   import 'src/app.css';
   import 'src/lib/main.ts';
+
+  let isHidden: boolean = false; //main.ts의 'const settingModal'을 대체
 </script>
 
-<section class="timer-setting-modal overlay" hidden data-mode="create">
+<section
+  class="timer-setting-modal overlay"
+  hidden={isHidden}
+  data-mode="create"
+>
   <div id="setting-timer">
     <header class="close-row">
       <h2>시간설정</h2>
-      <button aria-label="닫기" type="button">
+      <button
+        aria-label="닫기"
+        type="button"
+        on:click={() => (isHidden = true)}
+      >
         <svg width="48" height="48" viewBox="0 0 48 48">
           <path
             d="M12.8 38L10 35.2L21.2 24L10 12.8L12.8 10L24 21.2L35.2 10L38 12.8L26.8 24L38 35.2L35.2 38L24 26.8L12.8 38Z"
