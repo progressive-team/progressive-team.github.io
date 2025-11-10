@@ -2,27 +2,14 @@ import 'normalize.css';
 import '@noonnu/bmjua';
 
 import Timer, { State } from './timer';
-import { formatTimeInput, getDisplayFormat } from './util';
 
 const worker = new Worker(new URL('./worker.ts', import.meta.url), {
   type: 'module',
 });
 
-const settingModal = document.querySelector<HTMLElement>('.timer-setting-modal');
-
-const workTimeInput = document.getElementById('work-time') as HTMLInputElement;
-const breakTimeInput = document.getElementById('break-time') as HTMLInputElement;
-const longBreakTimeInput = document.getElementById('long-break-time') as HTMLInputElement;
-const cycleInput = document.getElementById('cycle') as HTMLInputElement;
-const timeInputs = document.querySelectorAll(
-  '#work-time, #break-time, #cycle, #long-break-time',
+const settingModal = document.querySelector<HTMLElement>(
+  '.timer-setting-modal',
 );
-
-timeInputs.forEach((input) => {
-  input.addEventListener('blur', () => {
-    if (input.id !== 'cycle') formatTimeInput(input); //주기를 제외하고 타이머 값 포맷팅
-  });
-});
 
 const tabs = document.querySelectorAll<HTMLElement>(
   '.tab-list[role="tablist"] > [role="tab"]',
@@ -30,8 +17,8 @@ const tabs = document.querySelectorAll<HTMLElement>(
 const settingGuide = document.querySelector<HTMLElement>('.setting-guide');
 
 const timer = new Timer(
-  document.querySelector('main.app'),
-  document.querySelector('.timer-display'),
+  document.querySelector<HTMLElement>('main.app'),
+  document.querySelector<HTMLElement>('.timer-display'),
   tabs,
   settingGuide,
   worker,
@@ -111,11 +98,7 @@ function verify() {
     return;
   }
 
-  if (
-    isNaN(cycle) ||
-    !Number.isInteger(cycle) ||
-    cycle <= 0
-  ) {
+  if (isNaN(cycle) || !Number.isInteger(cycle) || cycle <= 0) {
     alert('⚠️ 주기는 0보다 큰 정수만 가능합니다!');
     return;
   }

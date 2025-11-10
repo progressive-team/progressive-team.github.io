@@ -1,8 +1,13 @@
 <script lang="ts">
   import 'src/app.css';
   import 'src/lib/main.ts';
+  import { formatTimeInput, getDisplayFormat } from './util';
 
   let isHidden: boolean = false; //main.ts의 'const settingModal'을 대체
+  let workTime: string = '25:00';
+  let breakTime: string = '05:00';
+  let cycle: number = 1;
+  let longBreakTime: string = '15:00';
 </script>
 
 <section
@@ -28,16 +33,40 @@
     </header>
     <fieldset class="row-box">
       <label for="work-time">활동 시간</label>
-      <input id="work-time" inputmode="numeric" placeholder="25:00" />
+      <input
+        id="work-time"
+        inputmode="numeric"
+        placeholder="25:00"
+        bind:value={workTime}
+        on:blur={() => (workTime = formatTimeInput(workTime))}
+      />
 
       <label for="break-time">휴식 시간</label>
-      <input id="break-time" inputmode="numeric" placeholder="05:00" />
+      <input
+        id="break-time"
+        inputmode="numeric"
+        placeholder="05:00"
+        on:blur={() => (breakTime = formatTimeInput(breakTime))}
+      />
 
       <label for="cycle">주기</label>
-      <input id="cycle" name="cycle" type="number" placeholder="1" min="1" />
+      <input
+        id="cycle"
+        name="cycle"
+        type="number"
+        placeholder="1"
+        min="1"
+        bind:value={cycle}
+      />
 
       <label for="long-break-time">긴 휴식 시간</label>
-      <input id="long-break-time" inputmode="numeric" placeholder="15:00" />
+      <input
+        id="long-break-time"
+        inputmode="numeric"
+        placeholder="15:00"
+        bind:value={longBreakTime}
+        on:blur={() => (longBreakTime = formatTimeInput(longBreakTime))}
+      />
     </fieldset>
     <button
       type="submit"
