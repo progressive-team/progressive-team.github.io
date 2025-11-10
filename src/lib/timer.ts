@@ -14,7 +14,7 @@ export const State = {
   WORK: new TimerInfo('일할 시간', 'work'),
   BREAK: new TimerInfo('짧은 휴식', 'break'),
   LONG_BREAK: new TimerInfo('긴 휴식', 'long-break'),
-} as const
+} as const;
 
 export default class Timer {
   mainApp: HTMLElement;
@@ -30,11 +30,11 @@ export default class Timer {
   currentCycle: number;
 
   constructor(
-    mainApp: HTMLElement, 
-    timerDisplay: HTMLElement, 
-    tabs: NodeListOf<HTMLElement>, 
-    settingGuide: HTMLElement, 
-    worker: Worker
+    mainApp: HTMLElement,
+    timerDisplay: HTMLElement,
+    tabs: NodeListOf<HTMLElement>,
+    settingGuide: HTMLElement,
+    worker: Worker,
   ) {
     this.mainApp = mainApp;
     this.timerDisplay = timerDisplay;
