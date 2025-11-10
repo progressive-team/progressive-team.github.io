@@ -8,6 +8,39 @@
   let breakTime: string = '05:00';
   let cycle: number = 1;
   let longBreakTime: string = '15:00';
+
+  function verify() {
+    // 값이 없으면 기본값 설정
+    if (!workTime) workTime = '25:00';
+    if (!breakTime) breakTime = '05:00';
+    if (!longBreakTime) longBreakTime = '15:00';
+    if (!cycle) cycle = 1;
+
+    if (
+      workTime === '00:00' ||
+      breakTime === '00:00' ||
+      longBreakTime === '00:00'
+    ) {
+      alert('⚠️ 타이머 시간은 00:00일 수 없습니다!');
+      return;
+    }
+    if (isNaN(cycle) || !Number.isInteger(cycle) || cycle <= 0) {
+      alert('⚠️ 주기는 0보다 큰 정수만 가능합니다!');
+      return;
+    }
+    const timeRegex = /^\d{2,}:\d{2}$/;
+    if (
+      !timeRegex.test(workTime) ||
+      !timeRegex.test(breakTime) ||
+      !timeRegex.test(longBreakTime)
+    ) {
+      alert('⚠️ 시간 형식이 잘못되었습니다. (예: 25:00)');
+      return;
+    }
+    alert(
+      `✅ 타이머 설정 완료!\n활동: ${workTime}\n휴식: ${breakTime}\n긴 휴식: ${longBreakTime}\n주기: ${cycle}`,
+    );
+  }
 </script>
 
 <section class="timer-create-area">
@@ -84,6 +117,7 @@
       id="generateBtn"
       class="generate-row"
       aria-label="시간 설정"
+      on:click={verify}
     ></button>
   </div>
 </section>

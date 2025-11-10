@@ -55,10 +55,6 @@ tabs.forEach((tab) => {
 
 settingGuide.addEventListener('click', openSettingModal);
 
-//만들기 버튼 클릭 시 검증 로직
-const generateBtn = document.getElementById('generateBtn');
-generateBtn.addEventListener('click', verify);
-
 const startButton = document.querySelector('.start-button');
 startButton.addEventListener('click', () => {
   if (timer.isTimerRunning()) {
@@ -76,51 +72,24 @@ function openSettingModal() {
   settingModal.hidden = false;
 }
 
+//입력값 검증 로직(일부 구현)
 function verify() {
-  // 값이 없으면 기본값으로 설정
-  if (!workTimeInput.value) workTimeInput.value = '25:00';
-  if (!breakTimeInput.value) breakTimeInput.value = '05:00';
-  if (!longBreakTimeInput.value) longBreakTimeInput.value = '15:00';
-  if (!cycleInput.value) cycleInput.value = '1';
+  //(구현 완료 - 삭제됨)값이 없는 경우 기본값으로 설정하기
 
+  // 이미 생성된 타이머가 있으면 값 받아오기
   const workTime = workTimeInput.value;
   const breakTime = breakTimeInput.value;
   const longBreakTime = longBreakTimeInput.value;
   const cycle = Number(cycleInput.value);
 
-  if (
-    workTime === '00:00' ||
-    breakTime === '00:00' ||
-    longBreakTime === '00:00'
-  ) {
-    // todo 근본적으로 alert 방식에서 벗어나는 건 어떨까
-    alert('⚠️ 타이머 시간은 00:00일 수 없습니다!');
-    return;
-  }
-
-  if (isNaN(cycle) || !Number.isInteger(cycle) || cycle <= 0) {
-    alert('⚠️ 주기는 0보다 큰 정수만 가능합니다!');
-    return;
-  }
-
-  const timeRegex = /^\d{2,}:\d{2}$/;
-  if (
-    !timeRegex.test(workTime) ||
-    !timeRegex.test(breakTime) ||
-    !timeRegex.test(longBreakTime)
-  ) {
-    alert('⚠️ 시간 형식이 잘못되었습니다. (예: 25:00)');
-    return;
-  }
+  //(구현 완료 - 삭제됨)입력값 검증 과정
 
   // 모든 검증을 통과하면 타이머를 생성하라는 초기 페이지와 시간 설정 모달을 숨기고 실제 타이머 페이지로 전환
   document.querySelector<HTMLElement>('.timer-create-area').hidden = true;
   settingModal.hidden = true;
   document.querySelector<HTMLElement>('.timer-active-area').hidden = false;
 
-  alert(
-    `✅ 타이머 설정 완료!\n활동: ${workTime}\n휴식: ${breakTime}\n긴 휴식: ${longBreakTime}\n주기: ${cycle}`,
-  );
+  //(구현 완료 - 삭제됨)타이머 생성 알림(alert)
 
   timer.setTime(workTime, breakTime, longBreakTime, cycle);
 
