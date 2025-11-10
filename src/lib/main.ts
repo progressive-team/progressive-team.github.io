@@ -27,7 +27,7 @@ timeInputs.forEach((input) => {
 const tabs = document.querySelectorAll<HTMLElement>(
   '.tab-list[role="tablist"] > [role="tab"]',
 );
-const settingGuide = document.querySelector('.setting-guide');
+const settingGuide = document.querySelector<HTMLElement>('.setting-guide');
 
 const timer = new Timer(
   document.querySelector('main.app'),

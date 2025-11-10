@@ -1,7 +1,10 @@
 import { requestNotificationPermission, showNotification } from './notify.js';
 
 class TimerInfo {
-  constructor(name, keyword) {
+  name: string;
+  keyword: string;
+
+  constructor(name: string, keyword: string) {
     this.name = name;
     this.keyword = keyword;
   }
@@ -14,7 +17,25 @@ export const State = Object.freeze({
 });
 
 export default class Timer {
-  constructor(mainApp, timerDisplay, tabs, settingGuide, worker) {
+  mainApp: HTMLElement;
+  timerDisplay: HTMLElement;
+  tabs: NodeListOf<HTMLElement>;
+  settingGuide: HTMLElement;
+  worker: Worker;
+
+  workTime: string;
+  breakTime: string;
+  longBreakTime: string;
+  totalCycle: number;
+  currentCycle: number;
+
+  constructor(
+    mainApp: HTMLElement, 
+    timerDisplay: HTMLElement, 
+    tabs: NodeListOf<HTMLElement>, 
+    settingGuide: HTMLElement, 
+    worker: Worker
+  ) {
     this.mainApp = mainApp;
     this.timerDisplay = timerDisplay;
     this.tabs = tabs;
