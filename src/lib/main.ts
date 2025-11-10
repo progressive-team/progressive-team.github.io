@@ -1,10 +1,10 @@
 import 'normalize.css';
 import '@noonnu/bmjua';
 
-import Timer, { State } from './timer.ts';
-import { formatTimeInput, getDisplayFormat } from './util.js';
+import Timer, { State } from './timer';
+import { formatTimeInput, getDisplayFormat } from './util';
 
-const worker = new Worker(new URL('./worker.js', import.meta.url), {
+const worker = new Worker(new URL('./worker.ts', import.meta.url), {
   type: 'module',
 });
 
