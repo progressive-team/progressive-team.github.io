@@ -1,4 +1,9 @@
 <script lang="ts">
+  const visibility = $state({
+    createButton: false,
+    settingModal: false,
+    timer: false,
+  });
 </script>
 
 <main class="app" data-state="work" data-timer-state="stopped">
