@@ -49,7 +49,7 @@ document
 workTimeInput.value = timer.workTime;
 breakTimeInput.value = timer.breakTime;
 longBreakTimeInput.value = timer.longBreakTime;
-cycleInput.value = timer.totalCycle;
+cycleInput.value = `${timer.totalCycle}`;
 
 tabs.forEach((tab) => {
   tab.addEventListener('click', () => {
