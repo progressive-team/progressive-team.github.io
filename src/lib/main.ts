@@ -8,12 +8,12 @@ const worker = new Worker(new URL('./worker.ts', import.meta.url), {
   type: 'module',
 });
 
-const settingModal = document.querySelector('.timer-setting-modal');
+const settingModal = document.querySelector<HTMLElement>('.timer-setting-modal');
 
-const workTimeInput = document.getElementById('work-time');
-const breakTimeInput = document.getElementById('break-time');
-const longBreakTimeInput = document.getElementById('long-break-time');
-const cycleInput = document.getElementById('cycle');
+const workTimeInput = document.getElementById('work-time') as HTMLInputElement;
+const breakTimeInput = document.getElementById('break-time') as HTMLInputElement;
+const longBreakTimeInput = document.getElementById('long-break-time') as HTMLInputElement;
+const cycleInput = document.getElementById('cycle') as HTMLInputElement;
 const timeInputs = document.querySelectorAll(
   '#work-time, #break-time, #cycle, #long-break-time',
 );
@@ -24,7 +24,7 @@ timeInputs.forEach((input) => {
   });
 });
 
-const tabs = document.querySelectorAll(
+const tabs = document.querySelectorAll<HTMLElement>(
   '.tab-list[role="tablist"] > [role="tab"]',
 );
 const settingGuide = document.querySelector('.setting-guide');
@@ -131,9 +131,9 @@ function verify() {
   }
 
   // 모든 검증을 통과하면 타이머를 생성하라는 초기 페이지와 시간 설정 모달을 숨기고 실제 타이머 페이지로 전환
-  document.querySelector('.timer-create-area').hidden = true;
+  document.querySelector<HTMLElement>('.timer-create-area').hidden = true;
   settingModal.hidden = true;
-  document.querySelector('.timer-active-area').hidden = false;
+  document.querySelector<HTMLElement>('.timer-active-area').hidden = false;
 
   alert(
     `✅ 타이머 설정 완료!\n활동: ${workTime}\n휴식: ${breakTime}\n긴 휴식: ${longBreakTime}\n주기: ${parseInt(
