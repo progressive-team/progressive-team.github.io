@@ -1,7 +1,7 @@
 <script lang="ts">
   import 'src/app.css';
   import 'src/lib/main.ts';
-  import { formatTimeInput, getDisplayFormat } from './util';
+  import { formatTimeInput, getDisplayFormat } from '../lib/util';
 
   let isHidden: boolean = false; //main.ts의 'const settingModal'을 대체
   let workTime: string = '25:00';
@@ -10,6 +10,17 @@
   let longBreakTime: string = '15:00';
 </script>
 
+<section class="timer-create-area">
+  <button id="create-timer">
+    <svg viewBox="0 0 72 72" fill="none">
+      <path
+        d="M33 39H15V33H33V15H39V33H57V39H39V57H33V39Z"
+        fill="currentColor"
+      />
+    </svg>
+  </button>
+  <label for="create-timer">클릭해서 타이머를 추가하세요</label>
+</section>
 <section
   class="timer-setting-modal overlay"
   hidden={isHidden}

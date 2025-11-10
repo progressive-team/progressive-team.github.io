@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Page2 from './components/page2.svelte';
   const visibility = $state({
     timerCreateArea: false,
     settingModal: false,
@@ -20,17 +21,7 @@
 </script>
 
 <main class="app" data-state="work" data-timer-state="stopped">
-  <section class="timer-create-area">
-    <button id="create-timer">
-      <svg viewBox="0 0 72 72" fill="none">
-        <path
-          d="M33 39H15V33H33V15H39V33H57V39H39V57H33V39Z"
-          fill="currentColor"
-        />
-      </svg>
-    </button>
-    <label for="create-timer">클릭해서 타이머를 추가하세요</label>
-  </section>
+  <Page2 />
 
   <section class="timer-active-area" hidden>
     <div class="inner-box">
