@@ -12,6 +12,8 @@
   //
   // 기본값이 false 이며 이는 숨겨진(hidden) 상태를 의미함. true로 바꿔야
   // 보이는 것을 의미함.
+  import Page3 from './components/page3.svelte';
+  
   const visibility = $state({
     timerCreateArea: false,
     settingModal: false,
@@ -67,28 +69,7 @@
 <main class="app" data-state="work" data-timer-state="stopped">
   <Page2 {...parentInfo} />
 
-  <section class="timer-active-area" hidden>
-    <div class="inner-box">
-      <ul class="tab-list" role="tablist">
-        <li role="tab" aria-selected="true" data-keyword="work">
-          <button>일할 시간</button>
-        </li>
-        <li role="tab" data-keyword="break">
-          <button>짧은 휴식</button>
-        </li>
-        <li role="tab" data-keyword="long-break">
-          <button>긴 휴식</button>
-        </li>
-      </ul>
-      <div class="frame">
-        <div class="timer-display">25:00</div>
-        <div class="button-group">
-          <button class="start-button" aria-label="시작 버튼"></button>
-          <p class="setting-guide"></p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <Page3 />
 </main>
 
 <style>
