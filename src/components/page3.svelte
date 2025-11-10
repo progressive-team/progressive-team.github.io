@@ -1,29 +1,71 @@
 <script lang="ts">
+  import Timer from '../lib/timer';
+  import { getDisplayFormat } from '../lib/util';
+
+  const worker = new Worker(new URL('./worker.ts', import.meta.url), {
+    type: 'module',
+  });
+
   const tabs = [
     { keyword: 'work', label: '일할 시간', selected: true },
     { keyword: 'break', label: '짧은 휴식', selected: false },
     { keyword: 'long-break', label: '긴 휴식', selected: false },
   ];
-</script>
 
-<section class="timer-active-area" hidden>
-  <div class="inner-box">
-    <menu class="tab-list" role="tablist">
-      {#each tabs as tab}
-        <li role="tab" aria-selected={tab.selected} data-keyword={tab.keyword}>
-          <button>{tab.label}</button>
-        </li>
-      {/each}
-    </menu>
-    <div class="frame">
-      <div class="timer-display">25:00</div>
-      <div class="button-group">
-        <button class="start-button"></button>
-        <p class="setting-guide"></p>
-      </div>
-    </div>
-  </div>
-</section>
+  const settingModal = document.querySelector<HTMLElement>('.timer-setting-modal');
+  
+  const timer = new Timer(
+    document.querySelector('main.app'),
+    document.querySelector('.timer-display'),
+    tabs,
+    settingGuide,
+    worker,
+  );
+
+  worker.onmessage = (event) => {
+    const remaining = event.data.remaining;
+
+    const totalSeconds = Math.max(0, Math.ceil(remaining / 1000));
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    const formatted = getDisplayFormat(minutes, seconds);
+    timer.setTimerDisplay(formatted);
+
+    // 남은 시간이 0보다 크면 타이머 종료 동작하지 않기
+    if (remaining > 0) return;
+
+    timer.skipNextPhase();
+  };
+
+  function tabClick(clickedTab: { keyword: string, label: string, selected: boolean }) {
+    // 이미 선택되어 있는 상태에서는 다시 선택 로직이 동작하지 않게끔 하기
+    if (clickedTab.selected === true) return;
+
+    // 버튼마다 기능 동작시키기
+    timer.runByButton(clickedTab.keyword);
+
+    // 다른 버튼 눌러서 넘어갈 때 타이머가 동작할 경우 타이머를 멈추게 하기
+    if (timer.isTimerRunning()) {
+      timer.stopTimer();
+    }
+  }
+
+  function startButtonClick() {
+    if (timer.isTimerRunning()) {
+      timer.resetTimer();
+    } else {
+      timer.initTimer();
+      timer.startTimer();
+    }
+  }
+
+  function openSettingModal() {
+    if (timer.isTimerRunning()) return;
+
+    settingModal.dataset.mode = 'modify';
+    settingModal.hidden = false;
+  }
+</script>
 
 <style>
   .timer-active-area {
@@ -186,3 +228,22 @@
     content: '긴 휴식 시간입니다. 재정비하세요.';
   }
 </style>
+
+<section class="timer-active-area">
+  <div class="inner-box">
+    <menu class="tab-list" role="tablist">
+      {#each tabs as tab}
+        <li role="tab" aria-selected={tab.selected} data-keyword={tab.keyword}>
+          <button onclick={() => {tabClick(tab)}}>{tab.label}</button>
+        </li>
+      {/each}
+    </menu>
+    <div class="frame">
+      <div class="timer-display">25:00</div>
+      <div class="button-group">
+        <button class="start-button" onclick={startButtonClick}></button>
+        <p class="setting-guide" onclick={openSettingModal}></p>
+      </div>
+    </div>
+  </div>
+</section>
