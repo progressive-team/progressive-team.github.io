@@ -58,7 +58,7 @@ export default class Timer {
     }
   }
 
-  getTime(state) {
+  getTime(state: TimerInfo) {
     switch (state) {
       case State.WORK:
         return this.workTime;
@@ -149,7 +149,7 @@ export default class Timer {
     this.currentCycle = cycle;
   }
 
-  runByButton(keyword) {
+  runByButton(keyword: string) {
     switch (keyword) {
       case 'work':
         this.changeState(State.WORK);
@@ -165,7 +165,7 @@ export default class Timer {
     }
   }
 
-  setTimerDisplay(value) {
+  setTimerDisplay(value: string) {
     this.timerDisplay.textContent = value;
   }
 }
