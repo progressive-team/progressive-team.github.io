@@ -2,6 +2,8 @@
   import Timer from '../lib/timer';
   import { getDisplayFormat } from '../lib/util';
 
+  let { visibility } = $props();
+  
   const worker = new Worker(new URL('./worker.ts', import.meta.url), {
     type: 'module',
   });
