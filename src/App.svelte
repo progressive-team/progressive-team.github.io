@@ -69,7 +69,7 @@
 <main class="app" data-state="work" data-timer-state="stopped">
   <Page2 {...parentInfo} />
 
-  <Page3 visibility={visibility} />
+  <Page3 {...parentInfo} />
 </main>
 
 <style>

@@ -2,7 +2,7 @@
   import Timer from '../lib/timer';
   import { getDisplayFormat } from '../lib/util';
 
-  let { visibility } = $props();
+  let parentInfo = $props();
   
   const worker = new Worker(new URL('./worker.ts', import.meta.url), {
     type: 'module',
@@ -13,8 +13,6 @@
     { keyword: 'break', label: '짧은 휴식', selected: false },
     { keyword: 'long-break', label: '긴 휴식', selected: false },
   ];
-
-  const settingModal = document.querySelector<HTMLElement>('.timer-setting-modal');
   
   const timer = new Timer(
     document.querySelector('main.app'),
@@ -63,9 +61,10 @@
 
   function openSettingModal() {
     if (timer.isTimerRunning()) return;
-
-    settingModal.dataset.mode = 'modify';
-    settingModal.hidden = false;
+    
+    // TODO: if 블록으로 관리
+    // settingModal.dataset.mode = 'modify';
+    parentInfo.showSettingModal();
   }
 </script>
 
