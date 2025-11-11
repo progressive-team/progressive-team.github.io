@@ -85,16 +85,8 @@ function verify() {
   //(구현 완료 - 삭제됨)입력값 검증 과정
 
   // 모든 검증을 통과하면 타이머를 생성하라는 초기 페이지와 시간 설정 모달을 숨기고 실제 타이머 페이지로 전환
-  document.querySelector<HTMLElement>('.timer-create-area').hidden = true;
-  settingModal.hidden = true;
-  document.querySelector<HTMLElement>('.timer-active-area').hidden = false;
 
   //(구현 완료 - 삭제됨)타이머 생성 알림(alert)
-
-  timer.setTime(workTime, breakTime, longBreakTime, cycle);
-
-  // 다른 탭에서 수정하더라도 일할 시간 탭으로 돌아오게 하기
-  timer.changeState(State.WORK);
 }
 
 worker.onmessage = (event) => {

@@ -3,7 +3,8 @@
   import 'src/lib/main.ts';
   import { formatTimeInput, getDisplayFormat } from '../lib/util';
 
-  let isHidden: boolean = false; //main.ts의 'const settingModal'을 대체
+  const parentInfo = $props();
+
   let workTime: string = '25:00';
   let breakTime: string = '05:00';
   let cycle: number = 1;
@@ -40,11 +41,23 @@
     alert(
       `✅ 타이머 설정 완료!\n활동: ${workTime}\n휴식: ${breakTime}\n긴 휴식: ${longBreakTime}\n주기: ${cycle}`,
     );
+
+    // 3페이지 제외 다 숨기고 3페이지만 드러내기
+    parentInfo.hideTimerCreateArea();
+    parentInfo.hideSettingModal();
+    parentInfo.showTimerActiveArea();
+
+    // 타이머 시간 설정
+    parentInfo.setTimerTime(workTime, breakTime, longBreakTime, cycle);
   }
 </script>
 
 <section class="timer-create-area">
-  <button id="create-timer">
+  <button
+    id="create-timer"
+    onclick={parentInfo.showSettingModal}
+    aria-label="타이머 생성 버튼"
+  >
     <svg viewBox="0 0 72 72" fill="none">
       <path
         d="M33 39H15V33H33V15H39V33H57V39H39V57H33V39Z"
@@ -56,7 +69,7 @@
 </section>
 <section
   class="timer-setting-modal overlay"
-  hidden={isHidden}
+  hidden={!parentInfo.visibility.settingModal}
   data-mode="create"
 >
   <div id="setting-timer">
@@ -65,7 +78,7 @@
       <button
         aria-label="닫기"
         type="button"
-        on:click={() => (isHidden = true)}
+        onclick={parentInfo.hideSettingModal}
       >
         <svg width="48" height="48" viewBox="0 0 48 48">
           <path
@@ -82,7 +95,9 @@
         inputmode="numeric"
         placeholder="25:00"
         bind:value={workTime}
-        on:blur={() => (workTime = formatTimeInput(workTime))}
+        onblur={() => {
+          workTime = formatTimeInput(workTime);
+        }}
       />
 
       <label for="break-time">휴식 시간</label>
@@ -90,7 +105,9 @@
         id="break-time"
         inputmode="numeric"
         placeholder="05:00"
-        on:blur={() => (breakTime = formatTimeInput(breakTime))}
+        onblur={() => {
+          breakTime = formatTimeInput(breakTime);
+        }}
       />
 
       <label for="cycle">주기</label>
@@ -109,7 +126,9 @@
         inputmode="numeric"
         placeholder="15:00"
         bind:value={longBreakTime}
-        on:blur={() => (longBreakTime = formatTimeInput(longBreakTime))}
+        onblur={() => {
+          longBreakTime = formatTimeInput(longBreakTime);
+        }}
       />
     </fieldset>
     <button
@@ -117,7 +136,7 @@
       id="generateBtn"
       class="generate-row"
       aria-label="시간 설정"
-      on:click={verify}
+      onclick={verify}
     ></button>
   </div>
 </section>

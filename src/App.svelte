@@ -18,6 +18,15 @@
     timerActiveArea: false,
   });
 
+  // 객체를 계속 만들어둬야 한다고?
+  // 타이머 객체를 차라리 여기서 미리 만들어서 그걸 시간 변경 가능하게끔 하기?
+  const verifiedTimerInputs = $state({
+    workTime: '',
+    breakTime: '',
+    longBreakTime: '',
+    cycle: 1,
+  });
+
   function hideSettingModal() {
     visibility.settingModal = false;
   }
@@ -30,10 +39,33 @@
   function showTimerActiveArea() {
     visibility.timerActiveArea = true;
   }
+  function setTimerTime(
+    workTime: string,
+    breakTime: string,
+    longBreakTime: string,
+    cycle: number,
+  ) {
+    verifiedTimerInputs.workTime = workTime;
+    verifiedTimerInputs.breakTime = breakTime;
+    verifiedTimerInputs.longBreakTime = longBreakTime;
+    verifiedTimerInputs.cycle = cycle;
+
+    // 다른 탭에서 수정하더라도 일할 시간 탭으로 돌아오게 하기
+    timer.changeState(State.WORK);
+  }
+
+  const parentInfo = {
+    visibility,
+    showSettingModal,
+    hideSettingModal,
+    hideTimerCreateArea,
+    showTimerActiveArea,
+    setTimerTime,
+  };
 </script>
 
 <main class="app" data-state="work" data-timer-state="stopped">
-  <Page2 />
+  <Page2 {...parentInfo} />
 
   <section class="timer-active-area" hidden>
     <div class="inner-box">
