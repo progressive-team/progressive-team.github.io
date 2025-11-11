@@ -111,6 +111,9 @@
       />
 
       <label for="cycle">주기</label>
+      <!-- todo bind:value={cycle} 부분 cycle 을 사용하면서 후 검증이 가능함? -->
+      <!-- input 이벤트에서 검증하는 방법이 있는데 개인적으로 cycle 변수 자체를 -->
+      <!-- 검증 함수에 집어넣고 그 반환값을 bind 해주고 싶은데 이게 될지 모르겠음. -->
       <input
         id="cycle"
         name="cycle"
