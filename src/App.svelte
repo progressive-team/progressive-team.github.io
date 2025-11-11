@@ -40,20 +40,10 @@
         <input id="break-time" inputmode="numeric" placeholder="05:00" />
 
         <label for="cycle">주기</label>
-        <input
-          id="cycle"
-          name="cycle"
-          type="number"
-          placeholder="1"
-          min="1"
-        />
+        <input id="cycle" name="cycle" type="number" placeholder="1" min="1" />
 
         <label for="long-break-time">긴 휴식 시간</label>
-        <input
-          id="long-break-time"
-          inputmode="numeric"
-          placeholder="15:00"
-        />
+        <input id="long-break-time" inputmode="numeric" placeholder="15:00" />
       </fieldset>
       <button type="submit" id="generateBtn" class="generate-row"></button>
     </div>
