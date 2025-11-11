@@ -1,4 +1,6 @@
 import { mount } from 'svelte';
+import 'normalize.css';
+import '@noonnu/bmjua';
 import './app.css';
 import App from './App.svelte';
 
