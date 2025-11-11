@@ -10,6 +10,12 @@
   let cycle: number = 1;
   let longBreakTime: string = '15:00';
 
+  // 2 페이지에서 해야 하는 부분
+  //workTimeInput.value = timer.workTime;
+  //breakTimeInput.value = timer.breakTime;
+  //longBreakTimeInput.value = timer.longBreakTime;
+  //cycleInput.value = `${timer.totalCycle}`;
+
   function verify() {
     // 값이 없으면 기본값 설정
     if (!workTime) workTime = '25:00';
