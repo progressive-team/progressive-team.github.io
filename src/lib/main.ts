@@ -24,15 +24,6 @@ const timer = new Timer(
   worker,
 );
 
-document.querySelector('#create-timer').addEventListener('click', () => {
-  settingModal.hidden = false;
-});
-document
-  .querySelector('button[aria-label="닫기"]')
-  .addEventListener('click', () => {
-    settingModal.hidden = true;
-  });
-
 workTimeInput.value = timer.workTime;
 breakTimeInput.value = timer.breakTime;
 longBreakTimeInput.value = timer.longBreakTime;
@@ -65,13 +56,6 @@ startButton.addEventListener('click', () => {
     timer.startTimer();
   }
 });
-
-function openSettingModal() {
-  if (timer.isTimerRunning()) return;
-
-  settingModal.dataset.mode = 'modify';
-  settingModal.hidden = false;
-}
 
 worker.onmessage = (event) => {
   const remaining = event.data.remaining;
