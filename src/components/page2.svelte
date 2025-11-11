@@ -1,6 +1,5 @@
 <script lang="ts">
-  import 'src/app.css';
-  import 'src/lib/main.ts';
+  import '../app.css';
   import { formatTimeInput, getDisplayFormat } from '../lib/util';
 
   const parentInfo = $props();
