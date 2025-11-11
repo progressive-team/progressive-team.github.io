@@ -1,9 +1,22 @@
 <script lang="ts">
   const visibility = $state({
-    createButton: false,
+    timerCreateArea: false,
     settingModal: false,
-    timer: false,
+    timerActiveArea: false,
   });
+
+  function hideSettingModal() {
+    visibility.settingModal = false;
+  }
+  function showSettingModal() {
+    visibility.settingModal = true;
+  }
+  function hideTimerCreateArea() {
+    visibility.timerCreateArea = false;
+  }
+  function showTimerActiveArea() {
+    visibility.timerActiveArea = true;
+  }
 </script>
 
 <main class="app" data-state="work" data-timer-state="stopped">
