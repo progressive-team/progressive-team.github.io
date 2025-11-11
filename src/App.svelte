@@ -13,6 +13,8 @@
   // 기본값이 false 이며 이는 숨겨진(hidden) 상태를 의미함. true로 바꿔야
   // 보이는 것을 의미함.
   import Page3 from './components/page3.svelte';
+
+  import Timer from './lib/timer';
   
   const visibility = $state({
     timerCreateArea: false,
@@ -28,6 +30,8 @@
     longBreakTime: '',
     cycle: 1,
   });
+
+  const timer = $state(new Timer());
 
   function hideSettingModal() {
     visibility.settingModal = false;
@@ -68,7 +72,6 @@
 
 <main class="app" data-state="work" data-timer-state="stopped">
   <Page2 {...parentInfo} />
-
   <Page3 {...parentInfo} />
 </main>
 
