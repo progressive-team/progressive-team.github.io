@@ -52,99 +52,6 @@
   }
 </script>
 
-<section class="timer-create-area">
-  <button
-    id="create-timer"
-    onclick={parentInfo.showSettingModal}
-    aria-label="타이머 생성 버튼"
-  >
-    <svg viewBox="0 0 72 72" fill="none">
-      <path
-        d="M33 39H15V33H33V15H39V33H57V39H39V57H33V39Z"
-        fill="currentColor"
-      />
-    </svg>
-  </button>
-  <label for="create-timer">클릭해서 타이머를 추가하세요</label>
-</section>
-<!-- 이거 data set 벗어나서 스벨트 if 블록으로 상태별 generateBtn 내용물을 수정하기, 생성하기로 바꿔줘야 함.-->
-<section
-  class="timer-setting-modal overlay"
-  hidden={!parentInfo.visibility.settingModal}
-  data-mode="create"
->
-  <div id="setting-timer">
-    <header class="close-row">
-      <h2>시간설정</h2>
-      <button
-        aria-label="닫기"
-        type="button"
-        onclick={parentInfo.hideSettingModal}
-      >
-        <svg width="48" height="48" viewBox="0 0 48 48">
-          <path
-            d="M12.8 38L10 35.2L21.2 24L10 12.8L12.8 10L24 21.2L35.2 10L38 12.8L26.8 24L38 35.2L35.2 38L24 26.8L12.8 38Z"
-            fill="currentColor"
-          />
-        </svg>
-      </button>
-    </header>
-    <fieldset class="row-box">
-      <label for="work-time">활동 시간</label>
-      <input
-        id="work-time"
-        inputmode="numeric"
-        placeholder="25:00"
-        bind:value={workTime}
-        onblur={() => {
-          workTime = formatTimeInput(workTime);
-        }}
-      />
-
-      <label for="break-time">휴식 시간</label>
-      <input
-        id="break-time"
-        inputmode="numeric"
-        placeholder="05:00"
-        onblur={() => {
-          breakTime = formatTimeInput(breakTime);
-        }}
-      />
-
-      <label for="cycle">주기</label>
-      <!-- todo bind:value={cycle} 부분 cycle 을 사용하면서 후 검증이 가능함? -->
-      <!-- input 이벤트에서 검증하는 방법이 있는데 개인적으로 cycle 변수 자체를 -->
-      <!-- 검증 함수에 집어넣고 그 반환값을 bind 해주고 싶은데 이게 될지 모르겠음. -->
-      <input
-        id="cycle"
-        name="cycle"
-        type="number"
-        placeholder="1"
-        min="1"
-        bind:value={cycle}
-      />
-
-      <label for="long-break-time">긴 휴식 시간</label>
-      <input
-        id="long-break-time"
-        inputmode="numeric"
-        placeholder="15:00"
-        bind:value={longBreakTime}
-        onblur={() => {
-          longBreakTime = formatTimeInput(longBreakTime);
-        }}
-      />
-    </fieldset>
-    <button
-      type="submit"
-      id="generateBtn"
-      class="generate-row"
-      aria-label="시간 설정"
-      onclick={verify}
-    ></button>
-  </div>
-</section>
-
 <style>
   .overlay {
     position: absolute;
@@ -328,3 +235,97 @@
     letter-spacing: -0.616px;
   }
 </style>
+
+<section class="timer-create-area">
+  <button
+    id="create-timer"
+    onclick={parentInfo.showSettingModal}
+    aria-label="타이머 생성 버튼"
+  >
+    <svg viewBox="0 0 72 72" fill="none">
+      <path
+        d="M33 39H15V33H33V15H39V33H57V39H39V57H33V39Z"
+        fill="currentColor"
+      />
+    </svg>
+  </button>
+  <label for="create-timer">클릭해서 타이머를 추가하세요</label>
+</section>
+<!-- 이거 data set 벗어나서 스벨트 if 블록으로 상태별 generateBtn 내용물을 수정하기, 생성하기로 바꿔줘야 함.-->
+<section
+  class="timer-setting-modal overlay"
+  hidden={!parentInfo.visibility.settingModal}
+  data-mode="create"
+>
+  <div id="setting-timer">
+    <header class="close-row">
+      <h2>시간설정</h2>
+      <button
+        aria-label="닫기"
+        type="button"
+        onclick={parentInfo.hideSettingModal}
+      >
+        <svg width="48" height="48" viewBox="0 0 48 48">
+          <path
+            d="M12.8 38L10 35.2L21.2 24L10 12.8L12.8 10L24 21.2L35.2 10L38 12.8L26.8 24L38 35.2L35.2 38L24 26.8L12.8 38Z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+    </header>
+    <fieldset class="row-box">
+      <label for="work-time">활동 시간</label>
+      <input
+        id="work-time"
+        inputmode="numeric"
+        placeholder="25:00"
+        bind:value={workTime}
+        onblur={() => {
+          workTime = formatTimeInput(workTime);
+        }}
+      />
+
+      <label for="break-time">휴식 시간</label>
+      <input
+        id="break-time"
+        inputmode="numeric"
+        placeholder="05:00"
+        bind:value={breakTime}
+        onblur={() => {
+          breakTime = formatTimeInput(breakTime);
+        }}
+      />
+
+      <label for="cycle">주기</label>
+      <!-- todo bind:value={cycle} 부분 cycle 을 사용하면서 후 검증이 가능함? -->
+      <!-- input 이벤트에서 검증하는 방법이 있는데 개인적으로 cycle 변수 자체를 -->
+      <!-- 검증 함수에 집어넣고 그 반환값을 bind 해주고 싶은데 이게 될지 모르겠음. -->
+      <input
+        id="cycle"
+        name="cycle"
+        type="number"
+        placeholder="1"
+        min="1"
+        bind:value={cycle}
+      />
+
+      <label for="long-break-time">긴 휴식 시간</label>
+      <input
+        id="long-break-time"
+        inputmode="numeric"
+        placeholder="15:00"
+        bind:value={longBreakTime}
+        onblur={() => {
+          longBreakTime = formatTimeInput(longBreakTime);
+        }}
+      />
+    </fieldset>
+    <button
+      type="submit"
+      id="generateBtn"
+      class="generate-row"
+      aria-label="시간 설정"
+      onclick={verify}
+    ></button>
+  </div>
+</section>
