@@ -72,23 +72,6 @@ function openSettingModal() {
   settingModal.hidden = false;
 }
 
-//입력값 검증 로직(일부 구현)
-function verify() {
-  //(구현 완료 - 삭제됨)값이 없는 경우 기본값으로 설정하기
-
-  // 이미 생성된 타이머가 있으면 값 받아오기
-  const workTime = workTimeInput.value;
-  const breakTime = breakTimeInput.value;
-  const longBreakTime = longBreakTimeInput.value;
-  const cycle = Number(cycleInput.value);
-
-  //(구현 완료 - 삭제됨)입력값 검증 과정
-
-  // 모든 검증을 통과하면 타이머를 생성하라는 초기 페이지와 시간 설정 모달을 숨기고 실제 타이머 페이지로 전환
-
-  //(구현 완료 - 삭제됨)타이머 생성 알림(alert)
-}
-
 worker.onmessage = (event) => {
   const remaining = event.data.remaining;
 
