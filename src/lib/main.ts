@@ -53,6 +53,7 @@ tabs.forEach((tab) => {
   });
 });
 
+// settingGuide 블록은 3페이지에서 기능 구현 시 `if (timer.isTimerRunning()) return;` 만 미리 해주고 parentInfo.showSettingModal() 하면 될 것 같아 보임.
 settingGuide.addEventListener('click', openSettingModal);
 
 const startButton = document.querySelector('.start-button');

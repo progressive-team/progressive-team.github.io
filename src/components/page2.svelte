@@ -67,6 +67,7 @@
   </button>
   <label for="create-timer">클릭해서 타이머를 추가하세요</label>
 </section>
+<!-- 이거 data set 벗어나서 스벨트 if 블록으로 상태별 generateBtn 내용물을 수정하기, 생성하기로 바꿔줘야 함.-->
 <section
   class="timer-setting-modal overlay"
   hidden={!parentInfo.visibility.settingModal}
