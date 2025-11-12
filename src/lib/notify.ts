@@ -8,7 +8,7 @@ export function requestNotificationPermission() {
   }
 }
 
-export function showNotification(message) {
+export function showNotification(message: string) {
   if ('Notification' in window && Notification.permission === 'granted') {
     new Notification('알림', { body: message });
   }

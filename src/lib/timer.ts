@@ -141,7 +141,12 @@ export default class Timer {
     if (autoStart) this.startTimer();
   }
 
-  setTime(workTime: string, breakTime: string, longBreakTime: string, cycle: number) {
+  setTime(
+    workTime: string,
+    breakTime: string,
+    longBreakTime: string,
+    cycle: number,
+  ) {
     this.workTime = workTime;
     this.breakTime = breakTime;
     this.longBreakTime = longBreakTime;
