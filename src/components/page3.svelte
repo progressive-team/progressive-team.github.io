@@ -18,9 +18,9 @@
   });
 
   const tabs = [
-    { keyword: 'work', label: '일할 시간', selected: true },
-    { keyword: 'break', label: '짧은 휴식', selected: false },
-    { keyword: 'long-break', label: '긴 휴식', selected: false },
+    { keyword: 'work', label: '일할 시간' },
+    { keyword: 'break', label: '짧은 휴식' },
+    { keyword: 'long-break', label: '긴 휴식' },
   ];
 
   function changeState(keyword: string) {
@@ -55,10 +55,14 @@
   <div class="inner-box">
     <ul class="tab-list" role="tablist">
       {#each tabs as tab}
-        <li role="tab" aria-selected={tab.selected} data-keyword={tab.keyword}>
+        <li
+          role="tab"
+          aria-selected={tab.keyword === timerState}
+          data-keyword={tab.keyword}
+        >
           <button
             onclick={() => {
-              tab.selected && changeState(tab.keyword);
+              tab.keyword !== timerState && changeState(tab.keyword);
             }}
           >
             {tab.label}
