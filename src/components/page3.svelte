@@ -12,8 +12,8 @@
     { keyword: 'work', label: '일할 시간', selected: true },
     { keyword: 'break', label: '짧은 휴식', selected: false },
     { keyword: 'long-break', label: '긴 휴식', selected: false },
-  ];
-  
+  ] as const;
+
   const timer = new Timer(
     document.querySelector('main.app'),
     document.querySelector('.timer-display'),
