@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Timer from '../lib/timer';
   import { getDisplayFormat } from '../lib/util';
 
   let parentInfo = $props();
@@ -13,14 +12,6 @@
     { keyword: 'break', label: '짧은 휴식', selected: false },
     { keyword: 'long-break', label: '긴 휴식', selected: false },
   ] as const;
-
-  const timer = new Timer(
-    document.querySelector('main.app'),
-    document.querySelector('.timer-display'),
-    tabs,
-    settingGuide,
-    worker,
-  );
 
   worker.onmessage = (event) => {
     const remaining = event.data.remaining;

@@ -17,31 +17,13 @@ export const State = {
 } as const;
 
 export default class Timer {
-  mainApp: HTMLElement;
-  timerDisplay: HTMLElement;
-  tabs: NodeListOf<HTMLElement>;
-  settingGuide: HTMLElement;
-  worker: Worker;
-
   workTime: string;
   breakTime: string;
   longBreakTime: string;
   totalCycle: number;
   currentCycle: number;
 
-  constructor(
-    mainApp: HTMLElement,
-    timerDisplay: HTMLElement,
-    tabs: NodeListOf<HTMLElement>,
-    settingGuide: HTMLElement,
-    worker: Worker,
-  ) {
-    this.mainApp = mainApp;
-    this.timerDisplay = timerDisplay;
-    this.tabs = tabs;
-    this.settingGuide = settingGuide;
-    this.worker = worker;
-
+  constructor() {
     this.workTime = '25:00';
     this.breakTime = '05:00';
     this.longBreakTime = '15:00';
