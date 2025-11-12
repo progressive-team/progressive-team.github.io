@@ -10,14 +10,12 @@
   $effect(() => {
     if (timerState === 'work') {
       timerDisplay = timerSettingValue.workTime;
-    }
-    else if (timerState === 'break') {
+    } else if (timerState === 'break') {
       timerDisplay = timerSettingValue.breakTime;
-    }
-    else if (timerState === 'long-break') {
+    } else if (timerState === 'long-break') {
       timerDisplay = timerSettingValue.longBreakTime;
     }
-  })
+  });
 
   const tabs = [
     { keyword: 'work', label: '일할 시간', selected: true },
