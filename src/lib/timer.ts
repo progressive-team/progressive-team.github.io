@@ -74,10 +74,6 @@ export default class Timer {
     }
   }
 
-  isTimerRunning() {
-    return this.mainApp.dataset.timerState === 'running';
-  }
-
   stopTimer() {
     this.worker.postMessage({ command: 'stop' });
     this.mainApp.dataset.timerState = 'stopped';
