@@ -49,6 +49,51 @@
     // settingModal.dataset.mode = 'modify';
     showSettingModal();
   }
+
+  worker.onmessage = (event) => {
+    const remaining = event.data.remaining;
+
+    const totalSeconds = Math.max(0, Math.ceil(remaining / 1000));
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    // todo 이거 ui 에서 잡으면 좋을 것 같은데 worker 의 핵심부 못 빼내나?
+    const formatted = getDisplayFormat(minutes, seconds);
+    timerDisplay = formatted;
+
+    // 남은 시간이 0보다 크면 타이머 종료 동작하지 않기
+    if (remaining > 0) return;
+
+    skipNextPhase();
+  };
+
+  function skipNextPhase() {
+    runState = 'stopped';
+    switch (timerState) {
+      case 'work':
+        timerState = 'break';
+        // todo 이거 여기서 처리?
+        // 그리고 현재 주기 표시할 때 전체 주기도 표시해주기
+        // showNotification(`짧은 휴식 시작. 현재 주기: ${this.currentCycle}`);
+        runState = 'running';
+        break;
+      case 'break':
+        if (timerSettingValue.currentCycle > 1) {
+          timerState = 'work';
+          timerSettingValue.currentCycle--;
+        } else {
+          timerState = 'long-break';
+          // showNotification('모든 주기 종료\n긴 휴식 시작');
+        }
+        runState = 'running';
+        break;
+      case 'long-break':
+        timerState = 'work';
+        // showNotification('뽀모도로 종료');
+        break;
+      default:
+        throw new Error('Unknown State');
+    }
+  }
 </script>
 
 <section class="timer-active-area">
