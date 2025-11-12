@@ -62,8 +62,14 @@
         <button class="start-button" onclick={startButtonClick}></button>
         <p
           class="setting-guide"
-          onclick={runState === 'stopped' && openSettingModal}
-        ></p>
+          onclick={() => {
+            runState === 'stopped' && openSettingModal;
+          }}
+        >
+          {runState === 'stopped'
+            ? '클릭하여 타이머 설정하기'
+            : `${timerSettingValue.currentCycle}/${timerSettingValue.totalCycle}`}
+        </p>
       </div>
     </div>
   </div>
