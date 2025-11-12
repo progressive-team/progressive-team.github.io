@@ -1,4 +1,4 @@
-let timerId = null;
+let timerId: number | null = null;
 let totalDuration = 0;
 let startTime = 0;
 
@@ -7,7 +7,7 @@ function tick() {
   const remaining = totalDuration - elapsed;
   postMessage({ remaining: remaining });
 
-  if (remaining <= 0) {
+  if (remaining <= 0 && timerId) {
     clearTimeout(timerId);
     timerId = null;
   } else {
@@ -26,7 +26,7 @@ self.onmessage = (event) => {
     totalDuration = duration;
     startTime = Date.now();
     tick(); // 타이머 시작
-  } else if (command === 'stop') {
+  } else if (command === 'stop' && timerId) {
     clearTimeout(timerId);
     timerId = null;
   }

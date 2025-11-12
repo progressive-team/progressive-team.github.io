@@ -1,9 +1,37 @@
 <script lang="ts">
+  import Page2 from './components/page2.svelte';
+
+  // 객체지향의 상속/캡슐화 개념이 아니라서 visibility 를 그대로 넘겨줄 수밖에
+  // 없는 것이 최선으로 보이며, 그에 따라 개발자가 visibility 를 임의로 조작하는 것을
+  // 설계상 허용할 수밖에 없는 상태임을 유의해야 함.
+  // getSettingModalVisibility(): boolean {return visibility.settingModal}과
+  // 같은 방식으로 제어해볼까 생각했는데 $state 가 변할 때 저 함수가 호출될지를
+  // 검증하지 않아 함부로 사용할 수 없는 상태임.
+  // 그래서 일단 객체지향이 아니라는 점(==접근 제어 관리가 안 된다는 점)과 빠른
+  // 구현을 해야 하는 지금 상황을 반영해 visibility 객체를 바로 넘겨주는 것을 선택함.
+  //
+  // 기본값이 false 이며 이는 숨겨진(hidden) 상태를 의미함. true로 바꿔야
+  // 보이는 것을 의미함.
+  import Page3 from './components/page3.svelte';
+
+  import Timer from './lib/timer';
+  
   const visibility = $state({
     timerCreateArea: false,
     settingModal: false,
     timerActiveArea: false,
   });
+
+  // 객체를 계속 만들어둬야 한다고?
+  // 타이머 객체를 차라리 여기서 미리 만들어서 그걸 시간 변경 가능하게끔 하기?
+  const verifiedTimerInputs = $state({
+    workTime: '',
+    breakTime: '',
+    longBreakTime: '',
+    cycle: 1,
+  });
+
+  const timer = $state(new Timer());
 
   function hideSettingModal() {
     visibility.settingModal = false;
@@ -17,73 +45,34 @@
   function showTimerActiveArea() {
     visibility.timerActiveArea = true;
   }
+  function setTimerTime(
+    workTime: string,
+    breakTime: string,
+    longBreakTime: string,
+    cycle: number,
+  ) {
+    verifiedTimerInputs.workTime = workTime;
+    verifiedTimerInputs.breakTime = breakTime;
+    verifiedTimerInputs.longBreakTime = longBreakTime;
+    verifiedTimerInputs.cycle = cycle;
+
+    // 다른 탭에서 수정하더라도 일할 시간 탭으로 돌아오게 하기
+    timer.changeState(State.WORK);
+  }
+
+  const parentInfo = {
+    visibility,
+    showSettingModal,
+    hideSettingModal,
+    hideTimerCreateArea,
+    showTimerActiveArea,
+    setTimerTime,
+  };
 </script>
 
 <main class="app" data-state="work" data-timer-state="stopped">
-  <section class="timer-create-area">
-    <button id="create-timer">
-      <svg viewBox="0 0 72 72" fill="none">
-        <path
-          d="M33 39H15V33H33V15H39V33H57V39H39V57H33V39Z"
-          fill="currentColor"
-        />
-      </svg>
-    </button>
-    <label for="create-timer">클릭해서 타이머를 추가하세요</label>
-  </section>
-
-  <section class="timer-setting-modal overlay" hidden data-mode="create">
-    <div id="setting-timer">
-      <header class="close-row">
-        <h2>시간설정</h2>
-        <button aria-label="닫기">
-          <svg width="48" height="48" viewBox="0 0 48 48">
-            <path
-              d="M12.8 38L10 35.2L21.2 24L10 12.8L12.8 10L24 21.2L35.2 10L38 12.8L26.8 24L38 35.2L35.2 38L24 26.8L12.8 38Z"
-              fill="currentColor"
-            />
-          </svg>
-        </button>
-      </header>
-      <fieldset class="row-box">
-        <label for="work-time">활동 시간</label>
-        <input id="work-time" inputmode="numeric" placeholder="25:00" />
-
-        <label for="break-time">휴식 시간</label>
-        <input id="break-time" inputmode="numeric" placeholder="05:00" />
-
-        <label for="cycle">주기</label>
-        <input id="cycle" name="cycle" type="number" placeholder="1" min="1" />
-
-        <label for="long-break-time">긴 휴식 시간</label>
-        <input id="long-break-time" inputmode="numeric" placeholder="15:00" />
-      </fieldset>
-      <button type="submit" id="generateBtn" class="generate-row"></button>
-    </div>
-  </section>
-
-  <section class="timer-active-area" hidden>
-    <div class="inner-box">
-      <menu class="tab-list" role="tablist">
-        <li role="tab" aria-selected="true" data-keyword="work">
-          <button>일할 시간</button>
-        </li>
-        <li role="tab" data-keyword="break">
-          <button>짧은 휴식</button>
-        </li>
-        <li role="tab" data-keyword="long-break">
-          <button>긴 휴식</button>
-        </li>
-      </menu>
-      <div class="frame">
-        <div class="timer-display">25:00</div>
-        <div class="button-group">
-          <button class="start-button"></button>
-          <p class="setting-guide"></p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <Page2 {...parentInfo} />
+  <Page3 {...parentInfo} />
 </main>
 
 <style>
