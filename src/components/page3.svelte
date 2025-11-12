@@ -23,6 +23,7 @@
       worker.postMessage({ command: 'start', duration: duration });
     } else if (runState === false) {
       worker.postMessage({ command: 'stop' });
+      timerDisplay = timerSettingValue.workTime;
       timerState = 'work';
     }
   });
@@ -34,11 +35,12 @@
   ];
 
   function changeState(keyword: string) {
-    timerState = keyword;
-
     // 다른 버튼 눌러서 넘어갈 때 타이머가 동작할 경우 타이머를 멈추게 하기
     if (runState === true) {
       runState = false;
+    }
+    else {
+      timerState = keyword;
     }
   }
 
