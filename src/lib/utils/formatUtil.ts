@@ -16,3 +16,9 @@ export function formatTimeInput(input: string): string {
 
   return getDisplayFormat(min, sec);
 }
+
+// time 은 항상 "mm:ss" 형태로 들어옴.
+export function formatTime(time: string): number {
+  const parts = time.split(':');
+  return (parseInt(parts[0]) * 60 + parseInt(parts[1])) * 1000;
+}
