@@ -76,7 +76,7 @@
 
 <main class="app" data-state={appState} data-timer-state={timerState}>
   <Page2 {...parentInfo} />
-  <Page3 {...parentInfo} />
+  <Page3 {...parentInfo} appState={appState} timerState={timerState} />
 </main>
 
 <style>

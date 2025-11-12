@@ -1,5 +1,5 @@
 <script lang="ts">
-  let parentInfo = $props();
+  let { appState, timerState, ...parentInfo } = $props();
 
   const tabs = [
     { keyword: 'work', label: '일할 시간', selected: true },
