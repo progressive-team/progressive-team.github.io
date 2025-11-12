@@ -18,10 +18,10 @@
   });
 
   $effect(() => {
-    if (runState === 'running') {
+    if (runState === true) {
       const duration = formatTime(timerDisplay);
       worker.postMessage({ command: 'start', duration: duration });
-    } else if (runState === 'stopped') {
+    } else if (runState === false) {
       worker.postMessage({ command: 'stop' });
       timerState = 'work';
     }
@@ -37,7 +37,7 @@
     timerState = keyword;
 
     // 다른 버튼 눌러서 넘어갈 때 타이머가 동작할 경우 타이머를 멈추게 하기
-    if (runState === 'running') {
+    if (runState === true) {
       runState = false;
     }
   }
@@ -70,14 +70,14 @@
   };
 
   function skipNextPhase() {
-    runState = 'stopped';
+    runState = false;
     switch (timerState) {
       case 'work':
         timerState = 'break';
         // todo 이거 여기서 처리?
         // 그리고 현재 주기 표시할 때 전체 주기도 표시해주기
         // showNotification(`짧은 휴식 시작. 현재 주기: ${this.currentCycle}`);
-        runState = 'running';
+        runState = true;
         break;
       case 'break':
         if (timerSettingValue.currentCycle > 1) {
@@ -87,7 +87,7 @@
           timerState = 'long-break';
           // showNotification('모든 주기 종료\n긴 휴식 시작');
         }
-        runState = 'running';
+        runState = true;
         break;
       case 'long-break':
         timerState = 'work';
@@ -125,10 +125,10 @@
         <p
           class="setting-guide"
           onclick={() => {
-            runState === 'stopped' && openSettingModal();
+            runState === false && openSettingModal();
           }}
         >
-          {runState === 'stopped'
+          {runState === false
             ? '클릭하여 타이머 설정하기'
             : `${timerSettingValue.currentCycle}/${timerSettingValue.totalCycle}`}
         </p>
