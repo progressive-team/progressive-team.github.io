@@ -77,7 +77,7 @@
         <p
           class="setting-guide"
           onclick={() => {
-            runState === 'stopped' && openSettingModal;
+            runState === 'stopped' && openSettingModal();
           }}
         >
           {runState === 'stopped'
