@@ -17,6 +17,16 @@
     }
   });
 
+  $effect(() => {
+    if (runState === 'running') {
+      const duration = formatTime(timerDisplay);
+      worker.postMessage({ command: 'start', duration: duration });
+    } else if (runState === 'stopped') {
+      worker.postMessage({ command: 'stop' });
+      timerState = 'work';
+    }
+  });
+
   const tabs = [
     { keyword: 'work', label: '일할 시간' },
     { keyword: 'break', label: '짧은 휴식' },
@@ -34,13 +44,6 @@
 
   function startButtonClick() {
     timerSettingValue.currentCycle = timerSettingValue.totalCycle; // 주기 초기화
-    if (runState === 'running') {
-      this.worker.postMessage({ command: 'stop' });
-      timerState = 'work';
-    } else {
-      const duration = formatTime(timerDisplay);
-      this.worker.postMessage({ command: 'start', duration: duration });
-    }
     runState = !runState; // 동작 중이었으면 중지, 중지 중이었으면 동작시킴
   }
 
