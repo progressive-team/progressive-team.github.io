@@ -11,20 +11,12 @@
     { keyword: 'long-break', label: '긴 휴식', selected: false },
   ] as const;
 
-  function tabClick(clickedTab: {
-    keyword: string;
-    label: string;
-    selected: boolean;
-  }) {
-    // 이미 선택되어 있는 상태에서는 다시 선택 로직이 동작하지 않게끔 하기
-    if (clickedTab.selected === true) return;
-
-    // 버튼마다 기능 동작시키기
-    timer.runByButton(clickedTab.keyword);
+  function changeState(keyword: string) {
+    timerState = keyword;
 
     // 다른 버튼 눌러서 넘어갈 때 타이머가 동작할 경우 타이머를 멈추게 하기
-    if (timerState === 'running') {
-      timer.stopTimer();
+    if (runState === 'running') {
+      runState = false;
     }
   }
 
@@ -51,11 +43,9 @@
     <ul class="tab-list" role="tablist">
       {#each tabs as tab}
         <li role="tab" aria-selected={tab.selected} data-keyword={tab.keyword}>
-          <button
-            onclick={() => {
-              tabClick(tab);
-            }}>{tab.label}</button
-          >
+          <button onclick={() => { tab.selected && changeState(tab.keyword) }}>
+            {tab.label}
+          </button>
         </li>
       {/each}
     </ul>
