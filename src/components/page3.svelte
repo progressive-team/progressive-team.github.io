@@ -1,5 +1,6 @@
 <script lang="ts">
-  let { appState, timerState, ...parentInfo } = $props();
+  import { timers } from '../stores/timerStore';
+  let parentInfo = $props();
 
   const tabs = [
     { keyword: 'work', label: '일할 시간', selected: true },
@@ -19,13 +20,13 @@
     timer.runByButton(clickedTab.keyword);
 
     // 다른 버튼 눌러서 넘어갈 때 타이머가 동작할 경우 타이머를 멈추게 하기
-    if (timerState === "running") {
+    if (timerState === 'running') {
       timer.stopTimer();
     }
   }
 
   function startButtonClick() {
-    if (timerState === "running") {
+    if (timerState === 'running') {
       timer.resetTimer();
     } else {
       timer.initTimer();
@@ -34,7 +35,7 @@
   }
 
   function openSettingModal() {
-    if (timerState === "running") return;
+    if (timerState === 'running') return;
 
     // TODO: if 블록으로 관리
     // settingModal.dataset.mode = 'modify';
