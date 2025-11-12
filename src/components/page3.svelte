@@ -44,7 +44,7 @@
 
 <section class="timer-active-area">
   <div class="inner-box">
-    <menu class="tab-list" role="tablist">
+    <ul class="tab-list" role="tablist">
       {#each tabs as tab}
         <li role="tab" aria-selected={tab.selected} data-keyword={tab.keyword}>
           <button
@@ -54,7 +54,7 @@
           >
         </li>
       {/each}
-    </menu>
+    </ul>
     <div class="frame">
       <div class="timer-display">25:00</div>
       <div class="button-group">
