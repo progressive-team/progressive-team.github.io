@@ -23,11 +23,12 @@
   }
 
   function startButtonClick() {
-    this.currentCycle = this.totalCycle; // 주기 초기화
+    timerSettingValue.currentCycle = timerSettingValue.totalCycle; // 주기 초기화
     if (runState === 'running') {
       this.worker.postMessage({ command: 'stop' });
       timerState = 'work';
     } else {
+      const duration = formatTime(timerDisplay);
       this.worker.postMessage({ command: 'start', duration: duration });
     }
     runState = !runState; // 동작 중이었으면 중지, 중지 중이었으면 동작시킴
@@ -45,7 +46,11 @@
     <ul class="tab-list" role="tablist">
       {#each tabs as tab}
         <li role="tab" aria-selected={tab.selected} data-keyword={tab.keyword}>
-          <button onclick={() => { tab.selected && changeState(tab.keyword) }}>
+          <button
+            onclick={() => {
+              tab.selected && changeState(tab.keyword);
+            }}
+          >
             {tab.label}
           </button>
         </li>
@@ -55,7 +60,10 @@
       <div class="timer-display">{timerDisplay}</div>
       <div class="button-group">
         <button class="start-button" onclick={startButtonClick}></button>
-        <p class="setting-guide" onclick={ (runState === 'stopped') && openSettingModal}></p>
+        <p
+          class="setting-guide"
+          onclick={runState === 'stopped' && openSettingModal}
+        ></p>
       </div>
     </div>
   </div>
