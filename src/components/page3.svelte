@@ -21,12 +21,14 @@
   }
 
   function startButtonClick() {
-    if (timerState === 'running') {
-      timer.resetTimer();
+    this.currentCycle = this.totalCycle; // 주기 초기화
+    if (runState === 'running') {
+      this.worker.postMessage({ command: 'stop' });
+      timerState = 'work';
     } else {
-      timer.initTimer();
-      timer.startTimer();
+      this.worker.postMessage({ command: 'start', duration: duration });
     }
+    runState = !runState; // 동작 중이었으면 중지, 중지 중이었으면 동작시킴
   }
 
   function openSettingModal() {
