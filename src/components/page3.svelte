@@ -3,7 +3,7 @@
   import { getDisplayFormat } from '../lib/util';
 
   let parentInfo = $props();
-  
+
   const worker = new Worker(new URL('./worker.ts', import.meta.url), {
     type: 'module',
   });
@@ -37,7 +37,11 @@
     timer.skipNextPhase();
   };
 
-  function tabClick(clickedTab: { keyword: string, label: string, selected: boolean }) {
+  function tabClick(clickedTab: {
+    keyword: string;
+    label: string;
+    selected: boolean;
+  }) {
     // 이미 선택되어 있는 상태에서는 다시 선택 로직이 동작하지 않게끔 하기
     if (clickedTab.selected === true) return;
 
@@ -61,7 +65,7 @@
 
   function openSettingModal() {
     if (timer.isTimerRunning()) return;
-    
+
     // TODO: if 블록으로 관리
     // settingModal.dataset.mode = 'modify';
     parentInfo.showSettingModal();
@@ -196,7 +200,9 @@
     max-width: 400px;
     border-radius: 8px;
     background: #fdfdfd;
-    box-shadow: 0 8px 12px 6px rgba(0, 0, 0, 0.15), 0 4px 4px 0 rgba(0, 0, 0, 0.3);
+    box-shadow:
+      0 8px 12px 6px rgba(0, 0, 0, 0.15),
+      0 4px 4px 0 rgba(0, 0, 0, 0.3);
     border: 2px solid var(--main-theme-color);
     color: var(--main-theme-color);
     font-size: 28px;
@@ -205,7 +211,9 @@
     font-weight: 400;
     line-height: 150%; /* 42px */
     letter-spacing: -0.616px;
-    transition: border 0.5s ease, color 0.5s ease;
+    transition:
+      border 0.5s ease,
+      color 0.5s ease;
   }
 
   :global(.app[data-timer-state='stopped']) .start-button::before {
