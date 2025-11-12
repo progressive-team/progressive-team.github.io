@@ -1,32 +1,11 @@
 <script lang="ts">
-  import { getDisplayFormat } from '../lib/util';
-
   let parentInfo = $props();
-
-  const worker = new Worker(new URL('./worker.ts', import.meta.url), {
-    type: 'module',
-  });
 
   const tabs = [
     { keyword: 'work', label: '일할 시간', selected: true },
     { keyword: 'break', label: '짧은 휴식', selected: false },
     { keyword: 'long-break', label: '긴 휴식', selected: false },
   ] as const;
-
-  worker.onmessage = (event) => {
-    const remaining = event.data.remaining;
-
-    const totalSeconds = Math.max(0, Math.ceil(remaining / 1000));
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    const formatted = getDisplayFormat(minutes, seconds);
-    timer.setTimerDisplay(formatted);
-
-    // 남은 시간이 0보다 크면 타이머 종료 동작하지 않기
-    if (remaining > 0) return;
-
-    timer.skipNextPhase();
-  };
 
   function tabClick(clickedTab: {
     keyword: string;

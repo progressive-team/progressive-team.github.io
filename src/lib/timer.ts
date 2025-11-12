@@ -1,4 +1,5 @@
 import { requestNotificationPermission, showNotification } from './notify.js';
+import { getDisplayFormat } from '../lib/util';
 
 class TimerInfo {
   name: string;
@@ -17,6 +18,8 @@ export const State = {
 } as const;
 
 export default class Timer {
+  worker: Worker;
+
   workTime: string;
   breakTime: string;
   longBreakTime: string;
@@ -24,6 +27,24 @@ export default class Timer {
   currentCycle: number;
 
   constructor() {
+    this.worker = new Worker(new URL('./worker.ts', import.meta.url), {
+      type: 'module',
+    });
+    this.worker.onmessage = (event) => {
+      const remaining = event.data.remaining;
+
+      const totalSeconds = Math.max(0, Math.ceil(remaining / 1000));
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      const formatted = getDisplayFormat(minutes, seconds);
+      this.setTimerDisplay(formatted);
+
+      // 남은 시간이 0보다 크면 타이머 종료 동작하지 않기
+      if (remaining > 0) return;
+
+      this.skipNextPhase();
+    };
+
     this.workTime = '25:00';
     this.breakTime = '05:00';
     this.longBreakTime = '15:00';
