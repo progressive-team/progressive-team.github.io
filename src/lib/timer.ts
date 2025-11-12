@@ -21,21 +21,4 @@ export default class Timer {
     const duration = formatTime(timerString);
     this.settingGuide.dataset.cycleContext = `${this.currentCycle}/${this.totalCycle}`;
   }
-
-  // ui 에서 클릭할 때 timer.changeState 해주기
-  runByButton(keyword: string) {
-    switch (keyword) {
-      case 'work':
-        this.changeState(State.WORK);
-        break;
-      case 'break':
-        this.changeState(State.BREAK);
-        break;
-      case 'long-break':
-        this.changeState(State.LONG_BREAK);
-        break;
-      default:
-        throw new Error('Unknown button text');
-    }
-  }
 }
