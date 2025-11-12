@@ -68,6 +68,29 @@
   }
 </script>
 
+<section class="timer-active-area">
+  <div class="inner-box">
+    <menu class="tab-list" role="tablist">
+      {#each tabs as tab}
+        <li role="tab" aria-selected={tab.selected} data-keyword={tab.keyword}>
+          <button
+            onclick={() => {
+              tabClick(tab);
+            }}>{tab.label}</button
+          >
+        </li>
+      {/each}
+    </menu>
+    <div class="frame">
+      <div class="timer-display">25:00</div>
+      <div class="button-group">
+        <button class="start-button" onclick={startButtonClick}></button>
+        <p class="setting-guide" onclick={openSettingModal}></p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <style>
   .timer-active-area {
     display: flex;
@@ -229,22 +252,3 @@
     content: '긴 휴식 시간입니다. 재정비하세요.';
   }
 </style>
-
-<section class="timer-active-area">
-  <div class="inner-box">
-    <menu class="tab-list" role="tablist">
-      {#each tabs as tab}
-        <li role="tab" aria-selected={tab.selected} data-keyword={tab.keyword}>
-          <button onclick={() => {tabClick(tab)}}>{tab.label}</button>
-        </li>
-      {/each}
-    </menu>
-    <div class="frame">
-      <div class="timer-display">25:00</div>
-      <div class="button-group">
-        <button class="start-button" onclick={startButtonClick}></button>
-        <p class="setting-guide" onclick={openSettingModal}></p>
-      </div>
-    </div>
-  </div>
-</section>
