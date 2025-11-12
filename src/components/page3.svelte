@@ -1,6 +1,9 @@
 <script lang="ts">
   import { timers } from '../stores/timerStore.svelte';
-  import { visibility, showSettingModal } from '../stores/visibilityStore.svelte';
+  import {
+    visibility,
+    showSettingModal,
+  } from '../stores/visibilityStore.svelte';
 
   const tabs = [
     { keyword: 'work', label: '일할 시간', selected: true },
