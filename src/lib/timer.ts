@@ -1,158 +1,28 @@
-import { requestNotificationPermission, showNotification } from './notify.js';
-import { getDisplayFormat } from '../lib/util';
-
-class TimerInfo {
-  name: string;
-  keyword: string;
-
-  constructor(name: string, keyword: string) {
-    this.name = name;
-    this.keyword = keyword;
-  }
-}
-
-export const State = {
-  WORK: new TimerInfo('일할 시간', 'work'),
-  BREAK: new TimerInfo('짧은 휴식', 'break'),
-  LONG_BREAK: new TimerInfo('긴 휴식', 'long-break'),
-} as const;
+import { formatTime } from './utils/formatUtil';
 
 export default class Timer {
-  worker: Worker;
-
-  workTime: string;
-  breakTime: string;
-  longBreakTime: string;
-  totalCycle: number;
-  currentCycle: number;
-
-  constructor() {
-    this.worker = new Worker(new URL('./worker.ts', import.meta.url), {
-      type: 'module',
-    });
-    this.worker.onmessage = (event) => {
-      const remaining = event.data.remaining;
-
-      const totalSeconds = Math.max(0, Math.ceil(remaining / 1000));
-      const minutes = Math.floor(totalSeconds / 60);
-      const seconds = totalSeconds % 60;
-      const formatted = getDisplayFormat(minutes, seconds);
-      this.setTimerDisplay(formatted);
-
-      // 남은 시간이 0보다 크면 타이머 종료 동작하지 않기
-      if (remaining > 0) return;
-
-      this.skipNextPhase();
-    };
-
-    this.workTime = '25:00';
-    this.breakTime = '05:00';
-    this.longBreakTime = '15:00';
-    this.totalCycle = 1;
-    this.currentCycle = 1;
-  }
-
   changeState(state: TimerInfo) {
-    this.mainApp.dataset.state = state.keyword;
-    this.timerDisplay.textContent = this.getTime(state);
+    // 이 밑은 전부 UI 부
+    this.setTimerDisplay() = this.getTime(state);
     for (const tab of this.tabs) {
       tab.ariaSelected =
         tab.dataset.keyword === state.keyword ? 'true' : 'false';
     }
   }
-
-  getTime(state: TimerInfo) {
-    switch (state) {
-      case State.WORK:
-        return this.workTime;
-      case State.BREAK:
-        return this.breakTime;
-      case State.LONG_BREAK:
-        return this.longBreakTime;
-      default:
-        throw new Error('Unknown state');
-    }
-  }
-
-  stopTimer() {
-    this.worker.postMessage({ command: 'stop' });
-    this.mainApp.dataset.timerState = 'stopped';
-  }
-
-  resetTimer() {
-    this.stopTimer();
-    this.currentCycle = this.totalCycle;
-    this.changeState(State.WORK);
-  }
-
   initTimer() {
-    requestNotificationPermission();
-
-    // 주기 초기화
-    this.currentCycle = this.totalCycle;
+    // todo notify 알림하는 걸 설정에서 스스로 켜게 하기? 타이머 버튼 옆에서 켜게 하기? => 왜 이걸 생각하냐면 notify 하는 것 자체는 타이머가 가질 역할이 아니고 홀로 독립되어 동작할 수 있기 때문임. (다른 버튼으로 역할 위임)
+    // requestNotificationPermission();;
   }
 
   startTimer() {
+    // 함수 안에 있는 이 아래 부분들은 전부 ui 로 관리되는 부분
+    // 3페이지 타이머 UI 의 시작 버튼을 누를 경우 현재 timerDisplay 값으로 아래의 연산을 한 후 timer#start()의 인수에다가 넣어주면 됨.
     const timerString = this.timerDisplay.textContent;
-    const parts = timerString.split(':');
-    const duration = (parseInt(parts[0]) * 60 + parseInt(parts[1])) * 1000;
-
-    this.worker.postMessage({ command: 'start', duration: duration });
-
-    this.mainApp.dataset.timerState = 'running';
+    const duration = formatTime(timerString);
     this.settingGuide.dataset.cycleContext = `${this.currentCycle}/${this.totalCycle}`;
   }
 
-  skipNextPhase() {
-    this.stopTimer();
-
-    const { state } = this.mainApp.dataset;
-    let autoStart = false;
-
-    switch (state) {
-      case 'work':
-        this.changeState(State.BREAK);
-        showNotification(
-          `짧은 휴식 시작. 현재 주기: ${this.settingGuide.dataset.cycleContext}`,
-        );
-        autoStart = true;
-        break;
-
-      case 'break':
-        if (this.currentCycle > 1) {
-          this.changeState(State.WORK);
-          this.currentCycle--;
-        } else {
-          this.changeState(State.LONG_BREAK);
-          showNotification('모든 주기 종료\n긴 휴식 시작');
-        }
-        autoStart = true;
-        break;
-
-      case 'long-break':
-        this.changeState(State.WORK);
-        showNotification('뽀모도로 종료');
-        break;
-      default:
-        throw new Error('Unknown state');
-    }
-
-    if (autoStart) this.startTimer();
-  }
-
-  setTime(
-    workTime: string,
-    breakTime: string,
-    longBreakTime: string,
-    cycle: number,
-  ) {
-    this.workTime = workTime;
-    this.breakTime = breakTime;
-    this.longBreakTime = longBreakTime;
-    this.totalCycle = cycle;
-    this.currentCycle = cycle;
-  }
-
+  // ui 에서 클릭할 때 timer.changeState 해주기
   runByButton(keyword: string) {
     switch (keyword) {
       case 'work':
@@ -167,9 +37,5 @@ export default class Timer {
       default:
         throw new Error('Unknown button text');
     }
-  }
-
-  setTimerDisplay(value: string) {
-    this.timerDisplay.textContent = value;
   }
 }
