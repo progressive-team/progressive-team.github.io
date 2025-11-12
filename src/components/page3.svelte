@@ -30,8 +30,6 @@
   }
 
   function openSettingModal() {
-    if (timerState === 'running') return;
-
     // TODO: if 블록으로 관리
     // settingModal.dataset.mode = 'modify';
     showSettingModal();
@@ -53,7 +51,7 @@
       <div class="timer-display">25:00</div>
       <div class="button-group">
         <button class="start-button" onclick={startButtonClick}></button>
-        <p class="setting-guide" onclick={openSettingModal}></p>
+        <p class="setting-guide" onclick={ (runState === 'stopped') && openSettingModal}></p>
       </div>
     </div>
   </div>
