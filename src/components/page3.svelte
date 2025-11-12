@@ -11,7 +11,7 @@
     { keyword: 'work', label: '일할 시간', selected: true },
     { keyword: 'break', label: '짧은 휴식', selected: false },
     { keyword: 'long-break', label: '긴 휴식', selected: false },
-  ] as const;
+  ];
 
   function changeState(keyword: string) {
     timerState = keyword;
