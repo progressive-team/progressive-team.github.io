@@ -125,14 +125,11 @@
         <button class="start-button" onclick={startButtonClick}></button>
         <p
           class="setting-guide"
+          data-cycle-context={`${timerSettingValue.currentCycle}/${timerSettingValue.totalCycle}`}
           onclick={() => {
             runState === false && openSettingModal();
           }}
-        >
-          {runState === false
-            ? '클릭하여 타이머 설정하기'
-            : `${timerSettingValue.currentCycle}/${timerSettingValue.totalCycle}`}
-        </p>
+        ></p>
       </div>
     </div>
   </div>
@@ -259,11 +256,11 @@
       color 0.5s ease;
   }
 
-  :global(.app[data-timer-state='stopped']) .start-button::before {
+  :global(.app[data-timer-state='false']) .start-button::before {
     content: '시작';
   }
 
-  :global(.app[data-timer-state='running']) .start-button::before {
+  :global(.app[data-timer-state='true']) .start-button::before {
     content: '중지';
   }
 
@@ -287,17 +284,17 @@
     word-break: keep-all;
   }
 
-  :global(.app[data-timer-state='stopped']) .setting-guide::before {
+  :global(.app[data-timer-state='false']) .setting-guide::before {
     color: #404040;
     content: '<클릭해서 시간 설정하기>';
   }
 
-  :global(.app[data-timer-state='running']) .setting-guide::before {
+  :global(.app[data-timer-state='true']) .setting-guide::before {
     color: #fff;
     content: '타이머 주기: ' attr(data-cycle-context);
   }
 
-  :global(.app[data-timer-state='running'][data-state='long-break'])
+  :global(.app[data-timer-state='true'][data-state='long-break'])
     .setting-guide::before {
     color: #fff;
     content: '긴 휴식 시간입니다. 재정비하세요.';
