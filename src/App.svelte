@@ -15,6 +15,10 @@
   import Page3 from './components/page3.svelte';
 
   import Timer from './lib/timer';
+
+  type Keyword = "work" | "break" | "long-break";
+  let appState: Keyword = $state("work");
+  let timerState: "stopped" | "running" = $state("stopped");
   
   const visibility = $state({
     timerCreateArea: false,
@@ -70,7 +74,7 @@
   };
 </script>
 
-<main class="app" data-state="work" data-timer-state="stopped">
+<main class="app" data-state={appState} data-timer-state={timerState}>
   <Page2 {...parentInfo} />
   <Page3 {...parentInfo} />
 </main>
