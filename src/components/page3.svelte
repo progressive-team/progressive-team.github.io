@@ -5,6 +5,8 @@
     showSettingModal,
   } from '../stores/visibilityStore.svelte';
 
+  let timerDisplay: string = $state('25:00');
+
   const tabs = [
     { keyword: 'work', label: '일할 시간', selected: true },
     { keyword: 'break', label: '짧은 휴식', selected: false },
@@ -50,7 +52,7 @@
       {/each}
     </ul>
     <div class="frame">
-      <div class="timer-display">25:00</div>
+      <div class="timer-display">{timerDisplay}</div>
       <div class="button-group">
         <button class="start-button" onclick={startButtonClick}></button>
         <p class="setting-guide" onclick={ (runState === 'stopped') && openSettingModal}></p>
