@@ -60,56 +60,7 @@ export default class Timer {
     return this.runState;
   }
 
-  stop() {
-    this.worker.postMessage({ command: 'stop' });
-    this.runState = false;
-  }
-
-  reset() {
-    this.stop();
-    this.currentCycle = this.totalCycle;
-    this.changeState('work');
-  }
-
-  start(duration: number) {
-    this.worker.postMessage({ command: 'start', duration: duration });
-    this.runState = true;
-  }
-
   init() {
     this.currentCycle = this.totalCycle;
-  }
-
-  changeState(state: TimerState) {
-    this.timerState = state;
-  }
-
-  skipNextPhase() {
-    this.stop();
-    switch (this.timerState) {
-      case 'work':
-        this.changeState('break');
-        // todo 이거 여기서 처리?
-        // 그리고 현재 주기 표시할 때 전체 주기도 표시해주기
-        // showNotification(`짧은 휴식 시작. 현재 주기: ${this.currentCycle}`);
-        this.start(formatTime(this.timerState));
-        break;
-      case 'break':
-        if (this.currentCycle > 1) {
-          this.changeState('work');
-          this.currentCycle--;
-        } else {
-          this.changeState('long-break');
-          // showNotification('모든 주기 종료\n긴 휴식 시작');
-        }
-        this.start(formatTime(this.timerState));
-        break;
-      case 'long-break':
-        this.changeState('work');
-        // showNotification('뽀모도로 종료');
-        break;
-      default:
-        throw new Error('Unknown State');
-    }
   }
 }
