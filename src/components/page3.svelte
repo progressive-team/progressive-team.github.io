@@ -38,8 +38,7 @@
     // 다른 버튼 눌러서 넘어갈 때 타이머가 동작할 경우 타이머를 멈추게 하기
     if (runState === true) {
       runState = false;
-    }
-    else {
+    } else {
       timerState = keyword;
     }
   }
