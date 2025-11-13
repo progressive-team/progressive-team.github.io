@@ -8,7 +8,7 @@
   let timerDisplay: string = $state('25:00');
 
   $effect(() => {
-    if (timerState === 'work') {
+    if (timer.timerState === 'work') {
       timerDisplay = timerSettingValue.workTime;
     } else if (timerState === 'break') {
       timerDisplay = timerSettingValue.breakTime;
@@ -18,13 +18,13 @@
   });
 
   $effect(() => {
-    if (runState === true) {
+    if (timer.runState === true) {
       const duration = formatTime(timerDisplay);
-      worker.postMessage({ command: 'start', duration: duration });
-    } else if (runState === false) {
-      worker.postMessage({ command: 'stop' });
+      timer.worker.postMessage({ command: 'start', duration: duration });
+    } else if (timer.runState === false) {
+      timer.worker.postMessage({ command: 'stop' });
       timerDisplay = timerSettingValue.workTime;
-      timerState = 'work';
+      timer.timerState = 'work';
     }
   });
 
@@ -33,15 +33,6 @@
     { keyword: 'break', label: '짧은 휴식' },
     { keyword: 'long-break', label: '긴 휴식' },
   ];
-
-  function changeState(keyword: string) {
-    // 다른 버튼 눌러서 넘어갈 때 타이머가 동작할 경우 타이머를 멈추게 하기
-    if (runState === true) {
-      runState = false;
-    } else {
-      timerState = keyword;
-    }
-  }
 
   function startButtonClick() {
     timerSettingValue.currentCycle = timerSettingValue.totalCycle; // 주기 초기화
@@ -53,51 +44,6 @@
     // settingModal.dataset.mode = 'modify';
     showSettingModal();
   }
-
-  worker.onmessage = (event) => {
-    const remaining = event.data.remaining;
-
-    const totalSeconds = Math.max(0, Math.ceil(remaining / 1000));
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    // todo 이거 ui 에서 잡으면 좋을 것 같은데 worker 의 핵심부 못 빼내나?
-    const formatted = getDisplayFormat(minutes, seconds);
-    timerDisplay = formatted;
-
-    // 남은 시간이 0보다 크면 타이머 종료 동작하지 않기
-    if (remaining > 0) return;
-
-    skipNextPhase();
-  };
-
-  function skipNextPhase() {
-    runState = false;
-    switch (timerState) {
-      case 'work':
-        timerState = 'break';
-        // todo 이거 여기서 처리?
-        // 그리고 현재 주기 표시할 때 전체 주기도 표시해주기
-        // showNotification(`짧은 휴식 시작. 현재 주기: ${this.currentCycle}`);
-        runState = true;
-        break;
-      case 'break':
-        if (timerSettingValue.currentCycle > 1) {
-          timerState = 'work';
-          timerSettingValue.currentCycle--;
-        } else {
-          timerState = 'long-break';
-          // showNotification('모든 주기 종료\n긴 휴식 시작');
-        }
-        runState = true;
-        break;
-      case 'long-break':
-        timerState = 'work';
-        // showNotification('뽀모도로 종료');
-        break;
-      default:
-        throw new Error('Unknown State');
-    }
-  }
 </script>
 
 <section class="timer-active-area">
@@ -106,12 +52,14 @@
       {#each tabs as tab}
         <li
           role="tab"
-          aria-selected={tab.keyword === timerState}
+          aria-selected={tab.keyword === timer.timerState}
           data-keyword={tab.keyword}
         >
           <button
             onclick={() => {
-              tab.keyword !== timerState && changeState(tab.keyword);
+              if (tab.keyword !== timer.timerState) {
+                timer.changeState(tab.keyword);
+              }
             }}
           >
             {tab.label}
@@ -127,7 +75,9 @@
           class="setting-guide"
           data-cycle-context={`${timerSettingValue.currentCycle}/${timerSettingValue.totalCycle}`}
           onclick={() => {
-            runState === false && openSettingModal();
+            if (!timer.runState) {
+              openSettingModal();
+            }
           }}
         ></p>
       </div>
