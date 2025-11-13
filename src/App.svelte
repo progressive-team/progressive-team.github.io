@@ -20,6 +20,50 @@
   let appState: Keyword = $state('work');
   let timerState: 'stopped' | 'running' = $state('stopped');
 </script>
+
+<main class="app" data-state={timerState} data-timer-state={runState}>
+  <Page2 />
+  <Page3 />
+</main>
+
+<style>
+  @import 'tailwindcss';
+  @import 'normalize.css';
+  @import '@noonnu/bmjua';
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    overflow-y: auto;
+    margin: 0;
+  }
+
+  main.app {
+    --main-color: #fafaf8;
+    --main-theme-color: #ed6b6b;
+
+    font-family: BMJUA;
+    color: var(--main-color);
+    display: flex;
+    position: relative;
+    height: 576px;
+    background: var(--main-theme-color);
+    height: 100dvh;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.5s ease;
+  }
+
+  main.app[data-state='work'] {
+    --main-theme-color: #ed6b6b;
+  }
+
+  main.app[data-state='break'] {
+    --main-theme-color: #38858a;
+  }
+
   main.app[data-state='long-break'] {
     --main-theme-color: #397097;
   }
