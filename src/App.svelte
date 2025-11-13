@@ -20,6 +20,9 @@
   let appState: Keyword = $state('work');
   let timerState: 'stopped' | 'running' = $state('stopped');
 </script>
+  main.app[data-state='long-break'] {
+    --main-theme-color: #397097;
+  }
 
 <main class="app" data-state={appState} data-timer-state={timerState}>
   {#if currentPage() == 'create'}
@@ -30,6 +33,41 @@
     <Page3 {appState} {timerState} />
   {/if}
 </main>
+  [hidden] {
+    display: none !important;
+  }
 
-<style>
+  /* 타이머 생성 화면 */
+  .timer-create-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+  }
+
+  #create-timer {
+    display: flex;
+    width: 90px;
+    height: 90px;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: var(--main-theme-color);
+    border: none;
+    background: #fff;
+  }
+
+  label[for='create-timer'] {
+    display: block;
+    font-size: 30px;
+  }
+
+  /* 이 아래는 2번째 페이지 입니다. */
+  /* 타이머 설정창 */
+
+  #ipsum {
+    color: black;
+  }
 </style>
