@@ -1,8 +1,8 @@
 <script lang="ts">
   import '../app.css';
   import { formatTimeInput, getDisplayFormat } from '../lib/utils/formatUtil';
-  import { visibility, showSettingModal, hideSettingModal, hideTimerCreateArea, showTimerActiveArea } from '../stores/visibilityStore.svelte';
-  import { timer } from '../stores/timerStore.svelte';
+  import { showTimerActiveArea } from '../stores/visibilityStore.svelte';
+  import { timerStore } from '../stores/timerStore.svelte';
 
   let workTime: string = '25:00';
   let breakTime: string = '05:00';
@@ -40,17 +40,84 @@
     alert(
       `✅ 타이머 설정 완료!\n활동: ${workTime}\n휴식: ${breakTime}\n긴 휴식: ${longBreakTime}\n주기: ${cycle}`,
     );
-
-    // 3페이지 제외 다 숨기고 3페이지만 드러내기
-    hideTimerCreateArea();
-    hideSettingModal();
     showTimerActiveArea();
 
     // 타이머 시간 설정
-    timer.setTime(workTime, breakTime, longBreakTime, cycle);
-    timer.changeState('work');
+    timerStore.value?.setTime(workTime, breakTime, longBreakTime, cycle);
+    timerStore.value?.changeState('work');
   }
 </script>
+
+<!-- 이거 data set 벗어나서 스벨트 if 블록으로 상태별 generateBtn 내용물을 수정하기, 생성하기로 바꿔줘야 함.-->
+<section class="timer-setting-modal overlay" data-mode="create">
+  <div id="setting-timer">
+    <header class="close-row">
+      <h2>시간설정</h2>
+      <!---todo 닫기 버튼 눌렀을 때 이전 상태로 돌아가야 함.-->
+      <button aria-label="닫기" type="button" onclick={hideSettingModal}>
+        <svg width="48" height="48" viewBox="0 0 48 48">
+          <path
+            d="M12.8 38L10 35.2L21.2 24L10 12.8L12.8 10L24 21.2L35.2 10L38 12.8L26.8 24L38 35.2L35.2 38L24 26.8L12.8 38Z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+    </header>
+    <fieldset class="row-box">
+      <label for="work-time">활동 시간</label>
+      <input
+        id="work-time"
+        inputmode="numeric"
+        placeholder="25:00"
+        bind:value={workTime}
+        onblur={() => {
+          workTime = formatTimeInput(workTime);
+        }}
+      />
+
+      <label for="break-time">휴식 시간</label>
+      <input
+        id="break-time"
+        inputmode="numeric"
+        placeholder="05:00"
+        bind:value={breakTime}
+        onblur={() => {
+          breakTime = formatTimeInput(breakTime);
+        }}
+      />
+
+      <label for="cycle">주기</label>
+      <input
+        id="cycle"
+        name="cycle"
+        type="number"
+        inputmode="numeric"
+        placeholder="1"
+        min="1"
+        bind:value={cycle}
+      />
+
+      <label for="long-break-time">긴 휴식 시간</label>
+      <input
+        id="long-break-time"
+        inputmode="numeric"
+        placeholder="15:00"
+        bind:value={longBreakTime}
+        onblur={() => {
+          longBreakTime = formatTimeInput(longBreakTime);
+        }}
+      />
+    </fieldset>
+    <button
+      type="submit"
+      id="generateBtn"
+      class="generate-row"
+      aria-label="시간 설정"
+      onclick={verify}
+      >{timerStore.value === null ? '만들기' : '수정하기'}</button
+    >
+  </div>
+</section>
 
 <style>
   .overlay {
@@ -64,14 +131,6 @@
     justify-content: center;
     align-items: center;
     z-index: 1;
-  }
-
-  .timer-setting-modal[data-mode='create'] #generateBtn:before {
-    content: '만들기';
-  }
-
-  .timer-setting-modal[data-mode='modify'] #generateBtn:before {
-    content: '수정하기';
   }
 
   #setting-timer {
@@ -235,95 +294,3 @@
     letter-spacing: -0.616px;
   }
 </style>
-
-<section class="timer-create-area">
-  <button
-    id="create-timer"
-    onclick={showSettingModal}
-    aria-label="타이머 생성 버튼"
-  >
-    <svg viewBox="0 0 72 72" fill="none">
-      <path
-        d="M33 39H15V33H33V15H39V33H57V39H39V57H33V39Z"
-        fill="currentColor"
-      />
-    </svg>
-  </button>
-  <label for="create-timer">클릭해서 타이머를 추가하세요</label>
-</section>
-<!-- 이거 data set 벗어나서 스벨트 if 블록으로 상태별 generateBtn 내용물을 수정하기, 생성하기로 바꿔줘야 함.-->
-<section
-  class="timer-setting-modal overlay"
-  hidden={!visibility.settingModal}
-  data-mode="create"
->
-  <div id="setting-timer">
-    <header class="close-row">
-      <h2>시간설정</h2>
-      <button
-        aria-label="닫기"
-        type="button"
-        onclick={hideSettingModal}
-      >
-        <svg width="48" height="48" viewBox="0 0 48 48">
-          <path
-            d="M12.8 38L10 35.2L21.2 24L10 12.8L12.8 10L24 21.2L35.2 10L38 12.8L26.8 24L38 35.2L35.2 38L24 26.8L12.8 38Z"
-            fill="currentColor"
-          />
-        </svg>
-      </button>
-    </header>
-    <fieldset class="row-box">
-      <label for="work-time">활동 시간</label>
-      <input
-        id="work-time"
-        inputmode="numeric"
-        placeholder="25:00"
-        bind:value={workTime}
-        onblur={() => {
-          workTime = formatTimeInput(workTime);
-        }}
-      />
-
-      <label for="break-time">휴식 시간</label>
-      <input
-        id="break-time"
-        inputmode="numeric"
-        placeholder="05:00"
-        bind:value={breakTime}
-        onblur={() => {
-          breakTime = formatTimeInput(breakTime);
-        }}
-      />
-
-      <label for="cycle">주기</label>
-      <input
-        id="cycle"
-        name="cycle"
-        type="number"
-        inputmode="numeric"
-        placeholder="1"
-        min="1"
-        bind:value={cycle}
-      />
-
-      <label for="long-break-time">긴 휴식 시간</label>
-      <input
-        id="long-break-time"
-        inputmode="numeric"
-        placeholder="15:00"
-        bind:value={longBreakTime}
-        onblur={() => {
-          longBreakTime = formatTimeInput(longBreakTime);
-        }}
-      />
-    </fieldset>
-    <button
-      type="submit"
-      id="generateBtn"
-      class="generate-row"
-      aria-label="시간 설정"
-      onclick={verify}
-    ></button>
-  </div>
-</section>
