@@ -19,12 +19,7 @@
   type Keyword = "work" | "break" | "long-break";
   let appState: Keyword = $state("work");
   let timerState: "stopped" | "running" = $state("stopped");
-  
-  const visibility = $state({
-    timerCreateArea: false,
-    settingModal: false,
-    timerActiveArea: false,
-  });
+
 
   // 객체를 계속 만들어둬야 한다고?
   // 타이머 객체를 차라리 여기서 미리 만들어서 그걸 시간 변경 가능하게끔 하기?
@@ -37,18 +32,6 @@
 
   const timer = $state(new Timer());
 
-  function hideSettingModal() {
-    visibility.settingModal = false;
-  }
-  function showSettingModal() {
-    visibility.settingModal = true;
-  }
-  function hideTimerCreateArea() {
-    visibility.timerCreateArea = false;
-  }
-  function showTimerActiveArea() {
-    visibility.timerActiveArea = true;
-  }
   function setTimerTime(
     workTime: string,
     breakTime: string,
