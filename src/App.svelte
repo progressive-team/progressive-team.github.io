@@ -29,37 +29,11 @@
     longBreakTime: '',
     cycle: 1,
   });
-
-  const timer = $state(new Timer());
-
-  function setTimerTime(
-    workTime: string,
-    breakTime: string,
-    longBreakTime: string,
-    cycle: number,
-  ) {
-    verifiedTimerInputs.workTime = workTime;
-    verifiedTimerInputs.breakTime = breakTime;
-    verifiedTimerInputs.longBreakTime = longBreakTime;
-    verifiedTimerInputs.cycle = cycle;
-
-    // 다른 탭에서 수정하더라도 일할 시간 탭으로 돌아오게 하기
-    timer.changeState(State.WORK);
-  }
-
-  const parentInfo = {
-    visibility,
-    showSettingModal,
-    hideSettingModal,
-    hideTimerCreateArea,
-    showTimerActiveArea,
-    setTimerTime,
-  };
 </script>
 
 <main class="app" data-state={appState} data-timer-state={timerState}>
-  <Page2 {...parentInfo} />
-  <Page3 {...parentInfo} appState={appState} timerState={timerState} />
+  <Page2 />
+  <Page3 appState={appState} timerState={timerState} />
 </main>
 
 <style>

@@ -1,19 +1,13 @@
 <script lang="ts">
   import '../app.css';
   import { formatTimeInput, getDisplayFormat } from '../lib/utils/formatUtil';
-
-  const parentInfo = $props();
+  import { visibility, showSettingModal, hideSettingModal, hideTimerCreateArea, showTimerActiveArea } from '../stores/visibilityStore.svelte';
+  import { timer } from '../stores/timerStore.svelte';
 
   let workTime: string = '25:00';
   let breakTime: string = '05:00';
   let cycle: number = 1;
   let longBreakTime: string = '15:00';
-
-  // 2 페이지에서 해야 하는 부분
-  //workTimeInput.value = timer.workTime;
-  //breakTimeInput.value = timer.breakTime;
-  //longBreakTimeInput.value = timer.longBreakTime;
-  //cycleInput.value = `${timer.totalCycle}`;
 
   function verify() {
     // 값이 없으면 기본값 설정
@@ -48,12 +42,13 @@
     );
 
     // 3페이지 제외 다 숨기고 3페이지만 드러내기
-    parentInfo.hideTimerCreateArea();
-    parentInfo.hideSettingModal();
-    parentInfo.showTimerActiveArea();
+    hideTimerCreateArea();
+    hideSettingModal();
+    showTimerActiveArea();
 
     // 타이머 시간 설정
-    parentInfo.setTimerTime(workTime, breakTime, longBreakTime, cycle);
+    timer.setTime(workTime, breakTime, longBreakTime, cycle);
+    timer.changeState('work');
   }
 </script>
 
@@ -244,7 +239,7 @@
 <section class="timer-create-area">
   <button
     id="create-timer"
-    onclick={parentInfo.showSettingModal}
+    onclick={showSettingModal}
     aria-label="타이머 생성 버튼"
   >
     <svg viewBox="0 0 72 72" fill="none">
@@ -259,7 +254,7 @@
 <!-- 이거 data set 벗어나서 스벨트 if 블록으로 상태별 generateBtn 내용물을 수정하기, 생성하기로 바꿔줘야 함.-->
 <section
   class="timer-setting-modal overlay"
-  hidden={!parentInfo.visibility.settingModal}
+  hidden={!visibility.settingModal}
   data-mode="create"
 >
   <div id="setting-timer">
@@ -268,7 +263,7 @@
       <button
         aria-label="닫기"
         type="button"
-        onclick={parentInfo.hideSettingModal}
+        onclick={hideSettingModal}
       >
         <svg width="48" height="48" viewBox="0 0 48 48">
           <path
