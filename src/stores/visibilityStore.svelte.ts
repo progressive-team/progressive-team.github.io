@@ -1,21 +1,19 @@
-export const visibility = $state({
-    timerCreateArea: false,
-    settingModal: false,
-    timerActiveArea: false,
-  });
+type Visibility = 'create' | 'setting' | 'active';
 
-export function hideSettingModal() {
-    visibility.settingModal = false;
-  }
+let visibility = $state<Visibility>('create');
+
+export function currentPage() {
+  return visibility;
+}
 
 export function showSettingModal() {
-    visibility.settingModal = true;
-  }
+  visibility = 'setting';
+}
 
-export function hideTimerCreateArea() {
-    visibility.timerCreateArea = false;
-  }
+export function showTimerCreateArea() {
+  visibility = 'create';
+}
 
 export function showTimerActiveArea() {
-    visibility.timerActiveArea = true;
-  }
+  visibility = 'active';
+}
