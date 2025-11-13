@@ -1,7 +1,10 @@
 <script lang="ts">
   import '../app.css';
   import { formatTimeInput, getDisplayFormat } from '../lib/utils/formatUtil';
-  import { showTimerActiveArea } from '../stores/visibilityStore.svelte';
+  import {
+    showTimerActiveArea,
+    goBack,
+  } from '../stores/visibilityStore.svelte';
   import { timerStore } from '../stores/timerStore.svelte';
 
   let workTime: string = '25:00';
@@ -54,7 +57,7 @@
     <header class="close-row">
       <h2>시간설정</h2>
       <!---todo 닫기 버튼 눌렀을 때 이전 상태로 돌아가야 함.-->
-      <button aria-label="닫기" type="button" onclick={hideSettingModal}>
+      <button aria-label="닫기" type="button" onclick={goBack}>
         <svg width="48" height="48" viewBox="0 0 48 48">
           <path
             d="M12.8 38L10 35.2L21.2 24L10 12.8L12.8 10L24 21.2L35.2 10L38 12.8L26.8 24L38 35.2L35.2 38L24 26.8L12.8 38Z"
