@@ -40,28 +40,40 @@
     }
   });
 
+  const worker = new Worker('/timer.js');
+
+  worker.onmessage = (event: MessageEvent) => {
+    remainingTime = event.data.remainingTime;
+    if (remainingTime <= 0) {
+      skipNextPhase();
+    }
+  };
+
   // Effects
   $effect(() => {
     // Update remainingTime when the active timer state or its corresponding setting changes
     const rawParts = timeForCurrentState.split(':');
     if (rawParts.length === 1) rawParts.unshift('0');
     const parts = rawParts.map((value) => Number.parseInt(value, 10) || 0);
-    remainingTime = (parts[0] * 60 + parts[1]) * 1000;
+    const newTime = (parts[0] * 60 + parts[1]) * 1000;
+
+    remainingTime = newTime;
+    worker.postMessage({ command: 'reset', time: newTime });
   });
 
   $effect(() => {
-    if (timerRunningState !== 'running' || remainingTime <= 0) return;
-
-    const timer = setInterval(() => {
-      remainingTime -= 1000;
-      if (remainingTime <= 0) {
-        clearInterval(timer);
-        skipNextPhase();
+    if (timerRunningState === 'running') {
+      if (remainingTime > 0) {
+        worker.postMessage({ command: 'start', time: remainingTime });
       }
-    }, 1000);
+    } else {
+      worker.postMessage({ command: 'stop' });
+    }
+  });
 
+  $effect(() => {
     return () => {
-      clearInterval(timer);
+      worker.terminate();
     };
   });
 
