@@ -40,3 +40,12 @@ export function formatTimeInput(event: Event) {
   const input = event.target as HTMLInputElement;
   input.value = formatTimeString(input.value);
 }
+
+export function parseTimeInput(value: string) {
+  const rawParts = value.split(':');
+  if (rawParts.length === 1) rawParts.unshift('0');
+  const [minutes, seconds] = rawParts.map(
+    (value) => Number.parseInt(value, 10) || 0,
+  );
+  return (minutes * 60 + seconds) * 1000;
+}

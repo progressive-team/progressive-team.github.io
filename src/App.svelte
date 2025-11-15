@@ -2,6 +2,7 @@
   import {
     formatTimeInput,
     getDisplayFormat,
+    parseTimeInput,
     requestNotificationPermission,
     showNotification,
   } from './lib/utils';
@@ -52,13 +53,10 @@
   // Effects
   $effect(() => {
     // Update remainingTime when the active timer state or its corresponding setting changes
-    const rawParts = timeForCurrentState.split(':');
-    if (rawParts.length === 1) rawParts.unshift('0');
-    const parts = rawParts.map((value) => Number.parseInt(value, 10) || 0);
-    const newTime = (parts[0] * 60 + parts[1]) * 1000;
+    const time = parseTimeInput(timeForCurrentState);
+    remainingTime = time;
 
-    remainingTime = newTime;
-    worker.postMessage({ command: 'reset', time: newTime });
+    worker.postMessage({ command: 'reset', time });
   });
 
   $effect(() => {
@@ -138,29 +136,37 @@
   function skipNextPhase() {
     timerRunningState = 'stopped';
     let autoStart = false;
+    let nextState: 'work' | 'break' | 'long-break' = 'work';
+    let notificationMessage = '';
 
     switch (timerState) {
       case 'work':
-        changeTimerState('break');
-        showNotification(
-          `짧은 휴식 시작. 현재 주기: ${currentCycle}/${settings.totalCycle}`,
-        );
+        nextState = 'break';
+        notificationMessage = `짧은 휴식 시작. 현재 주기: ${currentCycle}/${settings.totalCycle}`;
         autoStart = true;
         break;
       case 'break':
         if (currentCycle > 1) {
           currentCycle--;
-          changeTimerState('work');
+          nextState = 'work';
         } else {
-          changeTimerState('long-break');
-          showNotification('모든 주기 종료\n긴 휴식 시작');
+          nextState = 'long-break';
+          notificationMessage = '모든 주기 종료\n긴 휴식 시작';
         }
         autoStart = true;
         break;
       case 'long-break':
-        changeTimerState('work');
-        showNotification('뽀모도로 종료');
+        nextState = 'work';
+        notificationMessage = '뽀모도로 종료';
         break;
+    }
+
+    // Synchronously update timer state and remaining time to prevent flicker
+    timerState = nextState;
+    remainingTime = parseTimeInput(timeForCurrentState);
+
+    if (notificationMessage) {
+      showNotification(notificationMessage);
     }
 
     if (autoStart) {
