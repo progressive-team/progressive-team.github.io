@@ -1,4 +1,4 @@
-import { formatTime } from '../utils/formatUtil';
+import { formatTime, getDisplayFormat } from '../utils/formatUtil';
 
 export type TimerState = 'work' | 'break' | 'long-break';
 
@@ -32,9 +32,6 @@ export default class Timer {
       const totalSeconds = Math.max(0, Math.ceil(remaining / 1000));
       const minutes = Math.floor(totalSeconds / 60);
       const seconds = totalSeconds % 60;
-      // todo 이거 ui 에서 잡으면 좋을 것 같은데 worker 의 핵심부 못 빼내나?
-      // const formatted = getDisplayFormat(minutes, seconds);
-      // setTimerDisplay(formatted);
 
       // 남은 시간이 0보다 크면 타이머 종료 동작하지 않기
       if (remaining > 0) return;
@@ -67,21 +64,29 @@ export default class Timer {
 
   reset() {
     this.stop();
-    this.currentCycle = this.totalCycle;
+    this.currentCycle = this.totalCycle; // 주기 초기화
     this.changeState('work');
   }
 
-  start(duration: number) {
+  start() {
+    const duration = formatTime(this.getTimeByState());
     this.worker.postMessage({ command: 'start', duration: duration });
     this.runState = true;
   }
 
-  init() {
-    this.currentCycle = this.totalCycle;
-  }
-
   changeState(state: TimerState) {
     this.timerState = state;
+  }
+
+  getTimeByState(): string {
+    switch (this.timerState) {
+      case 'work':
+        return this.workTime;
+      case 'break':
+        return this.breakTime;
+      case 'long-break':
+        return this.longBreakTime;
+    }
   }
 
   skipNextPhase() {
@@ -92,7 +97,7 @@ export default class Timer {
         // todo 이거 여기서 처리?
         // 그리고 현재 주기 표시할 때 전체 주기도 표시해주기
         // showNotification(`짧은 휴식 시작. 현재 주기: ${this.currentCycle}`);
-        this.start(formatTime(this.timerState));
+        this.start();
         break;
       case 'break':
         if (this.currentCycle > 1) {
@@ -102,7 +107,7 @@ export default class Timer {
           this.changeState('long-break');
           // showNotification('모든 주기 종료\n긴 휴식 시작');
         }
-        this.start(formatTime(this.timerState));
+        this.start();
         break;
       case 'long-break':
         this.changeState('work');

@@ -1,33 +1,13 @@
 <script lang="ts">
-  import { timers } from '../stores/timerStore.svelte';
+  import { timerStore } from '../stores/timerStore.svelte';
   import {
-    visibility,
     showSettingModal,
   } from '../stores/visibilityStore.svelte';
   import type { TimerState } from '../lib/models/Timer';
 
   let timerDisplay: string = $state('25:00');
+  let { value: timer } = timerStore;
 
-  $effect(() => {
-    if (timer.timerState === 'work') {
-      timerDisplay = timerSettingValue.workTime;
-    } else if (timerState === 'break') {
-      timerDisplay = timerSettingValue.breakTime;
-    } else if (timerState === 'long-break') {
-      timerDisplay = timerSettingValue.longBreakTime;
-    }
-  });
-
-  $effect(() => {
-    if (timer.runState === true) {
-      const duration = formatTime(timerDisplay);
-      timer.worker.postMessage({ command: 'start', duration: duration });
-    } else if (timer.runState === false) {
-      timer.worker.postMessage({ command: 'stop' });
-      timerDisplay = timerSettingValue.workTime;
-      timer.timerState = 'work';
-    }
-  });
   type Tab = {
     keyword: TimerState;
     label: string;
@@ -38,12 +18,7 @@
     { keyword: 'break', label: '짧은 휴식' },
     { keyword: 'long-break', label: '긴 휴식' },
   ];
-
-  function startButtonClick() {
-    timerSettingValue.currentCycle = timerSettingValue.totalCycle; // 주기 초기화
-    runState = !runState; // 동작 중이었으면 중지, 중지 중이었으면 동작시킴
-  }
-
+  
   function openSettingModal() {
     // TODO: if 블록으로 관리
     // settingModal.dataset.mode = 'modify';
@@ -53,11 +28,12 @@
 
 <section class="timer-active-area">
   <div class="inner-box">
+    <!-- todo: 컴포넌트화해서 캡슐화하는 거 가능성: props 로 탭 정보 넘겨주기  -->
     <ul class="tab-list" role="tablist">
       {#each tabs as tab}
         <li
           role="tab"
-          aria-selected={tab.keyword === timer.timerState}
+          aria-selected={tab.keyword === timer?.timerState}
           data-keyword={tab.keyword}
         >
           <button
@@ -75,15 +51,19 @@
     <div class="frame">
       <div class="timer-display">{timerDisplay}</div>
       <div class="button-group">
-        <button class="start-button" onclick={startButtonClick}></button>
+        <button class="start-button" onclick={()=>{
+          if (timer.runState) { timer.reset();} else {timer.start();}
+        }}>
+        {#if timer?.runState}
+          시작
+        {:else}
+          중지
+        {/if}
+        </button>
         <p
           class="setting-guide"
-          data-cycle-context={`${timerSettingValue.currentCycle}/${timerSettingValue.totalCycle}`}
-          onclick={() => {
-            if (!timer.runState) {
-              openSettingModal();
-            }
-          }}
+          data-cycle-context={`${timer?.currentCycle}/${timer?.totalCycle}`}
+          onclick={() => {if (!timer.runState) { openSettingModal(); }}}
         ></p>
       </div>
     </div>
@@ -209,14 +189,6 @@
     transition:
       border 0.5s ease,
       color 0.5s ease;
-  }
-
-  :global(.app[data-timer-state='false']) .start-button::before {
-    content: '시작';
-  }
-
-  :global(.app[data-timer-state='true']) .start-button::before {
-    content: '중지';
   }
 
   .start-button:hover {
