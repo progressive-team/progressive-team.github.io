@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { timers } from '../stores/timerStore';
-  let parentInfo = $props();
+  import { timers } from '../stores/timerStore.svelte';
+  import { visibility, showSettingModal } from '../stores/visibilityStore.svelte';
 
   const tabs = [
     { keyword: 'work', label: '일할 시간', selected: true },
@@ -39,7 +39,7 @@
 
     // TODO: if 블록으로 관리
     // settingModal.dataset.mode = 'modify';
-    parentInfo.showSettingModal();
+    showSettingModal();
   }
 </script>
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Page1 from './components/page1.svelte';
   import Page2 from './components/page2.svelte';
 
   // 객체지향의 상속/캡슐화 개념이 아니라서 visibility 를 그대로 넘겨줄 수밖에
@@ -13,70 +14,21 @@
   // 기본값이 false 이며 이는 숨겨진(hidden) 상태를 의미함. true로 바꿔야
   // 보이는 것을 의미함.
   import Page3 from './components/page3.svelte';
+  import { currentPage } from './stores/visibilityStore.svelte';
 
-  import Timer from './lib/timer';
-
-  type Keyword = "work" | "break" | "long-break";
-  let appState: Keyword = $state("work");
-  let timerState: "stopped" | "running" = $state("stopped");
-  
-  const visibility = $state({
-    timerCreateArea: false,
-    settingModal: false,
-    timerActiveArea: false,
-  });
-
-  // 객체를 계속 만들어둬야 한다고?
-  // 타이머 객체를 차라리 여기서 미리 만들어서 그걸 시간 변경 가능하게끔 하기?
-  const verifiedTimerInputs = $state({
-    workTime: '',
-    breakTime: '',
-    longBreakTime: '',
-    cycle: 1,
-  });
-
-  const timer = $state(new Timer());
-
-  function hideSettingModal() {
-    visibility.settingModal = false;
-  }
-  function showSettingModal() {
-    visibility.settingModal = true;
-  }
-  function hideTimerCreateArea() {
-    visibility.timerCreateArea = false;
-  }
-  function showTimerActiveArea() {
-    visibility.timerActiveArea = true;
-  }
-  function setTimerTime(
-    workTime: string,
-    breakTime: string,
-    longBreakTime: string,
-    cycle: number,
-  ) {
-    verifiedTimerInputs.workTime = workTime;
-    verifiedTimerInputs.breakTime = breakTime;
-    verifiedTimerInputs.longBreakTime = longBreakTime;
-    verifiedTimerInputs.cycle = cycle;
-
-    // 다른 탭에서 수정하더라도 일할 시간 탭으로 돌아오게 하기
-    timer.changeState(State.WORK);
-  }
-
-  const parentInfo = {
-    visibility,
-    showSettingModal,
-    hideSettingModal,
-    hideTimerCreateArea,
-    showTimerActiveArea,
-    setTimerTime,
-  };
+  type Keyword = 'work' | 'break' | 'long-break';
+  let appState: Keyword = $state('work');
+  let timerState: 'stopped' | 'running' = $state('stopped');
 </script>
 
 <main class="app" data-state={appState} data-timer-state={timerState}>
-  <Page2 {...parentInfo} />
-  <Page3 {...parentInfo} appState={appState} timerState={timerState} />
+  {#if currentPage() == 'create'}
+    <Page1 />
+  {:else if currentPage() == 'setting'}
+    <Page2 />
+  {:else}
+    <Page3 {appState} {timerState} />
+  {/if}
 </main>
 
 <style>
