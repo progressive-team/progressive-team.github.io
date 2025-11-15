@@ -1,6 +1,6 @@
 import { formatTime } from '../utils/formatUtil';
 
-type TimerState = 'work' | 'break' | 'long-break';
+export type TimerState = 'work' | 'break' | 'long-break';
 
 // todo 근본적으로 timer 컴포넌트마다 id 가 부여되어서 인지하고 있어야 함.
 // 그래야 timerStore.ts 의 timers 목록에서 꺼내 옴.

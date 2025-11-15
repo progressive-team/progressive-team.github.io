@@ -4,6 +4,7 @@
     visibility,
     showSettingModal,
   } from '../stores/visibilityStore.svelte';
+  import type { TimerState } from '../lib/models/Timer';
 
   let timerDisplay: string = $state('25:00');
 
@@ -27,8 +28,12 @@
       timer.timerState = 'work';
     }
   });
+  type Tab = {
+    keyword: TimerState;
+    label: string;
+  };
 
-  const tabs = [
+  const tabs: Tab[] = [
     { keyword: 'work', label: '일할 시간' },
     { keyword: 'break', label: '짧은 휴식' },
     { keyword: 'long-break', label: '긴 휴식' },
