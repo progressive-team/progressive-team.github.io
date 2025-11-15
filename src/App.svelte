@@ -15,15 +15,16 @@
   // 보이는 것을 의미함.
   import Page3 from './components/page3.svelte';
   import { currentPage } from './stores/visibilityStore.svelte';
-
-  type Keyword = 'work' | 'break' | 'long-break';
-  let appState: Keyword = $state('work');
-  let timerState: 'stopped' | 'running' = $state('stopped');
 </script>
 
-<main class="app" data-state={timerState} data-timer-state={runState}>
-  <Page2 />
-  <Page3 />
+<main class="app">
+  {#if currentPage() == 'create'}
+    <Page1 />
+  {:else if currentPage() == 'setting'}
+    <Page2 />
+  {:else}
+    <Page3/>
+  {/if}
 </main>
 
 <style>
@@ -68,19 +69,6 @@
     --main-theme-color: #397097;
   }
 
-<main class="app" data-state={appState} data-timer-state={timerState}>
-  {#if currentPage() == 'create'}
-    <Page1 />
-  {:else if currentPage() == 'setting'}
-    <Page2 />
-  {:else}
-    <Page3 {appState} {timerState} />
-  {/if}
-</main>
-  [hidden] {
-    display: none !important;
-  }
-
   /* 타이머 생성 화면 */
   .timer-create-area {
     display: flex;
@@ -88,6 +76,10 @@
     justify-content: center;
     align-items: center;
     gap: 28px;
+  }
+  
+    [hidden] {
+    display: none !important;
   }
 
   #create-timer {
