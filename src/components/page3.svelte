@@ -5,7 +5,6 @@
   } from '../stores/visibilityStore.svelte';
   import type { TimerState } from '../lib/models/Timer';
 
-  let timerDisplay: string = $state('25:00');
   let { value: timer } = timerStore;
 
   type Tab = {
@@ -49,7 +48,7 @@
       {/each}
     </ul>
     <div class="frame">
-      <div class="timer-display">{timerDisplay}</div>
+      <div class="timer-display">{timer?.timerDisplay}</div>
       <div class="button-group">
         <button class="start-button" onclick={()=>{
           if (timer.runState) { timer.reset();} else {timer.start();}

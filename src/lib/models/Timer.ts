@@ -8,6 +8,8 @@ export default class Timer {
   runState: boolean;
   worker: Worker;
   timerState: TimerState;
+  timerDisplay: string;
+
   workTime: string;
   breakTime: string;
   longBreakTime: string;
@@ -20,6 +22,8 @@ export default class Timer {
       type: 'module',
     });
     this.timerState = 'work';
+    this.timerDisplay = '';
+
     this.workTime = '25:00';
     this.breakTime = '05:00';
     this.longBreakTime = '15:00';
@@ -32,10 +36,11 @@ export default class Timer {
       const totalSeconds = Math.max(0, Math.ceil(remaining / 1000));
       const minutes = Math.floor(totalSeconds / 60);
       const seconds = totalSeconds % 60;
+      // 시간 반영 부분
+      this.timerDisplay = getDisplayFormat(minutes, seconds);
 
       // 남은 시간이 0보다 크면 타이머 종료 동작하지 않기
       if (remaining > 0) return;
-
       this.skipNextPhase();
     };
   }
