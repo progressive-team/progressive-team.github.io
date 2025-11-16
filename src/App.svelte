@@ -15,9 +15,10 @@
   // 보이는 것을 의미함.
   import Page3 from './components/page3.svelte';
   import { currentPage } from './stores/visibilityStore.svelte';
+  import { timerStore } from './stores/timerStore.svelte';
 </script>
 
-<main class="app">
+<main class="app" data-state={timerStore.value?.timerState}>
   {#if currentPage() == 'create'}
     <Page1 />
   {:else if currentPage() == 'setting'}
@@ -41,16 +42,18 @@
     margin: 0;
   }
 
+  /*height 2개 중복 뭐임? 아마 100dvh 가 최신일 걸텐데*/
   main.app {
     --main-color: #fafaf8;
     --main-theme-color: #ed6b6b;
+    color: var(--main-color);
+    background: var(--main-theme-color);
 
     font-family: BMJUA;
-    color: var(--main-color);
+
     display: flex;
     position: relative;
     height: 576px;
-    background: var(--main-theme-color);
     height: 100dvh;
     justify-content: center;
     align-items: center;
