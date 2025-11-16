@@ -1,0 +1,1 @@
+(function(){"use strict";let t=null,n=0,o=0;function s(){const i=Date.now()-o,e=n-i;postMessage({remaining:e}),e<=0&&t?(clearTimeout(t),t=null):t=setTimeout(s,100)}self.onmessage=i=>{const{command:e,duration:a}=i.data;e==="start"?(t&&clearTimeout(t),n=a,o=Date.now(),s()):e==="stop"&&t&&(clearTimeout(t),t=null)}})();
