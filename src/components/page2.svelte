@@ -7,8 +7,6 @@
   import { timerStore } from '../stores/timerStore.svelte';
   import Timer from '../lib/models/Timer.svelte';
 
-  const {value: timer} = timerStore;
-
   let workTime: string = '25:00';
   let breakTime: string = '05:00';
   let cycle: number = 1;
@@ -49,8 +47,8 @@
 
     timerStore.value = new Timer();
     // 타이머 시간 설정
-    timer.setTime(workTime, breakTime, longBreakTime, cycle);
-    timer.changeState('work');
+    timerStore.value.setTime(workTime, breakTime, longBreakTime, cycle);
+    timerStore.value.changeState('work');
   }
 </script>
 
@@ -64,7 +62,7 @@
         aria-label="닫기"
         type="button"
         onclick={() => {
-          timer === null
+          timerStore.value === null
             ? showTimerCreateArea()
             : showTimerActiveArea();
         }}
@@ -128,7 +126,7 @@
       class="generate-row"
       aria-label="시간 설정"
       onclick={verify}
-      >{timer === null ? '만들기' : '수정하기'}</button
+      >{timerStore.value === null ? '만들기' : '수정하기'}</button
     >
   </div>
 </section>

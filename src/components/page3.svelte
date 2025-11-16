@@ -5,8 +5,6 @@
   } from '../stores/visibilityStore.svelte';
   import type { TimerState } from '../lib/models/Timer.svelte';
 
-  let { value: timer } = timerStore;
-
   type Tab = {
     keyword: TimerState;
     label: string;
@@ -32,13 +30,13 @@
       {#each tabs as tab}
         <li
           role="tab"
-          aria-selected={tab.keyword === timer?.timerState}
+          aria-selected={tab.keyword === timerStore.value?.timerState}
           data-keyword={tab.keyword}
         >
           <button
             onclick={() => {
-              if (tab.keyword !== timer.timerState) {
-                timer.changeState(tab.keyword);
+              if (tab.keyword !== timerStore.value.timerState) {
+                timerStore.value.changeState(tab.keyword);
               }
             }}
           >
@@ -48,21 +46,21 @@
       {/each}
     </ul>
     <div class="frame">
-      <div class="timer-display">{timer?.timerDisplay}</div>
+      <div class="timer-display">{timerStore.value?.timerDisplay}</div>
       <div class="button-group">
         <button class="start-button" onclick={()=>{
-          if (timer.runState) { timer.reset();} else {timer.start();}
+          if (timerStore.value.runState) { timerStore.value.reset();} else {timerStore.value.start();}
         }}>
-        {#if timer?.runState}
-          시작
-        {:else}
+        {#if timerStore.value?.runState}
           중지
+        {:else}
+          시작
         {/if}
         </button>
         <p
           class="setting-guide"
-          data-cycle-context={`${timer?.currentCycle}/${timer?.totalCycle}`}
-          onclick={() => {if (!timer.runState) { openSettingModal(); }}}
+          data-cycle-context={`${timerStore.value?.currentCycle}/${timerStore.value?.totalCycle}`}
+          onclick={() => {if (!timerStore.value.runState) { openSettingModal(); }}}
         ></p>
       </div>
     </div>
