@@ -56,6 +56,8 @@ export default class Timer {
     this.longBreakTime = longBreakTime;
     this.totalCycle = cycle;
     this.currentCycle = cycle;
+
+    this.timerDisplay = this.getTimeByState();
   }
 
   isRunning(): boolean {
@@ -81,6 +83,7 @@ export default class Timer {
 
   changeState(state: TimerState) {
     this.timerState = state;
+    this.timerDisplay = this.getTimeByState();
   }
 
   getTimeByState(): string {
@@ -115,6 +118,7 @@ export default class Timer {
         this.start();
         break;
       case 'long-break':
+        this.currentCycle = this.totalCycle; // 주기 초기화
         this.changeState('work');
         // showNotification('뽀모도로 종료');
         break;
