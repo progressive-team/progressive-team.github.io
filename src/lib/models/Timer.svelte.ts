@@ -17,18 +17,18 @@ export default class Timer {
   currentCycle: number;
 
   constructor() {
-    this.runState = false;
+    this.runState = $state(false);
     this.worker = new Worker(new URL('./Worker.ts', import.meta.url), {
       type: 'module',
     });
-    this.timerState = 'work';
-    this.timerDisplay = '';
+    this.timerState = $state('work');
+    this.timerDisplay = $state('');
 
-    this.workTime = '25:00';
-    this.breakTime = '05:00';
-    this.longBreakTime = '15:00';
-    this.totalCycle = 1;
-    this.currentCycle = 1;
+    this.workTime = $state('25:00');
+    this.breakTime = $state('05:00');
+    this.longBreakTime = $state('15:00');
+    this.totalCycle = $state(1);
+    this.currentCycle = $state(1);
 
     this.worker.onmessage = (event) => {
       const remaining = event.data.remaining;
