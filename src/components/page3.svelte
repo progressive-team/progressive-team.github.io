@@ -1,42 +1,22 @@
 <script lang="ts">
-  import { timers } from '../stores/timerStore.svelte';
-  import { visibility, showSettingModal } from '../stores/visibilityStore.svelte';
+  import { timerStore } from '../stores/timerStore.svelte';
+  import {
+    showSettingModal,
+  } from '../stores/visibilityStore.svelte';
+  import type { TimerState } from '../lib/models/Timer.svelte';
 
-  const tabs = [
-    { keyword: 'work', label: '일할 시간', selected: true },
-    { keyword: 'break', label: '짧은 휴식', selected: false },
-    { keyword: 'long-break', label: '긴 휴식', selected: false },
-  ] as const;
-
-  function tabClick(clickedTab: {
-    keyword: string;
+  type Tab = {
+    keyword: TimerState;
     label: string;
-    selected: boolean;
-  }) {
-    // 이미 선택되어 있는 상태에서는 다시 선택 로직이 동작하지 않게끔 하기
-    if (clickedTab.selected === true) return;
+  };
 
-    // 버튼마다 기능 동작시키기
-    timer.runByButton(clickedTab.keyword);
-
-    // 다른 버튼 눌러서 넘어갈 때 타이머가 동작할 경우 타이머를 멈추게 하기
-    if (timerState === 'running') {
-      timer.stopTimer();
-    }
-  }
-
-  function startButtonClick() {
-    if (timerState === 'running') {
-      timer.resetTimer();
-    } else {
-      timer.initTimer();
-      timer.startTimer();
-    }
-  }
-
+  const tabs: Tab[] = [
+    { keyword: 'work', label: '일할 시간' },
+    { keyword: 'break', label: '짧은 휴식' },
+    { keyword: 'long-break', label: '긴 휴식' },
+  ];
+  
   function openSettingModal() {
-    if (timerState === 'running') return;
-
     // TODO: if 블록으로 관리
     // settingModal.dataset.mode = 'modify';
     showSettingModal();
@@ -45,22 +25,50 @@
 
 <section class="timer-active-area">
   <div class="inner-box">
+    <!-- todo: 컴포넌트화해서 캡슐화하는 거 가능성: props 로 탭 정보 넘겨주기  -->
     <ul class="tab-list" role="tablist">
       {#each tabs as tab}
-        <li role="tab" aria-selected={tab.selected} data-keyword={tab.keyword}>
+        <li
+          role="tab"
+          aria-selected={tab.keyword === timerStore.value?.timerState}
+          data-keyword={tab.keyword}
+        >
           <button
             onclick={() => {
-              tabClick(tab);
-            }}>{tab.label}</button
+              if (!timerStore.value?.runState && (tab.keyword !== timerStore.value.timerState)) {
+                timerStore.value.changeState(tab.keyword);
+              }
+            }}
           >
+            {tab.label}
+          </button>
         </li>
       {/each}
     </ul>
     <div class="frame">
-      <div class="timer-display">25:00</div>
+      <div class="timer-display">{timerStore.value?.timerDisplay}</div>
       <div class="button-group">
-        <button class="start-button" onclick={startButtonClick}></button>
-        <p class="setting-guide" onclick={openSettingModal}></p>
+        <button class="start-button" onclick={()=>{
+          if (timerStore.value.runState) {
+            timerStore.value.reset();
+          } else {
+            timerStore.value.changeState('work');
+            timerStore.value.start();
+          }
+        }}>
+        {#if timerStore.value?.runState}
+          중지
+        {:else}
+          시작
+        {/if}
+        </button>
+        <p
+          class="setting-guide
+          {timerStore.value?.runState ? 'running' : ''}
+          {timerStore.value?.timerState === 'long-break' ? 'long-break' : ''}"
+          data-cycle-context={`${timerStore.value?.currentCycle}/${timerStore.value?.totalCycle}`}
+          onclick={() => {if (!timerStore.value.runState) { openSettingModal(); }}}
+        ></p>
       </div>
     </div>
   </div>
@@ -187,14 +195,6 @@
       color 0.5s ease;
   }
 
-  :global(.app[data-timer-state='stopped']) .start-button::before {
-    content: '시작';
-  }
-
-  :global(.app[data-timer-state='running']) .start-button::before {
-    content: '중지';
-  }
-
   .start-button:hover {
     filter: brightness(0.95);
   }
@@ -215,18 +215,17 @@
     word-break: keep-all;
   }
 
-  :global(.app[data-timer-state='stopped']) .setting-guide::before {
+  .setting-guide::before {
     color: #404040;
     content: '<클릭해서 시간 설정하기>';
   }
 
-  :global(.app[data-timer-state='running']) .setting-guide::before {
+  .setting-guide.running::before {
     color: #fff;
     content: '타이머 주기: ' attr(data-cycle-context);
   }
 
-  :global(.app[data-timer-state='running'][data-state='long-break'])
-    .setting-guide::before {
+  .setting-guide.running.long-break::before {
     color: #fff;
     content: '긴 휴식 시간입니다. 재정비하세요.';
   }

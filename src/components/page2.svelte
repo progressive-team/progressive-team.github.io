@@ -1,11 +1,11 @@
 <script lang="ts">
-  import '../app.css';
   import { formatTimeInput, getDisplayFormat } from '../lib/utils/formatUtil';
   import {
     showTimerActiveArea,
     showTimerCreateArea,
   } from '../stores/visibilityStore.svelte';
   import { timerStore } from '../stores/timerStore.svelte';
+  import Timer from '../lib/models/Timer.svelte';
 
   let workTime: string = '25:00';
   let breakTime: string = '05:00';
@@ -45,9 +45,10 @@
     );
     showTimerActiveArea();
 
+    timerStore.value = new Timer();
     // 타이머 시간 설정
-    timerStore.value?.setTime(workTime, breakTime, longBreakTime, cycle);
-    timerStore.value?.changeState('work');
+    timerStore.value.setTime(workTime, breakTime, longBreakTime, cycle);
+    timerStore.value.changeState('work');
   }
 </script>
 
