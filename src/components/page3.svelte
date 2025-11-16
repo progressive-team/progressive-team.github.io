@@ -58,7 +58,9 @@
         {/if}
         </button>
         <p
-          class="setting-guide"
+          class="setting-guide
+          {timerStore.value?.runState ? 'running' : ''}
+          {timerStore.value?.timerState === 'long-break' ? 'long-break' : ''}"
           data-cycle-context={`${timerStore.value?.currentCycle}/${timerStore.value?.totalCycle}`}
           onclick={() => {if (!timerStore.value.runState) { openSettingModal(); }}}
         ></p>
@@ -208,18 +210,17 @@
     word-break: keep-all;
   }
 
-  :global(.app[data-timer-state='false']) .setting-guide::before {
+  .setting-guide::before {
     color: #404040;
     content: '<클릭해서 시간 설정하기>';
   }
 
-  :global(.app[data-timer-state='true']) .setting-guide::before {
+  .setting-guide.running::before {
     color: #fff;
     content: '타이머 주기: ' attr(data-cycle-context);
   }
 
-  :global(.app[data-timer-state='true'][data-state='long-break'])
-    .setting-guide::before {
+  .setting-guide.running.long-break::before {
     color: #fff;
     content: '긴 휴식 시간입니다. 재정비하세요.';
   }
