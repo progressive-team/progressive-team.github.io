@@ -49,7 +49,12 @@
       <div class="timer-display">{timerStore.value?.timerDisplay}</div>
       <div class="button-group">
         <button class="start-button" onclick={()=>{
-          if (timerStore.value.runState) { timerStore.value.reset();} else {timerStore.value.start();}
+          if (timerStore.value.runState) {
+            timerStore.value.reset();
+          } else {
+            timerStore.value.changeState('work');
+            timerStore.value.start();
+          }
         }}>
         {#if timerStore.value?.runState}
           중지
