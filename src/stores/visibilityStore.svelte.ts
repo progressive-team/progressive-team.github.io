@@ -1,7 +1,4 @@
-import { timerStore } from "./timerStore.svelte";
-const {value: timer} = timerStore;
 type Visibility = 'create' | 'setting' | 'active';
-
 
 let visibility = $state<Visibility>('create');
 
