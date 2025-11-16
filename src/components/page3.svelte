@@ -35,7 +35,7 @@
         >
           <button
             onclick={() => {
-              if (tab.keyword !== timerStore.value.timerState) {
+              if (!timerStore.value?.runState && (tab.keyword !== timerStore.value.timerState)) {
                 timerStore.value.changeState(tab.keyword);
               }
             }}
