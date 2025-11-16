@@ -2,7 +2,7 @@
   import { showSettingModal } from '../stores/visibilityStore.svelte';
 </script>
 
-<section>
+<section class="timer-create-area">
   <button
     id="create-timer"
     onclick={showSettingModal}
@@ -19,4 +19,30 @@
 </section>
 
 <style>
+  /* 타이머 생성 화면 */
+  .timer-create-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+  }
+
+  #create-timer {
+    display: flex;
+    width: 90px;
+    height: 90px;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: var(--main-theme-color);
+    border: none;
+    background: #fff;
+  }
+
+  label[for='create-timer'] {
+    display: block;
+    font-size: 30px;
+  }
 </style>
