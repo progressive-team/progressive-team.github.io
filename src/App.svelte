@@ -131,6 +131,7 @@
       timerRunningState = 'stopped';
     }
     timerState = newState;
+    remainingTime = parseTimeInput(timeForCurrentState);
   }
 
   function skipNextPhase() {
