@@ -3,7 +3,7 @@
   import {
     showSettingModal,
   } from '../stores/visibilityStore.svelte';
-  import type { TimerState } from '../lib/models/Timer';
+  import type { TimerState } from '../lib/models/Timer.svelte';
 
   let { value: timer } = timerStore;
 

@@ -5,7 +5,7 @@
     showTimerCreateArea,
   } from '../stores/visibilityStore.svelte';
   import { timerStore } from '../stores/timerStore.svelte';
-  import Timer from '../lib/models/Timer';
+  import Timer from '../lib/models/Timer.svelte';
 
   const {value: timer} = timerStore;
 
