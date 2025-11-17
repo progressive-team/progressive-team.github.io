@@ -7,10 +7,15 @@
   import { timerStore } from '../stores/timerStore.svelte';
   import Timer from '../lib/models/Timer.svelte';
 
-  let workTime: string = '25:00';
-  let breakTime: string = '05:00';
-  let cycle: number = 1;
-  let longBreakTime: string = '15:00';
+  // state 가 아닌데도 bind:value 가 됨.
+  let workTime: string =
+    timerStore.value === null ? '25:00' : timerStore.value.workTime;
+  let breakTime: string =
+    timerStore.value === null ? '05:00' : timerStore.value.breakTime;
+  let cycle: number =
+    timerStore.value === null ? 1 : timerStore.value.totalCycle;
+  let longBreakTime: string =
+    timerStore.value === null ? '15:00' : timerStore.value.longBreakTime;
 
   function verify() {
     // 값이 없으면 기본값 설정
