@@ -50,7 +50,10 @@
     );
     showTimerActiveArea();
 
-    timerStore.value = new Timer();
+    // 타이머가 없으면 생성
+    if (timerStore.value === null) {
+      timerStore.value = new Timer();
+    }
     // 타이머 시간 설정
     timerStore.value.setTime(workTime, breakTime, longBreakTime, cycle);
     timerStore.value.changeState('work');
