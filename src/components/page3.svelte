@@ -3,6 +3,9 @@
   import { showSettingModal } from '../stores/visibilityStore.svelte';
   import type { TimerState } from '../lib/models/Timer.svelte';
 
+  let progressiveToggle: boolean =
+    timerStore.value.isToggle === false ? false : timerStore.value.isToggle;
+
   type Tab = {
     keyword: TimerState;
     label: string;
@@ -57,6 +60,7 @@
             } else {
               timerStore.value.changeState('work');
               timerStore.value.start();
+              timerStore.value.isToggle = progressiveToggle;
             }
           }}
         >
@@ -90,7 +94,7 @@
       <div class="progressive-box">
         <span class="progressive-label">점진적 시간 증감</span>
         <label class="switch-box">
-          <input type="checkbox" id="progressive-toggle" />
+          <input type="checkbox" bind:checked={progressiveToggle} />
           <span class="slider"></span>
         </label>
       </div>
@@ -267,7 +271,7 @@
   }
 
   .progressive-label {
-    color: #ed6b6b;
+    color: var(--main-theme-color);
     text-align: center;
     font-size: 28px;
     font-style: normal;

@@ -1,4 +1,8 @@
-import { formatTime, getDisplayFormat } from '../utils/formatUtil';
+import {
+  formatTimeInput,
+  formatTime,
+  getDisplayFormat,
+} from '../utils/formatUtil';
 
 export type TimerState = 'work' | 'break' | 'long-break';
 
@@ -15,6 +19,7 @@ export default class Timer {
   longBreakTime: string;
   totalCycle: number;
   currentCycle: number;
+  isToggle: boolean;
 
   constructor() {
     this.runState = $state(false);
@@ -29,6 +34,7 @@ export default class Timer {
     this.longBreakTime = $state('15:00');
     this.totalCycle = $state(1);
     this.currentCycle = $state(1);
+    this.isToggle = $state(false);
 
     this.worker.onmessage = (event) => {
       const remaining = event.data.remaining;
@@ -72,6 +78,11 @@ export default class Timer {
   reset() {
     this.stop();
     this.currentCycle = this.totalCycle; // 주기 초기화
+    if (this.isToggle && this.timerState !== 'long-break') {
+      let value = Number(this.workTime.replace(/\D/g, '')) - 500;
+      if (value < 0) value = 0;
+      this.workTime = formatTimeInput(String(value));
+    }
     this.changeState('work');
   }
 
@@ -113,6 +124,11 @@ export default class Timer {
           this.currentCycle--;
         } else {
           this.changeState('long-break');
+          if (this.isToggle) {
+            this.workTime = formatTimeInput(
+              String(Number(this.workTime.replace(/\D/g, '')) + 500),
+            ); // 5분 증가
+          }
           // showNotification('모든 주기 종료\n긴 휴식 시작');
         }
         this.start();
