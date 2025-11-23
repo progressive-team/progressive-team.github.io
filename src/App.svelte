@@ -49,10 +49,6 @@
     --main-theme-color: #ed6b6b;
   }
 
-  * {
-    box-sizing: border-box;
-  }
-
   body {
     overflow-y: auto;
     margin: 0;
