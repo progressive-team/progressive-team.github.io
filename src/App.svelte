@@ -18,7 +18,18 @@
   import { timerStore } from './stores/timerStore.svelte';
 </script>
 
-<main class="app" data-state={timerStore.value?.timerState}>
+<main
+  class="app
+  relative flex items-center justify-center
+  font-[BMJUA] text-(--main-color)
+  bg-(--main-theme-color)
+  transition-colors duration-500 ease-in-out
+  data-[state=work]:bg-[#ed6b6b]
+  data-[state=break]:bg-[#38858a]
+  data-[state=long-break]:bg-[#397097]"
+  data-state={timerStore.value?.timerState}
+  style="display: flex; height: 576px; height: 100dvh;"
+>
   {#if currentPage() == 'create'}
     <Page1 />
   {:else if currentPage() == 'setting'}
@@ -33,6 +44,11 @@
   @import 'normalize.css';
   @import '@noonnu/bmjua';
 
+  @theme {
+    --main-color: #fafaf8;
+    --main-theme-color: #ed6b6b;
+  }
+
   * {
     box-sizing: border-box;
   }
@@ -43,32 +59,4 @@
   }
 
   /*height 2개 중복 뭐임? 아마 100dvh 가 최신일 걸텐데*/
-  main.app {
-    --main-color: #fafaf8;
-    --main-theme-color: #ed6b6b;
-    color: var(--main-color);
-    background: var(--main-theme-color);
-
-    font-family: BMJUA;
-
-    display: flex;
-    position: relative;
-    height: 576px;
-    height: 120dvh;
-    justify-content: center;
-    align-items: center;
-    transition: background-color 0.5s ease;
-  }
-
-  main.app[data-state='work'] {
-    --main-theme-color: #ed6b6b;
-  }
-
-  main.app[data-state='break'] {
-    --main-theme-color: #38858a;
-  }
-
-  main.app[data-state='long-break'] {
-    --main-theme-color: #397097;
-  }
 </style>
