@@ -28,7 +28,7 @@
   data-[state=break]:bg-[#38858a]
   data-[state=long-break]:bg-[#397097]"
   data-state={timerStore.value?.timerState}
-  style="display: flex; height: 576px; height: 100dvh;"
+  style="display: flex; height: 100dvh;"
 >
   {#if currentPage() == 'create'}
     <Page1 />
@@ -57,6 +57,4 @@
     overflow-y: auto;
     margin: 0;
   }
-
-  /*height 2개 중복 뭐임? 아마 100dvh 가 최신일 걸텐데*/
 </style>
