@@ -60,12 +60,27 @@
   }
 </script>
 
-<section class="timer-setting-modal overlay" data-mode="create">
-  <div id="setting-timer">
-    <header class="close-row">
-      <h2>시간설정</h2>
+<section
+  class="timer-setting-modal overlay
+  absolute flex top-0 left-0 w-full h-full bg-black/25
+  justify-center items-center z-1"
+  data-mode="create"
+>
+  <div id="setting-timer"
+    class="relative flex flex-col max-w-[620px]
+    p-[clamp(16px,4vw,24px)] m-[clamp(16px,4vw,24px)]
+    items-center gap-[18px] bg-[var(--main-theme-color)]
+    rounded-[6px] shadow-[0_8px_4px_0_rgba(0,0,0,0.25)]"
+  >
+    <header
+      class="close-row
+      grid grid-cols-[1fr_auto_1fr] w-full
+      items-center gap-x-[1rem]"
+    >
+      <h2 class="col-2 m-0 text-[36px] font-normal">시간설정</h2>
       <!---todo 닫기 버튼 눌렀을 때 이전 상태로 돌아가야 함.-->
       <button
+        class="w-[48px] h-[48px] p-0 col-3 justify-self-end border-none bg-transparent text-[var(--main-color)]"
         aria-label="닫기"
         type="button"
         onclick={() => {
@@ -82,7 +97,20 @@
         </svg>
       </button>
     </header>
-    <fieldset class="row-box">
+    <fieldset class="row-box
+      m-0 p-[0_34px] border-none
+      grid grid-cols-[minmax(max-content,1fr)_minmax(0,3fr)]
+      gap-[20px_10px] text-[clamp(1.25rem,4vw,24px)]
+      
+      [&>label]:text-right [&>label]:self-center [&>label]:font-normal [&>label]:tracking-[-0.528px]
+
+      [&>input]:[padding-block:clamp(6px,2.5vmin,8px)]
+      [&>input]:border-none [&>input]:rounded-[8px] [&>input]:shadow-[0_8px_12px_6px_rgba(0,0,0,0.15),0_4px_4px_0_rgba(0,0,0,0.3)]
+      [&>input]:text-current [&>input]:bg-white/30 
+      [&>input]:text-center [&>input]:!text-[2em] not-italic [&>input]:font-normal [&>input]:!leading-[100%] [&>input]:tracking-[-1.056px]
+
+      [&>input]:placeholder:text-current [&>input]:placeholder:opacity-40"
+      >
       <label for="work-time">활동 시간</label>
       <input
         id="work-time"
@@ -130,7 +158,11 @@
     <button
       type="submit"
       id="generateBtn"
-      class="generate-row"
+      class="generate-row
+      flex p-[2px_31px] justify-center items-center bg-white/40
+      rounded-[8px] border-none shadow-[0_8px_12px_6px_rgba(0,0,0,0.15),0_4px_4px_0_rgba(0,0,0,0.3)]
+      text-current text-center font-['BMJUA'] not-italic font-normal tracking-[-0.616px]"
+      style="font-size: 29px; line-height: 150%;"
       aria-label="시간 설정"
       onclick={verify}
       >{timerStore.value === null ? '만들기' : '수정하기'}</button
@@ -139,59 +171,6 @@
 </section>
 
 <style>
-  .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.25);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1;
-  }
-
-  #setting-timer {
-    position: relative;
-    display: flex;
-    max-width: 620px;
-    padding: clamp(16px, 4vw, 24px);
-    margin: clamp(16px, 4vw, 24px);
-    flex-direction: column;
-    align-items: center;
-    gap: 18px;
-    background: var(--main-theme-color);
-    border-radius: 6px;
-    box-shadow: 0 8px 4px 0 rgba(0, 0, 0, 0.25);
-  }
-
-  .close-row {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    column-gap: 1rem;
-
-    h2 {
-      grid-column: 2;
-      margin: 0;
-      font-size: 36px;
-      font-weight: 400;
-    }
-
-    button[aria-label='닫기'] {
-      grid-column: 3;
-      justify-self: end;
-      width: 48px;
-      height: 48px;
-      padding: 0;
-      border: none;
-      background: none;
-      color: var(--main-color);
-    }
-  }
-
   .close-button {
     display: flex;
     position: absolute;
@@ -204,48 +183,6 @@
     align-items: center;
     justify-content: center;
     color: #fdfdfd;
-  }
-
-  fieldset.row-box {
-    margin: 0;
-    padding: 0 34px;
-    border: none;
-
-    display: grid;
-    gap: 20px 10px;
-    font-size: clamp(1.25rem, 4vw, 24px);
-
-    grid-template-columns: minmax(max-content, 1fr) minmax(0, 3fr);
-
-    > label {
-      text-align: right;
-      align-self: center;
-      font-weight: 400;
-      letter-spacing: -0.528px;
-    }
-
-    > input {
-      padding-block: clamp(6px, 2.5vmin, 8px);
-      border: none;
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 8px;
-      box-shadow:
-        0 8px 12px 6px rgba(0, 0, 0, 0.15),
-        0 4px 4px 0 rgba(0, 0, 0, 0.3);
-      color: currentColor;
-
-      &::placeholder {
-        color: currentColor;
-        opacity: 0.4;
-      }
-
-      text-align: center;
-      font-size: 2em;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 100%;
-      letter-spacing: -1.056px;
-    }
   }
 
   .time-row {
@@ -290,26 +227,5 @@
     font-weight: 400;
     line-height: 100%;
     letter-spacing: -1.056px;
-  }
-
-  .generate-row {
-    display: flex;
-    padding: 2px 31px;
-    justify-content: center;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.4);
-    border-radius: 8px;
-    box-shadow:
-      0 8px 12px 6px rgba(0, 0, 0, 0.15),
-      0 4px 4px 0 rgba(0, 0, 0, 0.3);
-    border: none;
-    color: currentColor;
-    text-align: center;
-    font-family: BMJUA;
-    font-size: 28px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 150%;
-    letter-spacing: -0.616px;
   }
 </style>
