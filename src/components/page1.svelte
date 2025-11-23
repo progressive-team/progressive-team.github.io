@@ -2,11 +2,15 @@
   import { showSettingModal } from '../stores/visibilityStore.svelte';
 </script>
 
-<section class="timer-create-area">
+<section class="timer-create-area flex flex-col justify-center items-center gap-[28px]">
   <button
     id="create-timer"
     onclick={showSettingModal}
     aria-label="타이머 생성 버튼"
+    class="flex w-[90px] h-[90px] p-[10px]
+    justify-center items-center
+    rounded-[50%] border-none
+    text-[var(--main-theme-color)] bg-white"
   >
     <svg viewBox="0 0 72 72" fill="none">
       <path
@@ -15,34 +19,5 @@
       />
     </svg>
   </button>
-  <label for="create-timer">클릭해서 타이머를 추가하세요</label>
+  <label for="create-timer" class="block text-[30px]">클릭해서 타이머를 추가하세요</label>
 </section>
-
-<style>
-  /* 타이머 생성 화면 */
-  .timer-create-area {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 28px;
-  }
-
-  #create-timer {
-    display: flex;
-    width: 90px;
-    height: 90px;
-    padding: 10px;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    color: var(--main-theme-color);
-    border: none;
-    background: #fff;
-  }
-
-  label[for='create-timer'] {
-    display: block;
-    font-size: 30px;
-  }
-</style>
