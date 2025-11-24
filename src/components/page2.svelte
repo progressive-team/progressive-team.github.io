@@ -107,7 +107,7 @@
       [&>input]:[padding-block:clamp(6px,2.5vmin,8px)]
       [&>input]:border-none [&>input]:rounded-[8px] [&>input]:shadow-[0_8px_12px_6px_rgba(0,0,0,0.15),0_4px_4px_0_rgba(0,0,0,0.3)]
       [&>input]:text-current [&>input]:bg-white/30 
-      [&>input]:text-center [&>input]:!text-[2em] not-italic [&>input]:font-normal [&>input]:!leading-[100%] [&>input]:tracking-[-1.056px]
+      [&>input]:text-center [&>input]:text-[2em] not-italic [&>input]:font-normal [&>input]:leading-[100%] [&>input]:tracking-[-1.056px]
 
       [&>input]:placeholder:text-current [&>input]:placeholder:opacity-40"
       >
@@ -161,8 +161,7 @@
       class="generate-row
       flex p-[2px_31px] justify-center items-center bg-white/40
       rounded-[8px] border-none shadow-[0_8px_12px_6px_rgba(0,0,0,0.15),0_4px_4px_0_rgba(0,0,0,0.3)]
-      text-current text-center font-['BMJUA'] not-italic font-normal tracking-[-0.616px]"
-      style="font-size: 29px; line-height: 150%;"
+      text-current text-center font-['BMJUA'] text-[29px] not-italic font-normal leading-[150%] tracking-[-0.616px]"
       aria-label="시간 설정"
       onclick={verify}
       >{timerStore.value === null ? '만들기' : '수정하기'}</button

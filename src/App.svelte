@@ -20,7 +20,7 @@
 
 <main
   class="app
-  relative flex items-center justify-center
+  relative flex h-[100dvh] items-center justify-center
   font-[BMJUA] text-(--main-color)
   bg-(--main-theme-color)
   transition-colors duration-500 ease-in-out
@@ -28,7 +28,6 @@
   data-[state=break]:bg-[#38858a]
   data-[state=long-break]:bg-[#397097]"
   data-state={timerStore.value?.timerState}
-  style="display: flex; height: 100dvh;"
 >
   {#if currentPage() == 'create'}
     <Page1 />
@@ -40,7 +39,6 @@
 </main>
 
 <style>
-  @import 'normalize.css';
   body {
     overflow-y: auto;
     margin: 0;
