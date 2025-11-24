@@ -54,7 +54,7 @@
     display: flex;
     position: relative;
     height: 576px;
-    height: 100dvh;
+    height: 120dvh;
     justify-content: center;
     align-items: center;
     transition: background-color 0.5s ease;

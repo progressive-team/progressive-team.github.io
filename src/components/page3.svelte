@@ -102,7 +102,20 @@
           <span class="slider"></span>
         </label>
       </div>
-      <p class="progressive-text">ㅁㅇㅁㅇㅁ</p>
+      <div class="text-box">
+        <p
+          class="progressive-text"
+          style="text-align: center; font-size: 20px;"
+        >
+          점진적 시간 증감 여부 설정
+        </p>
+        <p class="progressive-text">
+          1. 타이머를 완주하면 다음 타이머의 ‘일할 시간’이 자동으로 5분
+          증가합니다. <br />2. 반대로 타이머가 도중에 중지(포기)되면 다음
+          타이머의 ‘일할 시간’이 5분 감소합니다. <br />특정 시간대로 계속
+          사용하고 싶을 때 증감 여부 설정을 끌 수 있습니다.
+        </p>
+      </div>
     </div>
   </div>
 </section>
@@ -333,16 +346,26 @@
     transform: translateX(54px);
   }
 
-  .progressive-text {
+  .text-box {
     display: flex;
     padding: 14px;
+    flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
-    gap: 10px;
+    gap: 20px;
     align-self: stretch;
     border-radius: 0 0 8px 8px;
     border-top: 1px dashed #000;
     background: #e7e7e7;
     margin: 0px;
+  }
+
+  .progressive-text {
+    color: #454545;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%; /* 27px */
+    letter-spacing: -0.396px;
+    margin: 0;
   }
 </style>
