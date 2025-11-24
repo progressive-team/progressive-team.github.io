@@ -40,15 +40,7 @@
 </main>
 
 <style>
-  @import 'tailwindcss';
   @import 'normalize.css';
-  @import '@noonnu/bmjua';
-
-  @theme {
-    --main-color: #fafaf8;
-    --main-theme-color: #ed6b6b;
-  }
-
   body {
     overflow-y: auto;
     margin: 0;

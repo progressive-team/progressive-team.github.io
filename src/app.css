@@ -1,0 +1,7 @@
+@import 'tailwindcss';
+@import '@noonnu/bmjua';
+
+@theme {
+  --main-color: #fafaf8;
+  --main-theme-color: #ed6b6b;
+}
