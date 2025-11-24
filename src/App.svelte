@@ -23,10 +23,7 @@
   relative flex h-[100dvh] items-center justify-center
   font-[BMJUA] text-(--main-color)
   bg-(--main-theme-color)
-  transition-colors duration-500 ease-in-out
-  data-[state=work]:bg-[#ed6b6b]
-  data-[state=break]:bg-[#38858a]
-  data-[state=long-break]:bg-[#397097]"
+  transition-colors duration-500 ease-in-out"
   data-state={timerStore.value?.timerState}
 >
   {#if currentPage() == 'create'}

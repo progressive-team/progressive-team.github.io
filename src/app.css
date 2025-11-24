@@ -3,5 +3,20 @@
 
 @theme {
   --main-color: #fafaf8;
+}
+
+:root {
   --main-theme-color: #ed6b6b;
+}
+
+[data-state='work'] {
+  --main-theme-color: #ed6b6b;
+}
+
+[data-state='break'] {
+  --main-theme-color: #38858a;
+}
+
+[data-state='long-break'] {
+  --main-theme-color: #397097;
 }
