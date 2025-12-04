@@ -95,6 +95,9 @@ export default class Timer {
   changeState(state: TimerState) {
     this.timerState = state;
     this.timerDisplay = this.getTimeByState();
+    // 추후 onStateChange 이벤트로 뽑아내기
+    // setFavicon(tab.color);
+    // console.log(`${tab.color}`);
   }
 
   getTimeByState(): string {

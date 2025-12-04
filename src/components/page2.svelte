@@ -1,4 +1,5 @@
 <script lang="ts">
+  // 얘 getDisplayFormat 안 씀
   import { formatTimeInput, getDisplayFormat } from '../lib/utils/formatUtil';
   import {
     showTimerActiveArea,

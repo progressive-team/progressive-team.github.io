@@ -47,6 +47,7 @@
       {/each}
     </ul>
     <div class="frame">
+      <!-- timerDisplay 변수 값을 timer 에서 홀드하고 있는 게 아니라 여기서 변수로 생성하고 관리하는 것도 생각해보기 -->
       <div class="timer-display">{timerStore.value?.timerDisplay}</div>
       <div class="button-group">
         <button
@@ -66,6 +67,7 @@
             시작
           {/if}
         </button>
+        <!-- 이거 button 으로 만들거나, 아니면 설정창 버튼을 따로 빼고 이건 주기만 보여주는 용도로 해서 평상시에는 비워두기? -->
         <p
           class="setting-guide
           {timerStore.value?.runState ? 'running' : ''}
