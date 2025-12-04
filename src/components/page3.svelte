@@ -1,18 +1,7 @@
 <script lang="ts">
   import { timerStore } from '../stores/timerStore.svelte';
   import { showSettingModal } from '../stores/visibilityStore.svelte';
-  import type { TimerState } from '../lib/models/Timer.svelte';
-
-  type Tab = {
-    keyword: TimerState;
-    label: string;
-  };
-
-  const tabs: Tab[] = [
-    { keyword: 'work', label: '일할 시간' },
-    { keyword: 'break', label: '짧은 휴식' },
-    { keyword: 'long-break', label: '긴 휴식' },
-  ];
+  import { tabs } from '../lib/models/Timer.svelte';
 
   function openSettingModal() {
     // TODO: if 블록으로 관리

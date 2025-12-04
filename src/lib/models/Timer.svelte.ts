@@ -4,7 +4,19 @@ import {
   getDisplayFormat,
 } from '../utils/formatUtil';
 
-export type TimerState = 'work' | 'break' | 'long-break';
+type TimerState = 'work' | 'break' | 'long-break';
+
+type Tab = {
+  keyword: TimerState;
+  label: string;
+  color: string;
+};
+
+export const tabs: Tab[] = [
+  { keyword: 'work', label: '일할 시간', color: '#ed6b6b' },
+  { keyword: 'break', label: '짧은 휴식', color: '#38858a' },
+  { keyword: 'long-break', label: '긴 휴식', color: '#397097' },
+];
 
 // todo 근본적으로 timer 컴포넌트마다 id 가 부여되어서 인지하고 있어야 함.
 // 그래야 timerStore.ts 의 timers 목록에서 꺼내 옴.
