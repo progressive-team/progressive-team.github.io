@@ -63,25 +63,26 @@
 
 <section
   class="timer-setting-modal overlay
-  absolute flex top-0 left-0 w-full h-full bg-black/25
-  justify-center items-center z-1"
+  absolute top-0 left-0 z-1 flex h-full w-full
+  items-center justify-center bg-black/25"
   data-mode="create"
 >
-  <div id="setting-timer"
-    class="relative flex flex-col max-w-[620px]
-    p-[clamp(16px,4vw,24px)] m-[clamp(16px,4vw,24px)]
-    items-center gap-[18px] bg-[var(--main-theme-color)]
-    rounded-[6px] shadow-[0_8px_4px_0_rgba(0,0,0,0.25)]"
+  <div
+    id="setting-timer"
+    class="relative m-[clamp(16px,4vw,24px)] flex max-w-[620px]
+    flex-col items-center
+    gap-[18px] rounded-[6px] bg-[var(--main-theme-color)]
+    p-[clamp(16px,4vw,24px)] shadow-[0_8px_4px_0_rgba(0,0,0,0.25)]"
   >
     <header
       class="close-row
-      grid grid-cols-[1fr_auto_1fr] w-full
+      grid w-full grid-cols-[1fr_auto_1fr]
       items-center gap-x-[1rem]"
     >
       <h2 class="col-2 m-0 text-[36px] font-normal">시간설정</h2>
       <!---todo 닫기 버튼 눌렀을 때 이전 상태로 돌아가야 함.-->
       <button
-        class="w-[48px] h-[48px] p-0 col-3 justify-self-end border-none bg-transparent text-[var(--main-color)]"
+        class="col-3 h-[48px] w-[48px] justify-self-end border-none bg-transparent p-0 text-[var(--main-color)]"
         aria-label="닫기"
         type="button"
         onclick={() => {
@@ -98,20 +99,21 @@
         </svg>
       </button>
     </header>
-    <fieldset class="row-box
-      m-0 p-[0_34px] border-none
-      grid grid-cols-[minmax(max-content,1fr)_minmax(0,3fr)]
-      gap-[20px_10px] text-[clamp(1.25rem,4vw,24px)]
+    <fieldset
+      class="row-box
+      m-0 grid grid-cols-[minmax(max-content,1fr)_minmax(0,3fr)]
+      gap-[20px_10px] border-none
+      p-[0_34px] text-[clamp(1.25rem,4vw,24px)]
       
-      [&>label]:text-right [&>label]:self-center [&>label]:font-normal [&>label]:tracking-[-0.528px]
+      not-italic [&>input]:rounded-[8px] [&>input]:border-none [&>input]:bg-white/30
 
       [&>input]:[padding-block:clamp(6px,2.5vmin,8px)]
-      [&>input]:border-none [&>input]:rounded-[8px] [&>input]:shadow-[0_8px_12px_6px_rgba(0,0,0,0.15),0_4px_4px_0_rgba(0,0,0,0.3)]
-      [&>input]:text-current [&>input]:bg-white/30 
-      [&>input]:text-center [&>input]:text-[2em] not-italic [&>input]:font-normal [&>input]:leading-[100%] [&>input]:tracking-[-1.056px]
+      [&>input]:text-center [&>input]:text-[2em] [&>input]:leading-[100%]
+      [&>input]:font-normal [&>input]:tracking-[-1.056px]
+      [&>input]:text-current [&>input]:shadow-[0_8px_12px_6px_rgba(0,0,0,0.15),0_4px_4px_0_rgba(0,0,0,0.3)] [&>input]:placeholder:text-current [&>input]:placeholder:opacity-40 [&>label]:self-center [&>label]:text-right
 
-      [&>input]:placeholder:text-current [&>input]:placeholder:opacity-40"
-      >
+      [&>label]:font-normal [&>label]:tracking-[-0.528px]"
+    >
       <label for="work-time">활동 시간</label>
       <input
         id="work-time"
@@ -160,9 +162,9 @@
       type="submit"
       id="generateBtn"
       class="generate-row
-      flex p-[2px_31px] justify-center items-center bg-white/40
-      rounded-[8px] border-none shadow-[0_8px_12px_6px_rgba(0,0,0,0.15),0_4px_4px_0_rgba(0,0,0,0.3)]
-      text-current text-center font-['BMJUA'] text-[29px] not-italic font-normal leading-[150%] tracking-[-0.616px]"
+      flex items-center justify-center rounded-[8px] border-none
+      bg-white/40 p-[2px_31px] text-center
+      font-['BMJUA'] text-[29px] leading-[150%] font-normal tracking-[-0.616px] text-current not-italic shadow-[0_8px_12px_6px_rgba(0,0,0,0.15),0_4px_4px_0_rgba(0,0,0,0.3)]"
       aria-label="시간 설정"
       onclick={verify}
       >{timerStore.value === null ? '만들기' : '수정하기'}</button
