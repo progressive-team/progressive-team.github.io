@@ -16,6 +16,9 @@
   import Page3 from './components/page3.svelte';
   import { currentPage } from './stores/visibilityStore.svelte';
   import { timerStore } from './stores/timerStore.svelte';
+  import { setFavicon } from './lib/utils/faviconUtil';
+
+  setFavicon('#ed6b6b');
 </script>
 
 <main
