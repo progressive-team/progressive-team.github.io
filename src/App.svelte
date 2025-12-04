@@ -23,9 +23,9 @@
 
 <main
   class="app
-  font-[BMJUA] text-(--main-color)
+  relative flex min-h-[100dvh] items-center justify-center
   bg-(--main-theme-color)
-  relative flex h-[150dvh] items-center justify-center
+  font-[BMJUA] text-(--main-color)
   transition-colors duration-500 ease-in-out"
   data-state={timerStore.value?.timerState}
 >
