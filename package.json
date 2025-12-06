@@ -26,6 +26,7 @@
   "dependencies": {
     "@noonnu/bmjua": "^0.1.0",
     "normalize.css": "^8.0.1",
+    "pnpm": "^10.24.0",
     "tailwindcss": "^4.1.17"
   }
 }

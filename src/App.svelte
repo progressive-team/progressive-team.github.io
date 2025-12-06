@@ -20,7 +20,7 @@
 
 <main
   class="app
-  relative flex h-[100dvh] items-center justify-center
+  relative flex min-h-[100dvh] items-center justify-center
   bg-(--main-theme-color) font-[BMJUA]
   text-(--main-color)
   transition-colors duration-500 ease-in-out"
