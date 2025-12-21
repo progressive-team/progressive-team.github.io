@@ -3,6 +3,7 @@ import {
   formatTime,
   getDisplayFormat,
 } from '../utils/formatUtil';
+import { showNotification } from '../notify';
 
 type TimerState = 'work' | 'break' | 'long-break';
 
@@ -130,7 +131,7 @@ export default class Timer {
         this.changeState('break');
         // todo 이거 여기서 처리?
         // 그리고 현재 주기 표시할 때 전체 주기도 표시해주기
-        // showNotification(`짧은 휴식 시작. 현재 주기: ${this.currentCycle}`);
+        showNotification(`짧은 휴식 시작. 현재 주기: ${this.currentCycle}`);
         this.start();
         break;
       case 'break':
@@ -144,14 +145,14 @@ export default class Timer {
               String(Number(this.workTime.replace(/\D/g, '')) + 500),
             ); // 5분 증가
           }
-          // showNotification('모든 주기 종료\n긴 휴식 시작');
+          showNotification('모든 주기 종료\n긴 휴식 시작');
         }
         this.start();
         break;
       case 'long-break':
         this.currentCycle = this.totalCycle; // 주기 초기화
         this.changeState('work');
-        // showNotification('뽀모도로 종료');
+        showNotification('뽀모도로 종료');
         break;
       default:
         throw new Error('Unknown State');
